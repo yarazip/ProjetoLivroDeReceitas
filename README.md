@@ -19,12 +19,11 @@ Atualmente, o projeto contém **apenas a página de login**, o **estilo (CSS) de
 - **CSS** – Estilização da interface, incluindo design responsivo.  
 
 ## 📂 Estrutura Atual do Projeto  
-
 /meu-projeto
-  ├── login.html (Página de login) 
-    ├── css/ │ ├── login.css (Estilos da página de login) 
-      ├── assets/ (Imagens utilizadas na interface)
-
+  ├── login.html              (Página de login)
+  ├── css/
+  │    ├── login.css          (Estilos da página de login)
+  ├── assets/                 (Imagens utilizadas na interface)
 
 ## 🚀 Como Executar o Projeto  
 
