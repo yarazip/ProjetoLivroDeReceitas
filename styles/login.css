@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 :root{
-    --logo_font: 'Rock Salt', sans-serif;
+    --logo-font: 'Rock Salt', sans-serif;
     --main-font: 'Source Sans 3', sans-serif;
     --highlights: #ffffff;
     --background : #eeeeee;
     --light-grey: #d9d9d9;
     --medium-grey:#959595;
-    --dark-grey:#232323;
+    --dark-grey:#333333;
     --black:#000000;
 
 }
@@ -22,7 +22,7 @@ body{
 }
 
 .logo {
-    font-family: var(--logo_font);
+    font-family: var(--logo-font);
     text-align: left;
     font-size: 25px;
     line-height: 1.2;
