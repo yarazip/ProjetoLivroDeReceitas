@@ -4,7 +4,7 @@
 
 Este projeto tem como objetivo criar um **Sistema de Publicação de Livros de Receitas**, onde **chefs** poderão cadastrar e compartilhar receitas em diversas categorias, como **Receitas de Animes**, **Massas**, **Sobremesas** e muito mais.  
 
-Atualmente, o projeto contém **apenas a página de login**, o **estilo (CSS) dessa página** e algumas **imagens** utilizadas na interface.  
+Atualmente, o projeto contém **a página de login**, o **estilo (CSS) dessa página** e as páginas de inserção de dados **somente o front-end** utilizadas na interface.  
 
 ## ✨ Status Atual  
 
