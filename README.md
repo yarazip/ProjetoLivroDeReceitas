@@ -20,13 +20,6 @@ Atualmente, o projeto contém **a página de login**, o **estilo (CSS) dessa pá
 - **HTML** – Estruturação das páginas.  
 - **CSS** – Estilização da interface, incluindo design responsivo.  
 
-## 📂 Estrutura Atual do Projeto  
-/meu-projeto
-  ├── login.html              (Página de login)
-  ├── css/
-  │    ├── login.css          (Estilos da página de login)
-  ├── assets/                 (Imagens utilizadas na interface)
-
 ## 🚀 Como Executar o Projeto  
 
 1. Clone este repositório ou faça o download dos arquivos.  
