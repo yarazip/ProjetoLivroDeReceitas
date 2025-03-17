@@ -17,7 +17,7 @@ Atualmente, o projeto contém **a página de login**, o **estilo (CSS) dessa pá
 
 ## 🛠️ Tecnologias Utilizadas  
 
-- **HTML** – Estruturação da página de login.  
+- **HTML** – Estruturação das páginas.  
 - **CSS** – Estilização da interface, incluindo design responsivo.  
 
 ## 📂 Estrutura Atual do Projeto  
