@@ -11,7 +11,9 @@ Atualmente, o projeto contém **apenas a página de login**, o **estilo (CSS) de
 - ✅ **Página de Login** – Interface inicial para chefs acessarem o sistema. *(Apenas design, sem funcionalidade de autenticação no momento.)*  
 - ✅ **Estilização (CSS)** – Aplicação de estilos para a tela de login.  
 - ✅ **Imagens** – Recursos gráficos para a interface.  
-- 🔜 **Próximos passos** – Desenvolvimento das páginas principais, como listagem de livros e receitas.  
+- ✅ **Layout de inserção** – Desenvolvimento das páginas principais, como listagem de livros e receitas.
+- 🚧 ** Próximo passo** - esqueci a senha e página de cadastro
+- 🚧 **Página principal de acesso** - desenvolver uma página com identidade visual para visualizar as receitas e os livros
 
 ## 🛠️ Tecnologias Utilizadas  
 
