@@ -68,6 +68,7 @@ body {
 }
 
 .form-box {
+    animation: slide-in 2s ease-out;
     background: var(--highlights);
     padding: 50px;
     border-radius: 15px;
