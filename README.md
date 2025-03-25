@@ -12,13 +12,14 @@ Atualmente, o projeto contém **a página de login**, o **estilo (CSS) dessa pá
 - ✅ **Estilização (CSS)** – Aplicação de estilos para a tela de login.  
 - ✅ **Imagens** – Recursos gráficos para a interface.  
 - ✅ **Layout de inserção** – Desenvolvimento das páginas principais, como listagem de livros e receitas.
-- 🚧 **Próximo passo** - layout esqueci a senha e página de cadastro
+- ✅ **Layout de inserção** – Desenvolvimento das páginas principais, como listagem de livros e receitas. **Próximo passo** - layout esqueci a senha e página de cadastro
 - 🚧 **layout da Página principal de acesso** -  desenvolver uma página com identidade visual para visualizar as receitas e os livros
 
 ## 🛠️ Tecnologias Utilizadas  
 
 - **HTML** – Estruturação das páginas.  
-- **CSS** – Estilização da interface, incluindo design responsivo.  
+- **CSS** – Estilização da interface, incluindo design responsivo.
+- **JavaScript** – Alert simples de email enviado.
 
 ## 🚀 Como Executar o Projeto  
 
