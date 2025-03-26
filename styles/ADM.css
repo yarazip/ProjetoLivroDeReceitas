@@ -18,16 +18,16 @@ body {
 
 .logo{
     font-family: var(--logo-font);
-    padding-left: 30px;
+    padding-left: -50px;
     margin-top: 20px;
     color: var(--black);
 }
 
-.container {
+/* .container {
     max-width: auto;
     margin: 20px auto;
     padding: 20px;
-}
+} */
 
 .menu {
     display: flex;
@@ -37,7 +37,7 @@ body {
     color: var(--black);
     padding: 10px 20px;
     border-radius: 8px;
-    padding-right: 150px;
+    padding-right: 30px;
 }
 
 .menu nav {
