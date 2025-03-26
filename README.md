@@ -24,8 +24,8 @@ Atualmente, o projeto contém **a página de login**, o **estilo (CSS) dessa pá
 ## 🚀 Como Executar o Projeto  
 
 1. Clone este repositório ou faça o download dos arquivos.  
-2. Abra o arquivo **`login.html`** em seu navegador para visualizar a página de login.
-3. Abra o arquivo **`mainpositions.html`** para visualizar a ferramnta de inserção e pesquisa (*front-end*)
+2. Abra o arquivo **`login.html`** em seu navegador para visualizar a página de login e esqueci a senha.
+3. Abra o arquivo **`cargosADM.html`** para visualizar a ferramnta de inserção e pesquisa (*front-end*)
 
 ## 🎯 Próximos Passos  
 
