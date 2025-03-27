@@ -1,4 +1,4 @@
-# 📖 Sistema de Publicação de Livros de Receitas  
+# 📖 Sistema de Publicação de Livros de Receitas  (Projeto da Faculdade)
 
 🚧 **Projeto em Desenvolvimento** 🚧  
 
