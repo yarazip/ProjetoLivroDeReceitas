@@ -13,6 +13,7 @@ Atualmente, o projeto contém **a página de login**, o **estilo (CSS) dessa pá
 - ✅ **Imagens** – Recursos gráficos para a interface.  
 - ✅ **Layout de inserção** – Desenvolvimento das páginas principais, como listagem de livros e receitas.
 - ✅ **Layout de inserção** – Desenvolvimento das páginas principais, como listagem de livros e receitas. **Próximo passo** - layout esqueci a senha e página de cadastro
+- 🚧 **Back-end** -  desenvolver o back end para login de cada funionário para inserir e deletar as informações correspondentes
 - 🚧 **layout da Página principal de acesso** -  desenvolver uma página com identidade visual para visualizar as receitas e os livros
 
 ## 🛠️ Tecnologias Utilizadas  
