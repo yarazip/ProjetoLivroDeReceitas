@@ -16,6 +16,13 @@ Atualmente, o projeto contém **a página de login**, o **estilo (CSS) dessa pá
 - 🚧 **Back-end** -  desenvolver o back end para login de cada funionário para inserir e deletar as informações correspondentes
 - 🚧 **layout da Página principal de acesso** -  desenvolver uma página com identidade visual para visualizar as receitas e os livros
 
+#
+
+## Caso de Uso
+
+![Diagrama de Caso de Uso](https://github.com/yarazip/ProjetoLivroDeReceitas/raw/main/casoDeUso/CasoDeUso.png) 
+
+
 ## 🛠️ Tecnologias Utilizadas  
 
 - **HTML** – Estruturação das páginas.  
