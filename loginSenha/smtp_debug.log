@@ -1,0 +1,144 @@
+2: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP d2e1a72fcca58-73971091cadsm9843065b3a.126 - gsmtp
+
+1: CLIENT -> SERVER: EHLO localhost
+
+2: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [2804:d59:868e:4900:35ed:1d3f:c2c6:efe1]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250 SMTPUTF8
+
+1: CLIENT -> SERVER: STARTTLS
+
+2: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+
+2: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+1: CLIENT -> SERVER: QUIT
+
+2: SERVER -> CLIENT: 
+1: SMTP ERROR: QUIT command failed: 
+2: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2025-04-02 06:23:27] 2: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP 98e67ed59e1d1-3056f80eb68sm491583a91.10 - gsmtp
+
+[2025-04-02 06:23:27] 1: CLIENT -> SERVER: EHLO localhost
+
+[2025-04-02 06:23:28] 2: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [2804:d59:868e:4900:35ed:1d3f:c2c6:efe1]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250 SMTPUTF8
+
+[2025-04-02 06:23:28] 1: CLIENT -> SERVER: STARTTLS
+
+[2025-04-02 06:23:28] 2: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+
+[2025-04-02 06:23:28] 1: CLIENT -> SERVER: EHLO localhost
+
+[2025-04-02 06:23:28] 2: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [2804:d59:868e:4900:35ed:1d3f:c2c6:efe1]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250 SMTPUTF8
+
+[2025-04-02 06:23:28] 1: CLIENT -> SERVER: AUTH LOGIN
+
+[2025-04-02 06:23:28] 2: SERVER -> CLIENT: 334 VXNlcm5hbWU6
+
+[2025-04-02 06:23:28] 1: CLIENT -> SERVER: [credentials hidden]
+[2025-04-02 06:23:29] 2: SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+
+[2025-04-02 06:23:29] 1: CLIENT -> SERVER: [credentials hidden]
+[2025-04-02 06:23:29] 2: SERVER -> CLIENT: 235 2.7.0 Accepted
+
+[2025-04-02 06:23:29] 1: CLIENT -> SERVER: MAIL FROM:<ya678945@gmail.com>
+
+[2025-04-02 06:23:29] 2: SERVER -> CLIENT: 250 2.1.0 OK 98e67ed59e1d1-3056f80eb68sm491583a91.10 - gsmtp
+
+[2025-04-02 06:23:29] 1: CLIENT -> SERVER: RCPT TO:<ba891575@gmail.com>
+
+[2025-04-02 06:23:29] 2: SERVER -> CLIENT: 250 2.1.5 OK 98e67ed59e1d1-3056f80eb68sm491583a91.10 - gsmtp
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: DATA
+
+[2025-04-02 06:23:30] 2: SERVER -> CLIENT: 354 Go ahead 98e67ed59e1d1-3056f80eb68sm491583a91.10 - gsmtp
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: Date: Wed, 2 Apr 2025 06:23:26 +0200
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: To: bia <ba891575@gmail.com>
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: From: =?iso-8859-1?Q?C=C3=B3digo_de_Sabores?= <ya678945@gmail.com>
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: Subject: Redefinicao de Senha
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: Message-ID: <moE3uEwBAZ9u6qlyPsLOJ8n4DjOibnJiUCOrDChPrE@localhost>
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: X-Mailer: PHPMailer 6.9.3 (https://github.com/PHPMailer/PHPMailer)
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: MIME-Version: 1.0
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: Content-Type: multipart/alternative;
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER:  boundary="b1=_moE3uEwBAZ9u6qlyPsLOJ8n4DjOibnJiUCOrDChPrE"
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: Content-Transfer-Encoding: 8bit
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: 
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: --b1=_moE3uEwBAZ9u6qlyPsLOJ8n4DjOibnJiUCOrDChPrE
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: Content-Type: text/plain; charset=us-ascii
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: 
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: Redefina sua senha acessando: https://localhost/projetoreceitas/loginSenha/redefinirSenha.php?token=82986a8d88492ebba178b6c4b387b94ce35310778b5efb156dd4aa643af1f358
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: 
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: --b1=_moE3uEwBAZ9u6qlyPsLOJ8n4DjOibnJiUCOrDChPrE
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: Content-Type: text/html; charset=iso-8859-1
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: Content-Transfer-Encoding: 8bit
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: 
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: 
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER:                 <h1>Redefinicao de Senha</h1>
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER:                 <p>Olá bia,</p>
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER:                 <p>Recebemos uma solicitacao para redefinir sua senha. Clique no link abaixo:</p>
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER:                 <p><a href='https://localhost/projetoreceitas/loginSenha/redefinirSenha.php?token=82986a8d88492ebba178b6c4b387b94ce35310778b5efb156dd4aa643af1f358'>Redefinir Senha</a></p>
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER:                 <p>O link expira em 1 hora.</p>
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER:                 <p>Caso nao tenha solicitado, ignore este email.</p>
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER:             
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: 
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: 
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: --b1=_moE3uEwBAZ9u6qlyPsLOJ8n4DjOibnJiUCOrDChPrE--
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: 
+
+[2025-04-02 06:23:30] 1: CLIENT -> SERVER: .
+
+[2025-04-02 06:23:31] 2: SERVER -> CLIENT: 250 2.0.0 OK  1743567811 98e67ed59e1d1-3056f80eb68sm491583a91.10 - gsmtp
+
+[2025-04-02 06:23:31] 1: CLIENT -> SERVER: QUIT
+
+[2025-04-02 06:23:31] 2: SERVER -> CLIENT: 221 2.0.0 closing connection 98e67ed59e1d1-3056f80eb68sm491583a91.10 - gsmtp
+

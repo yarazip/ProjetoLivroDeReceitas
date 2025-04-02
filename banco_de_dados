@@ -1,0 +1,155 @@
+CREATE DATABASE AcervoReceitas;
+USE AcervoReceitas;
+
+CREATE TABLE Usuario (
+    email VARCHAR(255) PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    datanasc DATE NOT NULL,
+    tipo ENUM('cozinheiro', 'administrador', 'degustador', 'editor') NOT NULL
+);
+
+CREATE TABLE Cozinheiro (
+    email VARCHAR(255) PRIMARY KEY,
+    referencias TEXT,
+    FOREIGN KEY (email) REFERENCES Usuario(email) ON DELETE CASCADE,
+    UNIQUE (email)
+);
+
+CREATE TABLE Administrador (
+    email VARCHAR(255) PRIMARY KEY,
+    FOREIGN KEY (email) REFERENCES Usuario(email) ON DELETE CASCADE,
+    UNIQUE (email)
+);
+
+CREATE TABLE Degustador (
+    email VARCHAR(255) PRIMARY KEY,
+    FOREIGN KEY (email) REFERENCES Usuario(email) ON DELETE CASCADE,
+    UNIQUE (email)
+);
+
+CREATE TABLE Editor (
+    email VARCHAR(255) PRIMARY KEY,
+    FOREIGN KEY (email) REFERENCES Usuario(email) ON DELETE CASCADE,
+    UNIQUE (email)
+);
+
+CREATE TABLE Receita (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    data_fabricacao DATE NOT NULL,
+    dificuldade ENUM('Fácil', 'Médio', 'Difícil') NOT NULL,
+    porcoes INT NOT NULL,
+    cozinheiro_email VARCHAR(255) NOT NULL,
+    FOREIGN KEY (cozinheiro_email) REFERENCES Cozinheiro(email) ON DELETE CASCADE
+);
+
+CREATE TABLE Ingrediente (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Quantidade (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(100) NOT NULL,
+    tipo VARCHAR(50) NOT NULL COMMENT 'Ex: peso, volume, unidade',
+    abreviacao VARCHAR(20) NOT NULL COMMENT 'Ex: g, ml, un'
+);
+
+CREATE TABLE Medida (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(100) NOT NULL,
+    tipo VARCHAR(50) 
+);
+
+CREATE TABLE ReceitaIngrediente (
+    receita_id INT,
+    ingrediente_id INT,
+    quantidade_id INT,
+    PRIMARY KEY (receita_id, ingrediente_id),
+    FOREIGN KEY (receita_id) REFERENCES Receita(id) ON DELETE CASCADE,
+    FOREIGN KEY (ingrediente_id) REFERENCES Ingrediente(id) ON DELETE CASCADE,
+    FOREIGN KEY (quantidade_id) REFERENCES Quantidade(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Avaliacao (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    receita_id INT NOT NULL,
+    degustador_email VARCHAR(255) NOT NULL,
+    nota DECIMAL(3,2) CHECK (nota BETWEEN 0 AND 10),
+    comentario TEXT,
+    FOREIGN KEY (receita_id) REFERENCES Receita(id) ON DELETE CASCADE,
+    FOREIGN KEY (degustador_email) REFERENCES Degustador(email) ON DELETE CASCADE
+);
+
+CREATE TABLE Livro (
+    isbn INT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    data_publicacao DATE
+);
+
+CREATE TABLE LivroReceita (
+    livro_isbn INT,
+    receita_id INT,
+    PRIMARY KEY (livro_isbn, receita_id)
+);
+
+CREATE TABLE RecuperacaoSenha (
+    email VARCHAR(255) PRIMARY KEY,
+    token VARCHAR(255) UNIQUE NOT NULL,
+    expiracao DATETIME NOT NULL,
+    status ENUM('ativo', 'expirado') NOT NULL DEFAULT 'ativo',
+    FOREIGN KEY (email) REFERENCES Usuario(email) ON DELETE CASCADE
+);
+
+CREATE TABLE Categoria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Restaurante (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    cnpj VARCHAR(18) NOT NULL UNIQUE,
+    endereco TEXT,
+    telefone VARCHAR(20),
+    data_cadastro DATE NOT NULL,
+    cozinheiro_email VARCHAR(255) NOT NULL,
+    FOREIGN KEY (cozinheiro_email) REFERENCES Cozinheiro(email) ON DELETE RESTRICT
+);
+
+ALTER TABLE LivroReceita
+    ADD CONSTRAINT fk_receita
+    FOREIGN KEY (receita_id) REFERENCES Receita(id) ON DELETE CASCADE;
+    
+-- Índice para busca por nome de receita
+CREATE INDEX idx_receita_nome ON Receita(nome);
+
+-- Índice para busca por ingredientes
+CREATE INDEX idx_ingrediente_nome ON Ingrediente(nome);
+
+-- Índice para usuários (caso precise buscar por nome)
+CREATE INDEX idx_usuario_nome ON Usuario(nome);
+
+-- Ídice para categoria para busca por categoria
+CREATE INDEX idx_categoria_nome ON Categoria(nome);
+
+-- Insere categorias comuns (opcional)
+INSERT INTO Categoria (nome) VALUES 
+    ('Massas'),
+    ('Vegetarianas'),
+    ('Aves'),
+    ('Carnes Bovinas'),
+    ('Carnes Suínas'),
+    ('Peixes'),
+    ('Sobremesas'),
+    ('Receitas de Anime');
+
+-- Tabela de relacionamento Receita-Categoria
+CREATE TABLE ReceitaCategoria (
+    receita_id INT,
+    categoria_id INT,
+    PRIMARY KEY (receita_id, categoria_id),
+    FOREIGN KEY (receita_id) REFERENCES Receita(id) ON DELETE CASCADE,
+    FOREIGN KEY (categoria_id) REFERENCES Categoria(id) ON DELETE CASCADE
+);

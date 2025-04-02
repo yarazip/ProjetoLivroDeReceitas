@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+:root{
+    --logo-font: 'Rock Salt', sans-serif;
+    --main-font: 'Source Sans 3', sans-serif;
+    --highlights: #ffffff;
+    --background : #eeeeee;
+    --light-grey: #d9d9d9;
+    --medium-grey:#959595;
+    --dark-grey:#333333;
+    --black:#000000;
+
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: var(--background);
+}
+
+.logo {
+    font-family: var(--logo-font);
+    text-align: left;
+    font-size: 25px;
+    line-height: 1.2;
+    display: block; 
+    white-space: pre-line; 
+    padding-left: 120px;
+    margin-top: 20px;
+    
+}
+
+.container {
+    margin-top: 15px;
+    gap: 30px;
+}
+
+.container h2 {
+    font-family: var(--main-font);
+    color: var(--medium-grey);
+    padding-left: 110px;
+    font-weight: 400;
+    font-size: 25px;
+}
+
+.login-section {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 98px;
+    gap: 25px; 
+}
+
+input {
+    font-family: var(--main-font);
+    width: 337px;
+    height: 63px;
+    padding: 20px;
+    margin: 10px 0;
+    border: var(--light-grey);
+    border-radius: 15px;
+    font-size: 18px;
+    background: var(--light-grey);
+    margin-bottom: 30px; 
+}
+
+button {
+    font-family: var(--main-font);
+    font-size: 20px;
+    width: 231px;
+    height: 60px;
+    padding: 15px;
+    background: var(--dark-grey);
+    color: var(--highlights);
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: block;
+    margin-top: 5px;
+    margin-left: 140px; 
+    margin-right: auto;
+}
+
+
+button:hover {
+    background:var(--black);
+}
+
+.links {
+    margin-top: 30px;
+    display: flex;
+    align-items: flex-start; 
+    flex-direction:  column;
+}
+
+.links a {
+    font-size: 15px;
+    font-family: var(--main-font);
+    display: block; 
+    color: var(--dark-grey);
+    text-align: justify;
+    margin-top: 10px;
+    padding-left: 100px;
+}
+
+.links a:hover{
+    color: var(--black);
+}
+
+
+video {
+    width: 130%; 
+    height: 100%; 
+    max-height: 100vh; 
+}
+
+ .video-section {
+    width: 60%; 
+    height: 100vh; 
+    display: flex;
+    align-items: center; 
+    position: absolute;
+    top: 0;
+    right: -175px; 
+    right: -100%;
+    animation: video 4s forwards;
+}
+
+   @keyframes video {
+            from {
+                right: -50%;
+            }
+            to {
+                right: 56.8%;
+                transform: translateX(90%);
+            }
+        } 
+
