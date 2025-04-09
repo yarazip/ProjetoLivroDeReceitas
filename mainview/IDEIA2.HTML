@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mainview.css">
+    <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Receitas | Código de Sabores</title>
+    <style>
+        /* Estilos específicos para o feed de receitas */
+        .recipes-header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../assets/banner-receitas.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .recipes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+        
+        .recipes-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--header-border);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .recipe-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .recipe-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .recipe-info {
+            padding: 20px;
+        }
+        
+        .recipe-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--medium-grey);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .recipe-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .author-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .recipe-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .category-tag {
+            background: var(--secondary-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .featured-recipes {
+            margin: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 15px auto 0;
+        }
+        
+        /* Estilos para o novo menu compacto */
+        header {
+            padding: 15px 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+        }
+        
+        .nav-links {
+            position: relative;
+        }
+        
+        .nav-links a {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+        
+        /* Estilos para o dropdown de categorias */
+        .categories-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .categories-dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--card-bg);
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            padding: 10px 0;
+        }
+        
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .recipes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            
+            .recipes-header {
+                padding: 60px 20px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header>
+        <h1 class="logo">Código de Sabores</h1>
+        <nav class="nav-links">
+            <div class="categories-dropdown">
+                <a href="receitas.html" class="active">Receitas <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="#">Todas as Receitas</a>
+                    <a href="#">Massas</a>
+                    <a href="#">Doces</a>
+                    <a href="#">Carnes</a>
+                    <a href="#">Vegetarianas</a>
+                    <a href="#">Rápidas</a>
+                    <a href="#">Low Carb</a>
+                    <a href="#">Brasileiras</a>
+                </div>
+            </div>
+            <a href="../sobre/sobre.html">Sobre Nós</a>
+            <a href="../contato/contato.html">Fale Conosco</a>
+        </nav>
+        <div class="header-right">
+            <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+            <div class="header-buttons">
+                <a href="../loginSenha/login.html" class="get-started-btn">Entrar</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="recipes-header">
+        <h1>Descubra Novas Receitas</h1>
+        <p>Encontre inspiração para suas próximas refeições</p>
+    </section>
+
+    <div class="recipes-container">
+        <div class="recipes-filters">
+            <button class="filter-btn active">Todas</button>
+            <button class="filter-btn">Massas</button>
+            <button class="filter-btn">Doces</button>
+            <button class="filter-btn">Carnes</button>
+            <button class="filter-btn">Vegetarianas</button>
+            <button class="filter-btn">Rápidas</button>
+            <button class="filter-btn">Low Carb</button>
+            <button class="filter-btn">Brasileiras</button>
+        </div>
+        
+        <div class="featured-recipes">
+            <h2 class="section-title">Receitas em Destaque</h2>
+            <div class="recipes-grid">
+                <!-- Receita 1 -->
+                <div class="recipe-card">
+                    <a href="receita-carbonara.html">
+                        <img src="../assets/carbonara.jpg" alt="Espaguete à Carbonara" class="recipe-img">
+                    </a>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title"><a href="receita-carbonara.html">Espaguete à Carbonara</a></h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 20 min</span>
+                            <span><i class="fas fa-utensils"></i> 4 porções</span>
+                        </div>
+                        <p>Clássico italiano com pancetta crocante e molho cremoso de ovos e queijo pecorino.</p>
+                        <div class="recipe-categories">
+                            <span class="category-tag">Massas</span>
+                            <span class="category-tag">Italiana</span>
+                        </div>
+                        <div class="recipe-author">
+                            <img src="../assets/chef1.jpg" alt="Chef Maria" class="author-avatar">
+                            <span>Chef Maria</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Receita 2 -->
+                <div class="recipe-card">
+                    <a href="receita-brigadeiro.html">
+                        <img src="../assets/brigadeiro.jpg" alt="Brigadeiro Gourmet" class="recipe-img">
+                    </a>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title"><a href="receita-brigadeiro.html">Brigadeiro Gourmet</a></h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 30 min</span>
+                            <span><i class="fas fa-utensils"></i> 20 unidades</span>
+                        </div>
+                        <p>Brigadeiro premium com chocolate 70% cacau e toque de flor de sal.</p>
+                        <div class="recipe-categories">
+                            <span class="category-tag">Doces</span>
+                            <span class="category-tag">Brasileira</span>
+                        </div>
+                        <div class="recipe-author">
+                            <img src="../assets/chef2.jpg" alt="Chef João" class="author-avatar">
+                            <span>Chef João</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Receita 3 -->
+                <div class="recipe-card">
+                    <a href="receita-risoto.html">
+                        <img src="../assets/risoto.jpg" alt="Risoto de Funghi" class="recipe-img">
+                    </a>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title"><a href="receita-risoto.html">Risoto de Funghi</a></h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 45 min</span>
+                            <span><i class="fas fa-utensils"></i> 2 porções</span>
+                        </div>
+                        <p>Cremoso risoto com cogumelos frescos e finalizado com trufa negra.</p>
+                        <div class="recipe-categories">
+                            <span class="category-tag">Italiana</span>
+                            <span class="category-tag">Vegetariana</span>
+                        </div>
+                        <div class="recipe-author">
+                            <img src="../assets/chef3.jpg" alt="Chef Ana" class="author-avatar">
+                            <span>Chef Ana</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="all-recipes">
+            <h2 class="section-title">Todas as Receitas</h2>
+            <div class="recipes-grid">
+                <!-- Receita 4 -->
+                <div class="recipe-card">
+                    <a href="receita-picanha.html">
+                        <img src="../assets/picanha.jpg" alt="Picanha na Manteiga" class="recipe-img">
+                    </a>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title"><a href="receita-picanha.html">Picanha na Manteiga</a></h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 60 min</span>
+                            <span><i class="fas fa-utensils"></i> 6 porções</span>
+                        </div>
+                        <p>Picanha suculenta grelhada na manteiga com alho e ervas.</p>
+                        <div class="recipe-categories">
+                            <span class="category-tag">Carnes</span>
+                            <span class="category-tag">Brasileira</span>
+                        </div>
+                        <div class="recipe-author">
+                            <img src="../assets/chef4.jpg" alt="Chef Carlos" class="author-avatar">
+                            <span>Chef Carlos</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Receita 5 -->
+                <div class="recipe-card">
+                    <a href="receita-salada.html">
+                        <img src="../assets/salada.jpg" alt="Salada Caesar" class="recipe-img">
+                    </a>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title"><a href="receita-salada.html">Salada Caesar</a></h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 15 min</span>
+                            <span><i class="fas fa-utensils"></i> 2 porções</span>
+                        </div>
+                        <p>Clássica salada Caesar com croutons caseiros e molho cremoso.</p>
+                        <div class="recipe-categories">
+                            <span class="category-tag">Saladas</span>
+                            <span class="category-tag">Light</span>
+                        </div>
+                        <div class="recipe-author">
+                            <img src="../assets/chef5.jpg" alt="Chef Sofia" class="author-avatar">
+                            <span>Chef Sofia</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Receita 6 -->
+                <div class="recipe-card">
+                    <a href="receita-pudim.html">
+                        <img src="../assets/pudim.jpg" alt="Pudim de Leite" class="recipe-img">
+                    </a>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title"><a href="receita-pudim.html">Pudim de Leite</a></h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 90 min</span>
+                            <span><i class="fas fa-utensils"></i> 8 porções</span>
+                        </div>
+                        <p>Pudim cremoso com calda de caramelo, receita tradicional.</p>
+                        <div class="recipe-categories">
+                            <span class="category-tag">Doces</span>
+                            <span class="category-tag">Sobremesas</span>
+                        </div>
+                        <div class="recipe-author">
+                            <img src="../assets/chef6.jpg" alt="Chef Antônio" class="author-avatar">
+                            <span>Chef Antônio</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Receita 7 -->
+                <div class="recipe-card">
+                    <a href="receita-moqueca.html">
+                        <img src="../assets/moqueca.jpg" alt="Moqueca de Peixe" class="recipe-img">
+                    </a>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title"><a href="receita-moqueca.html">Moqueca de Peixe</a></h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 50 min</span>
+                            <span><i class="fas fa-utensils"></i> 4 porções</span>
+                        </div>
+                        <p>Moqueca capixaba tradicional com peixe fresco e azeite de dendê.</p>
+                        <div class="recipe-categories">
+                            <span class="category-tag">Brasileira</span>
+                            <span class="category-tag">Frutos do Mar</span>
+                        </div>
+                        <div class="recipe-author">
+                            <img src="../assets/chef7.jpg" alt="Chef Rita" class="author-avatar">
+                            <span>Chef Rita</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Receita 8 -->
+                <div class="recipe-card">
+                    <a href="receita-panqueca.html">
+                        <img src="../assets/panqueca-americana.jpg" alt="Panquecas Americanas" class="recipe-img">
+                    </a>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title"><a href="receita-panqueca.html">Panquecas Americanas</a></h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 25 min</span>
+                            <span><i class="fas fa-utensils"></i> 3 porções</span>
+                        </div>
+                        <p>Panquecas fofas com maple syrup e frutas frescas, perfeitas para o café da manhã.</p>
+                        <div class="recipe-categories">
+                            <span class="category-tag">Café da Manhã</span>
+                            <span class="category-tag">Americana</span>
+                        </div>
+                        <div class="recipe-author">
+                            <img src="../assets/chef8.jpg" alt="Chef Lucas" class="author-avatar">
+                            <span>Chef Lucas</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Receita 9 -->
+                <div class="recipe-card">
+                    <a href="receita-bolo.html">
+                        <img src="../assets/bolo-cenoura.jpg" alt="Bolo de Cenoura" class="recipe-img">
+                    </a>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title"><a href="receita-bolo.html">Bolo de Cenoura</a></h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> 60 min</span>
+                            <span><i class="fas fa-utensils"></i> 10 porções</span>
+                        </div>
+                        <p>Bolo de cenoura fofinho com cobertura de chocolate.</p>
+                        <div class="recipe-categories">
+                            <span class="category-tag">Bolos</span>
+                            <span class="category-tag">Doces</span>
+                        </div>
+                        <div class="recipe-author">
+                            <img src="../assets/chef9.jpg" alt="Chef Marina" class="author-avatar">
+                            <span>Chef Marina</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h3>Empresa</h3>
+                <ul>
+                    <li><a href="../sobre/sobre.html">Sobre</a></li>
+                    <li><a href="#">Carreiras</a></li>
+                    <li><a href="#">Imprensa</a></li>
+                    <li><a href="../contato/contato.html">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Suporte</h3>
+                <ul>
+                    <li><a href="#">Central de Ajuda</a></li>
+                    <li><a href="#">Plataforma de Desenvolvedor</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Siga</h3>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Código De Sabores, Inc. Todos os direitos reservados.</p>
+            <div class="social-icons">
+                <a href="#">Privacidade</a>
+                <a href="#">Termos</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scriptmainview.js"></script>
+    <script>
+        // Filtro de receitas
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove a classe active de todos os botões
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // Adiciona a classe active apenas no botão clicado
+                    this.classList.add('active');
+                    
+                    // Aqui você implementaria a lógica para filtrar as receitas
+                    // Por enquanto é apenas visual
+                });
+            });
+        });
+    </script>
+</body>
+</html>

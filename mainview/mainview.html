@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mainview.css">
+    <link rel="shortcut icon" href="./assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Código de Sabores</title>
+</head>
+<body class="light-mode">
+    <header>
+        <h1 class="logo">Código de Sabores</h1>
+        <nav class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Receitas</a>
+            <a href="#">Sobre Nós</a>
+            <a href="#">Fale Conosco</a>
+        </nav>
+        <div class="header-right">
+            <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+            <div class="header-buttons">
+                <a href="../loginSenha/login.html" class="get-started-btn">Entrar</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Divulgue sua Receita para várias pessoas!</h1>
+        <p>Poste seus livros e receitas de forma rápida fácil e inovadora</p>
+        <a href="login.html" class="cta-button">Começar</a>
+        
+        <!-- Carrossel de imagens -->
+        <div class="hero-carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item" >
+                    <a href="receitaBatataFrita.html">
+                        <img src="../assets/batataFrita.jpg" alt="Receitas de culinária">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a href="receitaMacarrons.html">
+                        <img src="../assets/Pudim.jpg" alt="Livros de receitas">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a href="receita-panqueca.html">
+                        <img src="../assets/panqueca.jpg" alt="Pratos gourmet">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a href="receita-saudavel.html">
+                        <img src="../assets/Parmegiana.jpg" alt="Comida saudável">
+                    </a>
+                </div>
+            </div>
+            
+            <div class="carousel-controls">
+                <button class="carousel-control prev" aria-label="Imagem anterior">&#10094;</button>
+                <button class="carousel-control next" aria-label="Próxima imagem">&#10095;</button>
+            </div>
+            
+            <div class="carousel-indicators">
+                <div class="indicator active"></div>
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="templates">
+        <h2>Livros incríveis!</h2>
+        <p> Confira as nossas receitas de diversos livros</p>
+        <div class="template-grid">
+            <div class="template-card">
+                <a href="receita-massas.html">
+                    <img src="../assets/Noodles.jpg" alt="Modelo Minimalista" class="template-img">
+                </a>
+                <div class="template-info">
+                    <h3><a href="receita-massas.html">Massas Da Nona</a></h3>
+                    <p>Receitas clássicas italianas</p>
+                </div>
+            </div>
+            <div class="template-card">
+                <a href="receita-doces.html">
+                    <img src="../assets/Cheesecake.jpg" alt="Modelo Moderno" class="template-img">
+                </a>
+                <div class="template-info">
+                    <h3><a href="receita-doces.html">Sweet Life</a></h3>
+                    <p>Doces zero açúcar e muito mais!</p>
+                </div>
+            </div>
+            <div class="template-card">
+                <a href="receita-ocasiao.html">
+                    <img src="../assets/Ribs.jpg" alt="Modelo Clássico" class="template-img">
+                </a>
+                <div class="template-info">
+                    <h3><a href="receita-ocasiao.html">Um Prato Por Ocasião</a></h3>
+                    <p>Sua receita para uma ocasião especial!</p>
+                </div>
+            </div>
+            <div class="template-card">
+                <a href="receita-anime.html">
+                    <img src="../assets/Chihiro.jpeg" alt="Modelo Criativo" class="template-img">
+                </a>
+                <div class="template-info">
+                    <h3><a href="receita-anime.html">Confira nossa novidade!</a></h3>
+                    <p>Receita do seu anime favorito!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nova seção Sobre Nós -->
+    <section class="about-us">
+        <div class="about-container">
+            <h1>Sobre Nós</h1>
+            <p class="about-intro">O Código de Sabores nasceu da paixão por compartilhar conhecimento culinário de forma acessível e inovadora.</p>
+            
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>Missão</h3>
+                    <p>Nossa missão é oferecer livros de receitas com categorias específicas, para usuários interessados em novas receitas.</p>
+                </div>
+                
+                <div class="about-card">
+                    <h3>Visão</h3>
+                    <p>Sermos conhecidos por proporcionar aos cozinheiros do Brasil receitas saborosas e divertidas de fazer.</p>
+                </div>
+                
+                <div class="about-card">
+                    <h3>Valores</h3>
+                    <ul>
+                        <li>Paixão pela culinária</li>
+                        <li>Inovação constante</li>
+                        <li>Qualidade em primeiro lugar</li>
+                        
+                    </ul>
+                </div>
+            </div>
+            
+            
+                <section class="features">
+                    <h2>Tudo que você precisa para criar e postar sua receita</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">📱</div>
+                            <h3>Personalizável</h3>
+                            <p>Atualize sua em qualquer lugar com nosso sistema fácil de usar.</p>
+                        </div>
+                      
+                        <div class="feature-card">
+                            <div class="feature-icon">📊</div>
+                            <h3>Grandes críticos renomados</h3>
+                            <p>Avaliação das receitas pelos degustadores de alto renome no país.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🔒</div>
+                            <h3>Hospedagem Confiável</h3>
+                            <p>Hospedagem rápida e segura e com disponibilidade.</p>
+                        </div>
+                    </div>
+                </section>
+            
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <h2>Confiado por centenas de cozinheiros</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"O Código de Sabores tornou tão fácil começar meu livro de culinária."</p>
+                <p class="testimonial-author">— Sarah K., ~ Livro - Blog de Cozinheira</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Consegui configurar minhas receitas de viagens em um final de semana."</p>
+                <p class="testimonial-author">— Michael T., ~ Livro - Degustador de Viagens</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Como cozinheira e fotógrafa, ter um livro bonito era essencial. O Código de Sabores entregou exatamente o que eu precisava."</p>
+                <p class="testimonial-author">— Jessica L., ~ Livro - Comendo Com Os Olhos</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <h2>Pronto para começar seu livro?</h2>
+        <p>Junte-se a centenas de criadores licenciados que usam o Código de Sabores para compartilhar suas receitas com o mundo.</p>
+        <h5>Fale com nosso Administrador</h5>
+        <a href="#" class="cta-button">Email</a>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h3>Empresa</h3>
+                <ul>
+                    <li><a href="#">Sobre</a></li>
+                    <li><a href="#">Carreiras</a></li>
+                    <li><a href="#">Imprensa</a></li>
+                    <li><a href="#">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Suporte</h3>
+                <ul>
+                    <li><a href="#">Central de Ajuda</a></li>
+                    <li><a href="#">Plataforma de Desenvolvedor</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Siga</h3>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Código De Sabores, Inc. Todos os direitos reservados.</p>
+            <div class="social-icons">
+                <a href="#">Privacidade</a>
+                <a href="#">Termos</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scriptmainview.js"></script>
+</body>
+</html>

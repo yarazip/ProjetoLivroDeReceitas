@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mainview.css">
+    <link rel="shortcut icon" href="./assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Massas da Nona | Código de Sabores</title>
+    <style>
+        /* Estilos específicos para a página de receita */
+        .recipe-hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../assets/Noodles.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        
+        .recipe-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 40px;
+        }
+        
+        .recipe-content {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        
+        .recipe-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .recipe-info-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        
+        .recipe-info-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .info-item i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .ingredients-list, .instructions-list {
+            margin-left: 20px;
+        }
+        
+        .ingredients-list li, .instructions-list li {
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .recipe-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header>
+        <h1 class="logo">Código de Sabores</h1>
+        <nav class="nav-links">
+            <a href="../mainview/index.html">Home</a>
+            <a href="../receitas/receitas.html">Receitas</a>
+            <a href="../sobre/sobre.html">Sobre Nós</a>
+            <a href="../contato/contato.html">Fale Conosco</a>
+        </nav>
+        <div class="header-right">
+            <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+            <div class="header-buttons">
+                <a href="../loginSenha/login.html" class="get-started-btn">Entrar</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="recipe-hero">
+        <h1>Massas da Nona</h1>
+        <p>Receitas autênticas da nona italiana</p>
+    </section>
+
+    <div class="recipe-container">
+        <main class="recipe-content">
+            <article>
+                <h2>Espaguete à Carbonara</h2>
+                <img src="../assets/carbonara.jpg" alt="Espaguete à Carbonara" style="width:100%; border-radius:8px; margin:20px 0;">
+                
+                <h3>Descrição</h3>
+                <p>O verdadeiro espaguete à carbonara, como a nona fazia, com ovos, queijo pecorino, pancetta e pimenta-do-reino. Um clássico da culinária italiana que conquista pelo seu sabor rico e textura cremosa.</p>
+                
+                <h3>Ingredientes</h3>
+                <ul class="ingredients-list">
+                    <li>400g de espaguete</li>
+                    <li>200g de pancetta ou bacon em cubos</li>
+                    <li>4 gemas</li>
+                    <li>1 ovo inteiro</li>
+                    <li>100g de queijo pecorino romano ralado</li>
+                    <li>Pimenta-do-reino moída na hora</li>
+                    <li>Sal a gosto</li>
+                </ul>
+                
+                <h3>Modo de Preparo</h3>
+                <ol class="instructions-list">
+                    <li>Cozinhe o espaguete em água fervente com sal até ficar al dente.</li>
+                    <li>Enquanto isso, doure a pancetta em uma frigideira sem adicionar óleo, até ficar crocante.</li>
+                    <li>Em uma tigela, misture as gemas, o ovo inteiro, o queijo pecorino e bastante pimenta-do-reino.</li>
+                    <li>Escorra a massa, reservando um pouco da água do cozimento.</li>
+                    <li>Misture rapidamente o espaguete ainda quente com a pancetta, depois adicione a mistura de ovos e queijo, mexendo bem.</li>
+                    <li>Se necessário, adicione um pouco da água do cozimento para dar o ponto cremoso.</li>
+                    <li>Sirva imediatamente com mais queijo ralado e pimenta a gosto.</li>
+                </ol>
+                
+                <h3>Dicas da Nona</h3>
+                <p>Nunca use creme de leite em uma carbonara autêntica! O segredo está em misturar os ovos rapidamente com a massa quente para criar um molho cremoso sem cozinhar os ovos demais.</p>
+            </article>
+        </main>
+        
+        <aside class="recipe-sidebar">
+            <div class="recipe-info-card">
+                <h3>Informações</h3>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Tempo de preparo: 15 min</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-utensils"></i>
+                    <span>Rendimento: 4 porções</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-fire"></i>
+                    <span>Dificuldade: Fácil</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-star"></i>
+                    <span>Avaliação: 4.9/5</span>
+                </div>
+            </div>
+            
+            <div class="recipe-info-card">
+                <h3>Receitas Relacionadas</h3>
+                <ul>
+                    <li><a href="receita-penne.html">Penne all'Arrabbiata</a></li>
+                    <li><a href="receita-ravioli.html">Ravioli de Ricota</a></li>
+                    <li><a href="receita-lasanha.html">Lasanha à Bolonhesa</a></li>
+                    <li><a href="receita-risoto.html">Risoto de Funghi</a></li>
+                </ul>
+            </div>
+            
+            <div class="recipe-info-card">
+                <h3>Compartilhe</h3>
+                <div style="display: flex; gap: 10px;">
+                    <a href="#" style="color: var(--text-color);"><i class="fab fa-facebook fa-2x"></i></a>
+                    <a href="#" style="color: var(--text-color);"><i class="fab fa-instagram fa-2x"></i></a>
+                    <a href="#" style="color: var(--text-color);"><i class="fab fa-pinterest fa-2x"></i></a>
+                    <a href="#" style="color: var(--text-color);"><i class="fab fa-whatsapp fa-2x"></i></a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h3>Empresa</h3>
+                <ul>
+                    <li><a href="../sobre/sobre.html">Sobre</a></li>
+                    <li><a href="#">Carreiras</a></li>
+                    <li><a href="#">Imprensa</a></li>
+                    <li><a href="../contato/contato.html">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Suporte</h3>
+                <ul>
+                    <li><a href="#">Central de Ajuda</a></li>
+                    <li><a href="#">Plataforma de Desenvolvedor</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Siga</h3>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Código De Sabores, Inc. Todos os direitos reservados.</p>
+            <div class="social-icons">
+                <a href="#">Privacidade</a>
+                <a href="#">Termos</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scriptmainview.js"></script>
+</body>
+</html>
