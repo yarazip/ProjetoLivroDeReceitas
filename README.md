@@ -20,7 +20,7 @@ Atualmente, o projeto contém **a página de login**, o **estilo (CSS) dessa pá
 
 ## Caso de Uso
 
-![Diagrama de Caso de Uso](https://github.com/yarazip/ProjetoLivroDeReceitas/raw/main/casoDeUso/CasoDeUso.png) 
+![Diagrama de Caso de Uso](https://github.com/yarazip/ProjetoLivroDeReceitas/raw/main/CasoDeUso/CasoDeUso.png) 
 
 
 ## 🛠️ Tecnologias Utilizadas  
