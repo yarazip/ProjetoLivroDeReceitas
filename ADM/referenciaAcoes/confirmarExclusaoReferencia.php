@@ -14,33 +14,38 @@ if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'Administrador') {
     exit;
 }
 
-$id_cargo_para_excluir = $_GET['id'] ?? null;
+$id_func_excluir = $_GET['id_func'] ?? null;
+$id_rest_excluir = $_GET['id_rest'] ?? null;
 
-// Se o ID do cargo não foi fornecido na URL, redireciona de volta
-if (is_null($id_cargo_para_excluir)) {
-    $_SESSION['message'] = "Cargo não especificado para exclusão.";
+if (is_null($id_func_excluir) || is_null($id_rest_excluir)) {
+    $_SESSION['message'] = "Referência não especificada para exclusão.";
     $_SESSION['message_type'] = "error";
-    header("Location: ../cargosADM.php");
+    header("Location: ../referenciaADM.php");
     exit;
 }
 
-// Buscar detalhes do cargo para exibir na página de confirmação
+// Buscar detalhes da referência para exibir na página de confirmação
 try {
-    $stmt = $conn->prepare("SELECT id_cargo, nome, descricao FROM cargos WHERE id_cargo = ?");
-    $stmt->execute([$id_cargo_para_excluir]);
-    $cargo_info = $stmt->fetch(PDO::FETCH_ASSOC);
+    $sql = "SELECT hr.*, f.nome AS nome_funcionario, r.nome AS nome_restaurante
+            FROM historico_restaurante hr
+            JOIN funcionarios f ON hr.id_funcionario = f.id_funcionario
+            JOIN restaurantes r ON hr.id_restaurante = r.id_restaurante
+            WHERE hr.id_funcionario = ? AND hr.id_restaurante = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$id_func_excluir, $id_rest_excluir]);
+    $referencia_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$cargo_info) {
-        $_SESSION['message'] = "Cargo não encontrado para confirmação de exclusão.";
+    if (!$referencia_info) {
+        $_SESSION['message'] = "Referência não encontrada para confirmação de exclusão.";
         $_SESSION['message_type'] = "error";
-        header("Location: ../cargosADM.php");
+        header("Location: ../referenciaADM.php");
         exit;
     }
 } catch (PDOException $e) {
-    error_log("Erro ao buscar cargo para confirmação: " . $e->getMessage());
-    $_SESSION['message'] = "Erro ao carregar detalhes do cargo.";
+    error_log("Erro ao buscar referência para confirmação: " . $e->getMessage());
+    $_SESSION['message'] = "Erro ao carregar detalhes da referência.";
     $_SESSION['message_type'] = "error";
-    header("Location: ../cargosADM.php");
+    header("Location: ../referenciaADM.php");
     exit;
 }
 
@@ -49,7 +54,7 @@ try {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Confirmar Exclusão de Cargo</title>
+    <title>Confirmar Exclusão de Referência</title>
     <link rel="stylesheet" href="../../styles/func.css">
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
     <style>
@@ -112,18 +117,18 @@ try {
         </div>
 
         <div class="confirmation-box">
-            <h2>Confirmar Exclusão de Cargo</h2>
-            <p>Você tem certeza que deseja excluir o cargo:<br>
-               <strong>"<?= htmlspecialchars($cargo_info['nome']) ?>" (ID: <?= htmlspecialchars($cargo_info['id_cargo']) ?>)</strong>?</p>
-            <p>Esta ação é irreversível e pode causar inconsistências se houver funcionários associados a este cargo.</p>
+            <h2>Confirmar Exclusão de Referência</h2>
+            <p>Você tem certeza que deseja excluir a referência do funcionário <strong><?= htmlspecialchars($referencia_info['nome_funcionario']) ?></strong> no restaurante <strong><?= htmlspecialchars($referencia_info['nome_restaurante']) ?></strong> (de <?= htmlspecialchars($referencia_info['data_inicio']) ?> a <?= htmlspecialchars($referencia_info['data_fim'] ?? 'Atual') ?>)?</p>
+            <p>Esta ação é irreversível.</p>
             <div class="buttons">
-                <form action="excluirCargo.php" method="GET">
-                    <input type="hidden" name="id" value="<?= htmlspecialchars($id_cargo_para_excluir) ?>">
+                <form action="excluirReferencia.php" method="GET">
+                    <input type="hidden" name="id_func" value="<?= htmlspecialchars($id_func_excluir) ?>">
+                    <input type="hidden" name="id_rest" value="<?= htmlspecialchars($id_rest_excluir) ?>">
                     <input type="hidden" name="confirmar" value="sim">
                     <button type="submit" class="confirm-button">Sim, Excluir</button>
                 </form>
 
-                <a href="../cargosADM.php" class="cancel-button"><button type="button">Cancelar</button></a>
+                <button type="button" class="cancel-button" onclick="window.location.href='../referenciaADM.php'">Cancelar</button>
             </div>
         </div>
     </div>

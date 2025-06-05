@@ -14,33 +14,32 @@ if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'Administrador') {
     exit;
 }
 
-$id_cargo_para_excluir = $_GET['id'] ?? null;
+$id_restaurante_para_excluir = $_GET['id'] ?? null;
 
-// Se o ID do cargo não foi fornecido na URL, redireciona de volta
-if (is_null($id_cargo_para_excluir)) {
-    $_SESSION['message'] = "Cargo não especificado para exclusão.";
+if (is_null($id_restaurante_para_excluir)) {
+    $_SESSION['message'] = "Restaurante não especificado para exclusão.";
     $_SESSION['message_type'] = "error";
-    header("Location: ../cargosADM.php");
+    header("Location: ../restauranteADM.php");
     exit;
 }
 
-// Buscar detalhes do cargo para exibir na página de confirmação
+// Buscar detalhes do restaurante para exibir na página de confirmação
 try {
-    $stmt = $conn->prepare("SELECT id_cargo, nome, descricao FROM cargos WHERE id_cargo = ?");
-    $stmt->execute([$id_cargo_para_excluir]);
-    $cargo_info = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = $conn->prepare("SELECT id_restaurante, nome, contato FROM restaurantes WHERE id_restaurante = ?");
+    $stmt->execute([$id_restaurante_para_excluir]);
+    $restaurante_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$cargo_info) {
-        $_SESSION['message'] = "Cargo não encontrado para confirmação de exclusão.";
+    if (!$restaurante_info) {
+        $_SESSION['message'] = "Restaurante não encontrado para confirmação de exclusão.";
         $_SESSION['message_type'] = "error";
-        header("Location: ../cargosADM.php");
+        header("Location: ../restauranteADM.php");
         exit;
     }
 } catch (PDOException $e) {
-    error_log("Erro ao buscar cargo para confirmação: " . $e->getMessage());
-    $_SESSION['message'] = "Erro ao carregar detalhes do cargo.";
+    error_log("Erro ao buscar restaurante para confirmação: " . $e->getMessage());
+    $_SESSION['message'] = "Erro ao carregar detalhes do restaurante.";
     $_SESSION['message_type'] = "error";
-    header("Location: ../cargosADM.php");
+    header("Location: ../restauranteADM.php");
     exit;
 }
 
@@ -49,7 +48,7 @@ try {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Confirmar Exclusão de Cargo</title>
+    <title>Confirmar Exclusão de Restaurante</title>
     <link rel="stylesheet" href="../../styles/func.css">
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
     <style>
@@ -112,18 +111,18 @@ try {
         </div>
 
         <div class="confirmation-box">
-            <h2>Confirmar Exclusão de Cargo</h2>
-            <p>Você tem certeza que deseja excluir o cargo:<br>
-               <strong>"<?= htmlspecialchars($cargo_info['nome']) ?>" (ID: <?= htmlspecialchars($cargo_info['id_cargo']) ?>)</strong>?</p>
-            <p>Esta ação é irreversível e pode causar inconsistências se houver funcionários associados a este cargo.</p>
+            <h2>Confirmar Exclusão de Restaurante</h2>
+            <p>Você tem certeza que deseja excluir o restaurante:<br>
+               <strong>"<?= htmlspecialchars($restaurante_info['nome']) ?>" (ID: <?= htmlspecialchars($restaurante_info['id_restaurante']) ?>)</strong>?</p>
+            <p>Esta ação é irreversível e removerá todos os históricos de funcionários associados a este restaurante.</p>
             <div class="buttons">
-                <form action="excluirCargo.php" method="GET">
-                    <input type="hidden" name="id" value="<?= htmlspecialchars($id_cargo_para_excluir) ?>">
+                <form action="excluirRestaurante.php" method="GET">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($id_restaurante_para_excluir) ?>">
                     <input type="hidden" name="confirmar" value="sim">
                     <button type="submit" class="confirm-button">Sim, Excluir</button>
                 </form>
 
-                <a href="../cargosADM.php" class="cancel-button"><button type="button">Cancelar</button></a>
+                <button type="button" class="cancel-button" onclick="window.location.href='../restauranteADM.php'">Cancelar</button>
             </div>
         </div>
     </div>
