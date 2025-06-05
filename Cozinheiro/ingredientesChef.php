@@ -89,18 +89,15 @@ if (isset($_GET['excluir'])) {
         $conn->beginTransaction();
         try {
             // Verificar dependências na tabela 'receita_ingrediente'
-            // Se você decidiu não usar mais receita_ingrediente, pode remover este bloco.
             $stmt_check_deps = $conn->prepare("SELECT COUNT(*) FROM receita_ingrediente WHERE id_ingrediente = ?");
             $stmt_check_deps->execute([$id_ingrediente_para_excluir]);
             $num_dependencias = $stmt_check_deps->fetchColumn();
 
             if ($num_dependencias > 0) {
-                // Se houver dependências, impede a exclusão e retorna um erro
                 $conn->rollBack();
                 $_SESSION['message'] = "Não foi possível excluir o ingrediente. Ele está sendo usado em " . $num_dependencias . " receita(s).";
                 $_SESSION['message_type'] = "error";
             } else {
-                // Se não houver dependências, procede com a exclusão
                 $sql = "DELETE FROM ingredientes WHERE id_ingrediente = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute([$id_ingrediente_para_excluir]);
@@ -117,8 +114,6 @@ if (isset($_GET['excluir'])) {
         header("Location: ingredientesChef.php");
         exit;
     } else {
-        // Exibe o alerta de confirmação via JavaScript
-        // (Isso será o corpo da página se 'excluir' estiver presente e 'confirmar' não for 'sim')
         $stmt_nome_ingrediente = $conn->prepare("SELECT nome FROM ingredientes WHERE id_ingrediente = ?");
         $stmt_nome_ingrediente->execute([$id_ingrediente_para_excluir]);
         $nome_ingrediente_excluir = $stmt_nome_ingrediente->fetchColumn();
@@ -146,16 +141,35 @@ if (isset($_GET['excluir'])) {
         </body>
         </html>
         <?php
-        exit; // Impede que o restante do HTML seja renderizado
+        exit;
     }
 }
 
-// Lógica de PESQUISA
+// Lógica de PESQUISA e BUSCA DE INGREDIENTES COM RECEITAS RELACIONADAS (VIA ID)
 $termo = $_GET['pesquisa'] ?? '';
-$sql = "SELECT * FROM ingredientes WHERE nome LIKE ?";
+$sql = "
+    SELECT
+        i.id_ingrediente,
+        i.nome AS nome_ingrediente,
+        i.descricao AS descricao_ingrediente,
+        GROUP_CONCAT(DISTINCT r.nome_receita ORDER BY r.nome_receita ASC SEPARATOR '|<br>|') AS receitas_associadas
+    FROM
+        ingredientes i
+    LEFT JOIN
+        receita_ingrediente ri ON i.id_ingrediente = ri.id_ingrediente
+    LEFT JOIN
+        receitas r ON ri.nome_receita = r.nome_receita
+    WHERE
+        i.nome LIKE ?
+    GROUP BY
+        i.id_ingrediente, i.nome, i.descricao
+    ORDER BY
+        i.nome ASC;
+";
 $stmt = $conn->prepare($sql);
 $stmt->execute(["%$termo%"]);
 $ingredientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -166,44 +180,19 @@ $ingredientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../styles/func.css">
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
     <style>
-        /* Estilos adicionais para o layout do formulário */
-        .insert-bar form {
-            display: flex;
-            flex-wrap: wrap; /* Permite que os itens quebrem a linha */
-            gap: 10px;
-            align-items: center;
-        }
-        .insert-bar input[type="text"] {
-            flex-grow: 1; /* Faz com que os campos de texto preencham o espaço */
-            min-width: 150px; /* Largura mínima para evitar que fiquem muito pequenos */
-        }
-        .insert-bar button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #4CAF50; /* Verde para adicionar/salvar */
-            color: white;
-        }
-        .insert-bar a button {
-            background-color: #f44336; /* Vermelho para cancelar */
-        }
-        .message-success, .message-error {
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .message-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .message-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+        /* Seus estilos CSS */
+        .insert-bar form { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .insert-bar input[type="text"] { flex-grow: 1; min-width: 150px; }
+        .insert-bar button { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; background-color: #4CAF50; color: white; }
+        .insert-bar a button { background-color: #f44336; }
+        .message-success, .message-error { padding: 10px; margin-bottom: 20px; border-radius: 5px; font-weight: bold; }
+        .message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+        /* Novos estilos para a coluna de receitas */
+        .receitas-list { font-size: 0.9em; line-height: 1.4; }
+        .receitas-list span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .receitas-list span:hover { overflow: visible; white-space: normal; }
     </style>
 </head>
 <body>
@@ -219,7 +208,6 @@ $ingredientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <?php
-    // Exibir mensagens de feedback
     if (isset($_SESSION['message'])): ?>
         <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
             <?= htmlspecialchars($_SESSION['message']) ?>
@@ -270,18 +258,34 @@ $ingredientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Descrição</th>
-                <th>Ações</th>
+                <th>Receitas que Utilizam</th> <th>Ações</th>
             </tr>
         </thead>
         <tbody>
         <?php if (empty($ingredientes)): ?>
-            <tr><td colspan="4">Nenhum ingrediente encontrado.</td></tr>
-        <?php else: ?>
+            <tr><td colspan="5">Nenhum ingrediente encontrado.</td></tr> <?php else: ?>
             <?php foreach ($ingredientes as $ing): ?>
                 <tr>
                     <td><?= htmlspecialchars($ing['id_ingrediente']) ?></td>
-                    <td><?= htmlspecialchars($ing['nome']) ?></td>
-                    <td><?= htmlspecialchars($ing['descricao']) ?></td>
+                    <td><?= htmlspecialchars($ing['nome_ingrediente']) ?></td>
+                    <td><?= htmlspecialchars($ing['descricao_ingrediente']) ?></td>
+                    <td>
+                        <?php
+                        if ($ing['receitas_associadas']) {
+                            // Divide a string de receitas por '|<br>|' e exibe como links
+                            $receitas_arr = explode('|<br>|', $ing['receitas_associadas']);
+                            echo '<div class="receitas-list">';
+                            foreach ($receitas_arr as $receita_nome) {
+                                // Link para a página de consulta da receita (se você tiver uma)
+                                // Assumindo que receitasChef.php ou uma subpágina tem um link para consultar
+                                echo '<span><a href="receitasAcoes/consultar.php?nome=' . urlencode($receita_nome) . '">' . htmlspecialchars($receita_nome) . '</a></span>';
+                            }
+                            echo '</div>';
+                        } else {
+                            echo "Nenhuma";
+                        }
+                        ?>
+                    </td>
                     <td>
                         <a href="?editar=<?= htmlspecialchars($ing['id_ingrediente']) ?>"><button>Editar</button></a>
                         <a href="?excluir=<?= htmlspecialchars($ing['id_ingrediente']) ?>">
@@ -297,17 +301,5 @@ $ingredientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </body>
 </html>
 <?php
-// Fechar a conexão com o banco de dados
-$conn = null;
-?>
-<?php
-// Fim do arquivo ingredientesChef.php
-// Este arquivo gerencia a adição, edição, exclusão e pesquisa de ingredientes para o cozinheiro.
-// Ele inclui funcionalidades para:
-// - Adicionar novos ingredientes
-// - Editar ingredientes existentes
-// - Excluir ingredientes com confirmação e verificação de dependências
-// - Pesquisar ingredientes por nome
-// - Exibir mensagens de feedback para o usuário
-// Ele também garante que apenas usuários com permissões adequadas possam acessar essas funcionalidades, redirecionando usuários não autorizados para a página de login.
+$conn = null; // Fechar a conexão
 ?>

@@ -6,70 +6,76 @@ error_reporting(E_ALL);
 
 require_once '../../BancoDeDados/conexao.php'; // Caminho ajustado
 
-// Buscar categorias e medidas para os selects (medidas podem ser úteis para modo de preparo ou descrição)
-$categorias = $conn->query("SELECT id_categoria, nome_categoria FROM categorias")->fetchAll(PDO::FETCH_ASSOC);
-// As variáveis $ingredientes e $medidas (para os selects de ingredientes) não são mais necessárias se for texto livre
-// $ingredientes = $conn->query("SELECT id_ingrediente, nome FROM ingredientes")->fetchAll(PDO::FETCH_ASSOC);
-// $medidas = $conn->query("SELECT id_medida, descricao, medida FROM medidas")->fetchAll(PDO::FETCH_ASSOC);
+// Verifica se o usuário está logado e se tem permissão
+if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'Cozinheiro' && $_SESSION['cargo'] !== 'Administrador')) {
+    $_SESSION['message'] = "Você não tem permissão para editar receitas.";
+    $_SESSION['message_type'] = "error";
+    header("Location: ../../LoginSenha/login.php");
+    exit;
+}
+
+// Buscar categorias, ingredientes e medidas para os selects
+$categorias = $conn->query("SELECT id_categoria, nome_categoria FROM categorias ORDER BY nome_categoria ASC")->fetchAll(PDO::FETCH_ASSOC);
+$ingredientes_disponiveis = $conn->query("SELECT id_ingrediente, nome FROM ingredientes ORDER BY nome ASC")->fetchAll(PDO::FETCH_ASSOC);
+$medidas_disponiveis = $conn->query("SELECT id_medida, descricao, medida FROM medidas ORDER BY descricao ASC")->fetchAll(PDO::FETCH_ASSOC);
 
 // Lógica para processar a ATUALIZAÇÃO (se o formulário foi submetido)
 if (isset($_POST['atualizar'])) {
     $nome_original = $_POST['nome_original'];
     $nome = $_POST['nome_receita'];
     $data = $_POST['data_criacao'];
-    $id_funcionario = $_POST['id_funcionario']; // Pegando do hidden input
+    $id_funcionario = $_POST['id_funcionario'];
     $id_categoria = $_POST['id_categoria'];
     $modo_preparo = $_POST['modo_preparo'];
     $porcoes = $_POST['porcoes'];
     $tempo_preparo = $_POST['tempo_preparo'];
     $dificuldade = $_POST['dificuldade'];
-    $descricao = $_POST['descricao'];
-    $ingredientes_texto = $_POST['ingredientes_texto']; // NOVO CAMPO DE TEXTO LIVRE
+    $descricao_geral = $_POST['descricao_geral']; // Descrição geral da receita
+    // Removido: $ingredientes_texto = $_POST['ingredientes_texto'];
 
     $conn->beginTransaction();
 
     try {
-        // Atualizar dados da receita principal, incluindo o campo de texto livre para ingredientes
-        // Certifique-se de que a coluna 'ingredientes_lista_texto' existe na sua tabela 'receitas'
+        // Atualizar dados da receita principal
+        // Se a coluna 'ingredientes_lista_texto' não for mais usada, remova-a da query e do Array de execute.
         $sql = "UPDATE receitas SET
             nome_receita = ?, data_criacao = ?, id_funcionario = ?, id_categoria = ?,
-            modo_preparo = ?, porcoes = ?, tempo_preparo = ?, dificuldade = ?, descricao = ?,
-            ingredientes_lista_texto = ? -- Adicionando a nova coluna aqui
+            modo_preparo = ?, porcoes = ?, tempo_preparo = ?, dificuldade = ?, descricao = ?
             WHERE nome_receita = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             $nome, $data, $id_funcionario, $id_categoria,
-            $modo_preparo, $porcoes, $tempo_preparo, $dificuldade, $descricao,
-            $ingredientes_texto, // Valor para a nova coluna
+            $modo_preparo, $porcoes, $tempo_preparo, $dificuldade, $descricao_geral,
             $nome_original
         ]);
 
-        // **REMOVENDO A LÓGICA DE EXCLUIR E INSERIR INGREDIENTES DA RECEITA N:N**
-        // Pois agora os ingredientes são um campo de texto livre.
-        // Se você não usa mais a tabela 'receita_ingrediente', pode apagar estas linhas.
-        /*
-        $stmt = $conn->prepare("DELETE FROM receita_ingrediente WHERE nome_receita = ?");
-        $stmt->execute([$nome_original]);
+        // Excluir ingredientes antigos e reinserir os atualizados
+        $stmt_delete_ing = $conn->prepare("DELETE FROM receita_ingrediente WHERE nome_receita = ?");
+        $stmt_delete_ing->execute([$nome_original]);
 
-        if (!empty($_POST['ingredientes'])) { // Este bloco não será mais usado
+        if (!empty($_POST['ingredientes']) && !empty($_POST['quantidades']) && !empty($_POST['medidas'])) {
             $ingredientes_post = $_POST['ingredientes'];
+            $quantidades_post = $_POST['quantidades'];
             $medidas_post = $_POST['medidas'];
-            $quantidades = $_POST['quantidades'];
-            $descricoes_ing = $_POST['descricao_ingrediente'] ?? [];
+            $descricoes_ing_post = $_POST['descricao_ingrediente'] ?? [];
 
             $sqlIng = "INSERT INTO receita_ingrediente (nome_receita, id_ingrediente, id_medida, quantidade_ingrediente, descricao) VALUES (?, ?, ?, ?, ?)";
             $stmtIng = $conn->prepare($sqlIng);
 
             foreach ($ingredientes_post as $index => $id_ingrediente) {
-                $id_medida = $medidas_post[$index] ?? null;
-                $quantidade = $quantidades[$index] ?? 0;
-                $desc_ing = $descricoes_ing[$index] ?? null;
-                if ($id_medida !== null) {
-                    $stmtIng->execute([$nome, $id_ingrediente, $id_medida, $quantidade, $desc_ing]);
+                $id_medida = $medidas_post[$index];
+                $quantidade = $quantidades_post[$index];
+                $desc_ing = $descricoes_ing_post[$index] ?? null;
+
+                if (empty($id_ingrediente) || empty($id_medida) || !is_numeric($quantidade) || $quantidade <= 0) {
+                     // Lidar com erro de ingrediente inválido
+                     // Para edição, podemos permitir que campos vazios não gerem erro fatal, mas que sejam ignorados ou validados melhor
+                     continue; // Pula para o próximo ingrediente se este for inválido
                 }
+                $stmtIng->execute([$nome, $id_ingrediente, $id_medida, $quantidade, $desc_ing]);
             }
         }
-        */
+
 
         // Atualizar foto, se houver um novo upload
         if (isset($_FILES['foto_receita']) && $_FILES['foto_receita']['error'] === UPLOAD_ERR_OK && !empty($_FILES['foto_receita']['tmp_name'])) {
@@ -91,39 +97,38 @@ if (isset($_POST['atualizar'])) {
         $conn->commit();
         $_SESSION['message'] = "Receita '" . htmlspecialchars($nome) . "' atualizada com sucesso!";
         $_SESSION['message_type'] = "success";
-        header("Location: ../receitasChef.php"); // Redireciona para a lista principal
+        header("Location: ../../receitasChef.php");
         exit;
     } catch (Exception $e) {
         $conn->rollBack();
         error_log("Erro ao atualizar receita: " . $e->getMessage());
         $_SESSION['message'] = "Erro ao atualizar receita: " . $e->getMessage();
         $_SESSION['message_type'] = "error";
-       header("Location: ../receitasChef.php"); // Redireciona com erro
+        header("Location: ../../receitasChef.php");
         exit;
     }
 }
 
 // Lógica para BUSCAR RECEITA PARA EDIÇÃO (se o formulário não foi submetido, mas a página foi acessada via GET)
 $receita_editar = null;
-if (isset($_GET['nome'])) { // Usando 'nome' como parâmetro, como você já faz
+if (isset($_GET['nome'])) {
     $nome_receita_param = $_GET['nome'];
 
-    // Buscar receita (agora incluindo 'ingredientes_lista_texto')
+    // Buscar receita principal
     $stmt = $conn->prepare("SELECT nome_receita, data_criacao, id_funcionario, id_categoria, modo_preparo, porcoes, tempo_preparo, dificuldade, descricao, ingredientes_lista_texto
                             FROM receitas WHERE nome_receita = ?");
     $stmt->execute([$nome_receita_param]);
     $receita_editar = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // **REMOVENDO A BUSCA DE INGREDIENTES DA TABELA N:N**
-    /*
     if ($receita_editar) {
-        $stmtIng = $conn->prepare("SELECT * FROM receita_ingrediente WHERE nome_receita = ?");
+        // Buscar ingredientes específicos desta receita (reativado)
+        $stmtIng = $conn->prepare("SELECT ri.id_ingrediente, ri.id_medida, ri.quantidade_ingrediente, ri.descricao AS descricao_ingrediente_item
+                                    FROM receita_ingrediente ri
+                                    WHERE ri.nome_receita = ?");
         $stmtIng->execute([$nome_receita_param]);
-        $receita_editar['ingredientes'] = $stmtIng->fetchAll(PDO::FETCH_ASSOC);
-    */
+        $receita_editar['ingredientes_detalhes'] = $stmtIng->fetchAll(PDO::FETCH_ASSOC);
 
-    // Buscar foto da receita (mantido)
-    if ($receita_editar) { // Mantém a verificação
+        // Buscar foto da receita
         $stmtFoto = $conn->prepare("SELECT tipo FROM foto_receita WHERE nome_receita = ? LIMIT 1");
         $stmtFoto->execute([$nome_receita_param]);
         $foto = $stmtFoto->fetch(PDO::FETCH_ASSOC);
@@ -131,14 +136,12 @@ if (isset($_GET['nome'])) { // Usando 'nome' como parâmetro, como você já faz
             $receita_editar['foto_receita'] = $foto['tipo'];
         }
     } else {
-        // Redireciona se a receita não for encontrada
         $_SESSION['message'] = "Receita não encontrada para edição.";
         $_SESSION['message_type'] = "error";
         header("Location: ../../receitasChef.php");
         exit;
     }
 } else {
-    // Redireciona se a página foi acessada sem o parâmetro 'nome'
     $_SESSION['message'] = "Parâmetro 'nome' da receita ausente para edição.";
     $_SESSION['message_type'] = "error";
     header("Location: ../../receitasChef.php");
@@ -153,32 +156,71 @@ if (isset($_GET['nome'])) { // Usando 'nome' como parâmetro, como você já faz
     <link rel="stylesheet" href="../../styles/func.css" />
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon" />
     <style>
-        /* Remova estilos específicos de .ingrediente-item se não for mais usado
-           ou ajuste para o novo layout. */
-        .foto-receita { max-width: 100px; max-height: 100px; }
-        textarea { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        fieldset { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
-        legend { font-weight: bold; padding: 0 10px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"], input[type="date"], input[type="number"], select {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
+        /* Seus estilos CSS */
+        .insert-bar form { display: flex; flex-direction: column; gap: 15px; }
+        .insert-bar fieldset { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #f9f9f9; }
+        .insert-bar legend { font-size: 1.2em; font-weight: bold; padding: 0 10px; color: #333; }
+        .insert-bar label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .insert-bar input[type="text"],
+        .insert-bar input[type="date"],
+        .insert-bar input[type="number"],
+        .insert-bar select,
+        .insert-bar textarea { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .insert-bar button { padding: 12px 25px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; margin-top: 10px; }
+        .insert-bar button:hover { opacity: 0.9; }
+        .message-success, .message-error { padding: 10px; margin-bottom: 20px; border-radius: 5px; font-weight: bold; }
+        .message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        /* Estilos para o container de ingredientes */
+        .ingredientes-container {
             border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #fff;
         }
-        button[type="submit"], button[type="button"] {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
+        .ingrediente-item {
+            display: flex;
+            flex-wrap: wrap; /* Para responsividade em telas menores */
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee; /* Linha divisória para cada ingrediente */
+            align-items: flex-end; /* Alinha os botões com os inputs */
         }
-        button[type="submit"] { background-color: #4CAF50; color: white; }
-        button[type="button"] { background-color: #f44336; color: white; } /* Cancelar */
-        .insert-bar form { display: flex; flex-direction: column; gap: 10px; } /* Ajuste de layout */
+        .ingrediente-item:last-child {
+            border-bottom: none; /* Remove a linha do último item */
+        }
+        .ingrediente-item label {
+            flex-basis: 100%; /* Labels ocupam toda a largura antes dos inputs */
+            margin-bottom: 5px;
+        }
+        .ingrediente-item select,
+        .ingrediente-item input[type="number"],
+        .ingrediente-item input[type="text"] {
+            flex-grow: 1; /* Inputs crescem para preencher espaço */
+            margin-bottom: 0; /* Remove margin-bottom padrão */
+            min-width: 120px; /* Largura mínima para os selects/inputs */
+        }
+        .ingrediente-item input[type="number"] { width: 80px; min-width: 80px; }
+        .ingrediente-item button {
+            flex-shrink: 0; /* Botões não encolhem */
+            padding: 8px 12px;
+            font-size: 0.9em;
+            margin-top: 0; /* Remove margin-top padrão */
+        }
+        .adicionar-ingrediente { background-color: #007bff; color: white; } /* Azul para adicionar */
+        .remover-ingrediente { background-color: #dc3545; color: white; } /* Vermelho para remover */
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+        .foto-receita { max-width: 100px; max-height: 100px; }
+        .button-cancel {
+            display: inline-block; /* Para alinhar com o botão de submit */
+            margin-left: 10px; /* Espaço entre os botões */
+        }
+        .button-cancel button {
+            background-color: #f44336; /* Cor vermelha para cancelar */
+        }
     </style>
 </head>
 <body>
@@ -238,10 +280,79 @@ if (isset($_GET['nome'])) { // Usando 'nome' como parâmetro, como você já faz
                 </select>
             </fieldset>
 
-            <fieldset>
+            <fieldset class="ingredientes-container">
                 <legend>Ingredientes</legend>
-                <label for="ingredientes_texto">Lista de Ingredientes:</label>
-                <textarea id="ingredientes_texto" name="ingredientes_texto" placeholder="Liste os ingredientes, um por linha, ou separados por vírgula. Ex: 2 xícaras de farinha, 1 ovo grande, 1 colher de chá de fermento." rows="8" required><?= htmlspecialchars($receita_editar['ingredientes_lista_texto'] ?? '') ?></textarea>
+                <?php if (!empty($receita_editar['ingredientes_detalhes'])): ?>
+                    <?php foreach ($receita_editar['ingredientes_detalhes'] as $index => $ing): ?>
+                    <div class="ingrediente-item">
+                        <label for="ingrediente_<?= $index ?>" class="sr-only">Ingrediente:</label>
+                        <select name="ingredientes[]" id="ingrediente_<?= $index ?>" required>
+                            <option value="">Selecione o ingrediente</option>
+                            <?php foreach ($ingredientes_disponiveis as $ingrediente_disp): ?>
+                                <option value="<?= htmlspecialchars($ingrediente_disp['id_ingrediente']) ?>"
+                                    <?= ($ing['id_ingrediente'] == $ingrediente_disp['id_ingrediente']) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($ingrediente_disp['nome']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <label for="quantidade_<?= $index ?>" class="sr-only">Quantidade:</label>
+                        <input type="number" name="quantidades[]" id="quantidade_<?= $index ?>" step="0.1" min="0" placeholder="Qtd"
+                                value="<?= htmlspecialchars($ing['quantidade_ingrediente']) ?>" required>
+
+                        <label for="medida_<?= $index ?>" class="sr-only">Medida:</label>
+                        <select name="medidas[]" id="medida_<?= $index ?>" required>
+                            <option value="">Selecione a medida</option>
+                            <?php foreach ($medidas_disponiveis as $medida_disp): ?>
+                                <option value="<?= htmlspecialchars($medida_disp['id_medida']) ?>"
+                                    <?= ($ing['id_medida'] == $medida_disp['id_medida']) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($medida_disp['descricao'] . ' (' . $medida_disp['medida'] . ')') ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <label for="descricao_ingrediente_<?= $index ?>" class="sr-only">Descrição Adicional:</label>
+                        <input type="text" name="descricao_ingrediente[]" id="descricao_ingrediente_<?= $index ?>" placeholder="Descrição (ex: picado)"
+                                value="<?= htmlspecialchars($ing['descricao_ingrediente_item'] ?? '') ?>">
+
+                        <?php if ($index === 0 && count($receita_editar['ingredientes_detalhes']) == 1): // Se for o único item inicial ?>
+                            <button type="button" class="adicionar-ingrediente">+</button>
+                        <?php else: ?>
+                            <button type="button" class="remover-ingrediente">-</button>
+                        <?php endif; ?>
+                    </div>
+                    <?php endforeach; ?>
+                <?php else: // Se não houver ingredientes ou se a receita for nova ?>
+                    <div class="ingrediente-item">
+                        <label for="ingrediente_0" class="sr-only">Ingrediente:</label>
+                        <select name="ingredientes[]" id="ingrediente_0" required>
+                            <option value="">Selecione o ingrediente</option>
+                            <?php foreach ($ingredientes_disponiveis as $ingrediente_disp): ?>
+                                <option value="<?= htmlspecialchars($ingrediente_disp['id_ingrediente']) ?>">
+                                    <?= htmlspecialchars($ingrediente_disp['nome']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <label for="quantidade_0" class="sr-only">Quantidade:</label>
+                        <input type="number" name="quantidades[]" id="quantidade_0" step="0.1" min="0" placeholder="Qtd" required>
+
+                        <label for="medida_0" class="sr-only">Medida:</label>
+                        <select name="medidas[]" id="medida_0" required>
+                            <option value="">Selecione a medida</option>
+                            <?php foreach ($medidas_disponiveis as $medida_disp): ?>
+                                <option value="<?= htmlspecialchars($medida_disp['id_medida']) ?>">
+                                    <?= htmlspecialchars($medida_disp['descricao'] . ' (' . $medida_disp['medida'] . ')') ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <label for="descricao_ingrediente_0" class="sr-only">Descrição Adicional:</label>
+                        <input type="text" name="descricao_ingrediente[]" id="descricao_ingrediente_0" placeholder="Descrição (ex: picado)">
+
+                        <button type="button" class="adicionar-ingrediente">+</button>
+                    </div>
+                <?php endif; ?>
             </fieldset>
 
             <fieldset>
@@ -249,8 +360,8 @@ if (isset($_GET['nome'])) { // Usando 'nome' como parâmetro, como você já faz
                 <label for="modo_preparo">Modo de Preparo:</label>
                 <textarea id="modo_preparo" name="modo_preparo" placeholder="Modo de Preparo" rows="6" required><?= htmlspecialchars($receita_editar['modo_preparo'] ?? '') ?></textarea>
 
-                <label for="descricao">Descrição Geral da Receita (Opcional):</label>
-                <textarea id="descricao" name="descricao" placeholder="Descrição Geral"><?= htmlspecialchars($receita_editar['descricao'] ?? '') ?></textarea>
+                <label for="descricao_geral">Descrição Geral da Receita (Opcional):</label>
+                <textarea id="descricao_geral" name="descricao_geral" placeholder="Descrição Geral"><?= htmlspecialchars($receita_editar['descricao'] ?? '') ?></textarea>
             </fieldset>
 
             <fieldset>
@@ -264,7 +375,7 @@ if (isset($_GET['nome'])) { // Usando 'nome' como parâmetro, como você já faz
                     <p>Nenhuma foto atual.</p>
                 <?php endif; ?>
             </fieldset>
-            
+
             <button type="submit" name="atualizar">Atualizar Receita</button>
             <a href="../../receitasChef.php" class="button-cancel"><button type="button">Cancelar</button></a>
         </form>
@@ -272,9 +383,69 @@ if (isset($_GET['nome'])) { // Usando 'nome' como parâmetro, como você já faz
 </div>
 
 <script>
-// Se você não precisa mais da funcionalidade de adicionar/remover campos de ingrediente dinamicamente,
-// todo o bloco de script JavaScript pode ser removido ou limpo.
-// Pois agora o campo de ingrediente é um textarea único.
+document.addEventListener('DOMContentLoaded', function() {
+    let ingredienteCounter = <?= !empty($receita_editar['ingredientes_detalhes']) ? count($receita_editar['ingredientes_detalhes']) : 0 ?>;
+
+    // Função para clonar e adicionar um novo item de ingrediente
+    function addIngredienteItem() {
+        const container = document.querySelector('.ingredientes-container');
+        // Pega o último item para clonar e manter os selects preenchidos do original (vazios para o novo)
+        const lastItem = container.querySelector('.ingrediente-item:last-child');
+        const newItem = lastItem.cloneNode(true);
+
+        // Limpar os valores dos inputs e selects do novo item
+        newItem.querySelectorAll('input, select').forEach(el => {
+            if (el.tagName === 'SELECT' || el.type !== 'hidden') { // Não limpa hidden inputs
+                el.value = '';
+            }
+        });
+
+        // Atualizar IDs e nomes para serem únicos
+        newItem.querySelectorAll('[id]').forEach(el => {
+            el.id = el.id.replace(/_(\d+)$/, '_' + ingredienteCounter);
+            const label = newItem.querySelector(`label[for="${el.id}"]`); // Atualiza o 'for' do label
+            if (label) label.setAttribute('for', el.id);
+        });
+        newItem.querySelectorAll('[name]').forEach(el => {
+            el.name = el.name.replace(/\[\d+\]$/, '[' + ingredienteCounter + ']'); // Atualiza o índice do array
+        });
+
+        // Mudar o botão "+" para um botão de remover "-"
+        let addButton = newItem.querySelector('.adicionar-ingrediente');
+        if (addButton) {
+            addButton.classList.replace('adicionar-ingrediente', 'remover-ingrediente');
+            addButton.textContent = '-';
+        } else { // Se clonou um item que já era remover, garante que tenha um botão remover
+            let existingRemoverButton = newItem.querySelector('.remover-ingrediente');
+            if (!existingRemoverButton) {
+                // Cria um novo botão remover se não houver um
+                const newRemoverButton = document.createElement('button');
+                newRemoverButton.type = 'button';
+                newRemoverButton.classList.add('remover-ingrediente');
+                newRemoverButton.textContent = '-';
+                newItem.appendChild(newRemoverButton);
+            }
+        }
+        
+        container.appendChild(newItem);
+        ingredienteCounter++;
+    }
+
+    // Adiciona listener para o botão "Adicionar Ingrediente" e "Remover Ingrediente"
+    // Usamos delegação de evento para botões dinamicamente adicionados
+    document.querySelector('.ingredientes-container').addEventListener('click', function(event) {
+        if (event.target.classList.contains('adicionar-ingrediente')) {
+            addIngredienteItem();
+        } else if (event.target.classList.contains('remover-ingrediente')) {
+            // Garante que pelo menos um ingrediente permaneça
+            if (document.querySelectorAll('.ingrediente-item').length > 1) {
+                event.target.closest('.ingrediente-item').remove();
+            } else {
+                alert("É necessário ter pelo menos um ingrediente na receita.");
+            }
+        }
+    });
+});
 </script>
 </body>
 </html>

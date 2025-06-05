@@ -4,86 +4,21 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../BancoDeDados/conexao.php'; // Caminho ajustado
+require_once '../BancoDeDados/conexao.php';
 
-
-// Buscar categorias e medidas para o formulário de ADIÇÃO e selects de filtro
-$categorias = $conn->query("SELECT id_categoria, nome_categoria FROM categorias")->fetchAll(PDO::FETCH_ASSOC);
-// Continuamos buscando medidas, pois elas ainda são relevantes para as "porções" e "modo de preparo"
-$medidas = $conn->query("SELECT id_medida, descricao, medida FROM medidas")->fetchAll(PDO::FETCH_ASSOC);
-$funcionarios_para_filtro = $conn->query("SELECT id_funcionario, nome FROM funcionarios")->fetchAll(PDO::FETCH_ASSOC); // Para o filtro
-
-// Lógica de INSERIR nova receita
-if (isset($_POST['adicionar'])) {
-    $nome = $_POST['nome_receita'];
-    $data = $_POST['data_criacao'];
-    $id_categoria = $_POST['id_categoria'];
-    $modo_preparo = $_POST['modo_preparo'];
-    $porcoes = $_POST['porcoes'];
-    $tempo_preparo = $_POST['tempo_preparo'];
-    $dificuldade = $_POST['dificuldade'];
-    $descricao = $_POST['descricao'];
-    $ingredientes_texto = $_POST['ingredientes_texto']; // NOVO CAMPO
-    $id_funcionario = $_SESSION['id_funcionario'] ?? null; // Assume que id_funcionario está na sessão
-
-    if (!$id_funcionario) {
-        $_SESSION['message'] = "Erro: Funcionário não logado para adicionar receita.";
-        $_SESSION['message_type'] = "error";
-        header("Location: receitasChef.php");
-        exit;
-    }
-
-    $conn->beginTransaction();
-
-    try {
-        // Inserir receita
-        // ATENÇÃO: Se você moveu 'ingredientes' para um campo de texto livre,
-        // a tabela 'receitas' precisará de uma nova coluna para armazenar esse texto.
-        // Por exemplo, uma coluna `ingredientes_lista_texto` VARCHAR(1000) ou TEXT.
-        // Vou assumir que você adicionará essa coluna na tabela `receitas`.
-        // SE VOCÊ AINDA QUISER MANTER A RELAÇÃO N:N DE INGREDIENTES, ME AVISE.
-        // Por enquanto, o campo 'ingredientes_texto' será armazenado na coluna 'descricao'
-        // da tabela 'receitas' para demonstração. Mas o ideal é criar uma coluna nova.
-        // Ajuste a query INSERT abaixo para sua coluna correta, se criar uma nova.
-        
-        $sql = "INSERT INTO receitas (nome_receita, data_criacao, id_categoria, modo_preparo, porcoes, tempo_preparo, dificuldade, descricao, id_funcionario)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        // Passe $ingredientes_texto para a coluna 'descricao' por enquanto (para teste)
-        // O ideal é ter uma coluna específica para os ingredientes em texto livre.
-        $stmt->execute([$nome, $data, $id_categoria, $modo_preparo, $porcoes, $tempo_preparo, $dificuldade, $ingredientes_texto, $id_funcionario]);
-
-
-        // REMOVENDO A LÓGICA DE INSERIR INGREDIENTES DA RECEITA N:N (receita_ingrediente)
-        // Pois agora os ingredientes são um campo de texto livre.
-        // if (!empty($_POST['ingredientes'])) { ... }
-
-
-        // Inserir foto receita (se houver)
-        if (isset($_FILES['foto_receita']) && $_FILES['foto_receita']['error'] === UPLOAD_ERR_OK && !empty($_FILES['foto_receita']['tmp_name'])) {
-            $foto = file_get_contents($_FILES['foto_receita']['tmp_name']);
-            $sqlFoto = "INSERT INTO foto_receita (tipo, data_upload, id_funcionario, nome_receita) VALUES (?, NOW(), ?, ?)";
-            $stmtFoto = $conn->prepare($sqlFoto);
-            $stmtFoto->execute([$foto, $id_funcionario, $nome]);
-        }
-
-        $conn->commit();
-        $_SESSION['message'] = "Receita '" . htmlspecialchars($nome) . "' adicionada com sucesso!";
-        $_SESSION['message_type'] = "success";
-        header("Location: receitasChef.php");
-        exit;
-    } catch (Exception $e) {
-        $conn->rollBack();
-        error_log("Erro ao adicionar receita: " . $e->getMessage());
-        $_SESSION['message'] = "Erro ao adicionar receita: " . $e->getMessage();
-        $_SESSION['message_type'] = "error";
-        header("Location: receitasChef.php");
-        exit;
-    }
+// Verifica se o usuário está logado e se tem permissão (Cozinheiro ou Administrador)
+if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'Cozinheiro' && $_SESSION['cargo'] !== 'Administrador')) {
+    $_SESSION['message'] = "Você não tem permissão para acessar esta página.";
+    $_SESSION['message_type'] = "error";
+    header("Location: ../LoginSenha/login.php");
+    exit;
 }
 
+// Buscar categorias e funcionários para os selects de filtro
+$categorias = $conn->query("SELECT id_categoria, nome_categoria FROM categorias")->fetchAll(PDO::FETCH_ASSOC);
+$funcionarios_para_filtro = $conn->query("SELECT id_funcionario, nome FROM funcionarios")->fetchAll(PDO::FETCH_ASSOC);
 
-// Lógica de PESQUISA e FILTROS (mantida)
+// Lógica de PESQUISA e FILTROS
 $termo = $_GET['pesquisa'] ?? '';
 $filtro_categoria = $_GET['categoria'] ?? '';
 $filtro_funcionario = $_GET['funcionario'] ?? '';
@@ -128,6 +63,44 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Receitas do Cozinheiro</title>
     <link rel="stylesheet" href="../styles/func.css" />
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon" />
+    <style>
+        /* Seus estilos CSS */
+        .message-success, .message-error { padding: 10px; margin-bottom: 20px; border-radius: 5px; font-weight: bold; }
+        .message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; vertical-align: top; } /* Adicionado vertical-align */
+        th { background-color: #f2f2f2; }
+        .filter-form { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 20px; }
+        .filter-form label { font-weight: bold; }
+        .filter-form input[type="text"], .filter-form select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .filter-form button { padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .filter-form .clear-filters-button { margin-left: 10px; background-color: #dc3545; color: white; }
+        .foto-receita { max-width: 100px; height: auto; display: block; margin: 0 auto; }
+        .add-recipe-button-container { text-align: right; margin-bottom: 20px; }
+        .add-recipe-button {
+            padding: 10px 20px;
+            background-color: #28a745; /* Verde para adicionar */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .add-recipe-button:hover { opacity: 0.9; }
+
+        /* Estilos para a lista de ingredientes na tabela */
+        .ingredientes-lista-tabela ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .ingredientes-lista-tabela li {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -142,14 +115,13 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <?php
-    // Exibir mensagens de feedback
     if (isset($_SESSION['message'])): ?>
         <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
             <?= htmlspecialchars($_SESSION['message']) ?>
         </div>
-        <?php 
-        unset($_SESSION['message']); 
-        unset($_SESSION['message_type']); 
+        <?php
+        unset($_SESSION['message']);
+        unset($_SESSION['message_type']);
     endif;
     ?>
 
@@ -157,7 +129,7 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <form method="GET" class="filter-form">
         <label for="pesquisa">Pesquisar por Nome:</label>
         <input type="text" id="pesquisa" name="pesquisa" placeholder="Ex: Bolo de Chocolate" value="<?= htmlspecialchars($termo) ?>">
-        
+
         <label for="categoria">Filtrar por Categoria:</label>
         <select id="categoria" name="categoria">
             <option value="">Todas as Categorias</option>
@@ -179,7 +151,7 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </option>
             <?php endforeach; ?>
         </select>
-        
+
         <label for="ineditas">
             <input type="checkbox" id="ineditas" name="ineditas" <?= $filtro_ineditas ? 'checked' : '' ?>> Receitas Inéditas
         </label>
@@ -192,70 +164,9 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <hr>
 
-    <h2>Adicionar Nova Receita</h2>
-    <div class="insert-bar">
-        <form method="POST" enctype="multipart/form-data">
-            <p><strong>Cozinheiro logado:</strong> <?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></p>
-
-            <fieldset>
-                <legend>Informações Básicas da Receita</legend>
-                <label for="nome_receita">Nome da Receita:</label>
-                <input type="text" id="nome_receita" name="nome_receita" placeholder="Ex: Lasanha à Bolonhesa" required>
-
-                <label for="data_criacao">Data de Criação:</label>
-                <input type="date" id="data_criacao" name="data_criacao" required value="<?= date('Y-m-d') ?>">
-
-                <label for="id_categoria">Categoria:</label>
-                <select id="id_categoria" name="id_categoria" required>
-                    <option value="">Selecione a Categoria</option>
-                    <?php foreach ($categorias as $categoria): ?>
-                        <option value="<?= htmlspecialchars($categoria['id_categoria']) ?>">
-                            <?= htmlspecialchars($categoria['nome_categoria']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <label for="porcoes">Número de Porções:</label>
-                <input type="number" id="porcoes" name="porcoes" placeholder="Ex: 4" min="1" required>
-
-                <label for="tempo_preparo">Tempo de Preparo (Ex: 30 min, 1h 15min):</label>
-                <input type="text" id="tempo_preparo" name="tempo_preparo" placeholder="Ex: 45 minutos" required>
-
-                <label for="dificuldade">Dificuldade:</label>
-                <select id="dificuldade" name="dificuldade" required>
-                    <option value="">Selecione a Dificuldade</option>
-                    <option value="Fácil">Fácil</option>
-                    <option value="Médio">Médio</option>
-                    <option value="Difícil">Difícil</option>
-                </select>
-            </fieldset>
-
-            <fieldset>
-                <legend>Ingredientes</legend>
-                <label for="ingredientes_texto">Lista de Ingredientes:</label>
-                <textarea id="ingredientes_texto" name="ingredientes_texto" placeholder="Liste os ingredientes, um por linha, ou separados por vírgula. Ex: 2 xícaras de farinha, 1 ovo grande, 1 colher de chá de fermento." rows="8" required></textarea>
-            </fieldset>
-
-            <fieldset>
-                <legend>Instruções e Descrição</legend>
-                <label for="modo_preparo">Modo de Preparo:</label>
-                <textarea id="modo_preparo" name="modo_preparo" placeholder="Descreva passo a passo como preparar a receita." rows="6" required></textarea>
-
-                <label for="descricao">Descrição Geral da Receita (Opcional):</label>
-                <textarea id="descricao" name="descricao" placeholder="Uma breve descrição sobre a receita."></textarea>
-            </fieldset>
-
-            <fieldset>
-                <legend>Foto da Receita</legend>
-                <label for="foto_receita">Selecione uma foto para a receita:</label>
-                <input type="file" id="foto_receita" name="foto_receita" accept="image/*">
-            </fieldset>
-            
-            <button type="submit" name="adicionar">Salvar Receita</button>
-        </form>
+    <div class="add-recipe-button-container">
+        <a href="adicionarReceitas.php" class="add-recipe-button">Adicionar Nova Receita</a>
     </div>
-
-    <hr>
 
     <h2>Receitas Cadastradas</h2>
     <table border="1" cellpadding="5" cellspacing="0">
@@ -268,7 +179,8 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Porções</th>
                 <th>Tempo de Preparo</th>
                 <th>Dificuldade</th>
-                <th>Ingredientes</th> <th>Descrição Geral</th> <th>Foto</th>
+                <th>Ingredientes</th> <th>Descrição Geral</th>
+                <th>Foto</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -287,15 +199,44 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($r['porcoes']) ?></td>
                     <td><?= htmlspecialchars($r['tempo_preparo']) ?></td>
                     <td><?= htmlspecialchars($r['dificuldade']) ?></td>
-                    <td><?= nl2br(htmlspecialchars($r['descricao'])) ?></td>
-                    <td><?= nl2br(htmlspecialchars($r['descricao'])) ?></td>
                     <td>
+                        <?php
+                        // Buscar ingredientes da receita atual (QUERY N+1 AQUI, OTIMIZAR SE NECESSÁRIO)
+                        $stmtIng = $conn->prepare("SELECT ri.quantidade_ingrediente, i.nome, m.descricao AS medida_descricao, m.medida, ri.descricao AS item_descricao
+                                                 FROM receita_ingrediente ri
+                                                 JOIN ingredientes i ON ri.id_ingrediente = i.id_ingrediente
+                                                 JOIN medidas m ON ri.id_medida = m.id_medida
+                                                 WHERE ri.nome_receita = ?");
+                        $stmtIng->execute([$r['nome_receita']]);
+                        $ingredientes_receita_info = $stmtIng->fetchAll(PDO::FETCH_ASSOC);
+
+                        if (!empty($ingredientes_receita_info)): ?>
+                            <div class="ingredientes-lista-tabela">
+                                <ul>
+                                <?php foreach($ingredientes_receita_info as $ing_info): ?>
+                                    <li>
+                                        <?= htmlspecialchars($ing_info['quantidade_ingrediente']) ?>
+                                        <?= htmlspecialchars($ing_info['medida_descricao']) ?>
+                                        (<?= htmlspecialchars($ing_info['medida']) ?>) de
+                                        <strong><?= htmlspecialchars($ing_info['nome']) ?></strong>
+                                        <?php if (!empty($ing_info['item_descricao'])): ?>
+                                            (<?= htmlspecialchars($ing_info['item_descricao']) ?>)
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php else: ?>
+                            Nenhum ingrediente detalhado.
+                        <?php endif; ?>
+                    </td>
+                    <td><?= nl2br(htmlspecialchars($r['descricao'] ?? '')) ?></td> <td>
                         <?php
                         $stmtFoto = $conn->prepare("SELECT tipo FROM foto_receita WHERE nome_receita = ? LIMIT 1");
                         $stmtFoto->execute([$r['nome_receita']]);
                         $foto = $stmtFoto->fetch(PDO::FETCH_ASSOC);
-                        if ($foto): ?>
-                            <img src="data:image/jpeg;base64,<?= base64_encode($foto['tipo']) ?>" alt="Foto da Receita" class="foto-receita" style="max-width: 100px; height: auto;" />
+                        if ($foto && $foto['tipo']): ?>
+                            <img src="data:image/jpeg;base64,<?= base64_encode($foto['tipo']) ?>" alt="Foto da Receita" class="foto-receita" />
                         <?php else: ?>
                             Sem foto
                         <?php endif; ?>
@@ -303,7 +244,7 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td>
                         <a href="receitasAcoes/consultar.php?nome=<?= urlencode($r['nome_receita']) ?>">Consultar</a> |
                         <a href="receitasAcoes/editar.php?nome=<?= urlencode($r['nome_receita']) ?>">Editar</a> |
-                        <a href="receitasAcoes/excluir.php?excluir=<?= urlencode($r['nome_receita']) ?>" onclick="return confirm('Tem certeza que deseja excluir esta receita?')">Excluir</a>
+                        <a href="receitasAcoes/excluir.php?excluir=<?= urlencode($r['nome_receita']) ?>">Excluir</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -312,10 +253,5 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </table>
 </div>
 
-<script>
-// Se você não precisa mais da funcionalidade de adicionar/remover campos de ingrediente dinamicamente,
-// todo o bloco de script JavaScript pode ser removido ou limpo,
-// já que o campo agora é um textarea único.
-</script>
 </body>
 </html>
