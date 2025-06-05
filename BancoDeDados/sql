@@ -1,0 +1,191 @@
+CREATE DATABASE teste_trabalho_1;
+USE teste_trabalho_1;
+
+-- Tabela: Cargo
+CREATE TABLE cargos (
+    id_cargo SMALLINT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(45) NOT NULL,
+    descricao VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id_cargo)
+) ENGINE=InnoDB;
+
+-- Tabela: Categoria
+CREATE TABLE categorias (
+    id_categoria SMALLINT NOT NULL AUTO_INCREMENT,
+    nome_categoria VARCHAR(45) NOT NULL,
+    descricao VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id_categoria)
+) ENGINE=InnoDB COMMENT 'Contém as categorias de receitas (Carne, Aves, Bolo, etc.)';
+
+-- Tabela: Restaurante
+CREATE TABLE restaurantes (
+    id_restaurante INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(45) NOT NULL,
+    contato VARCHAR(45) NOT NULL COMMENT 'Nome da pessoa de contato no restaurante',
+    telefone VARCHAR(20) NOT NULL,
+    descricao VARCHAR(255) NULL,
+    PRIMARY KEY (id_restaurante)
+) ENGINE=InnoDB;
+
+-- Tabela: Funcionario
+CREATE TABLE funcionarios (
+    id_funcionario INT NOT NULL AUTO_INCREMENT,
+    CPF INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    salario DECIMAL(9,2) NOT NULL,
+    data_admissao DATE NOT NULL,
+    foto_funcionario LONGBLOB NULL,
+    descricao VARCHAR(255) NULL,
+    id_cargo SMALLINT NOT NULL,
+    PRIMARY KEY (id_funcionario),
+    FOREIGN KEY (id_cargo) REFERENCES cargos (id_cargo)
+) ENGINE=InnoDB;
+
+-- tabela de login
+CREATE TABLE logins (
+id_login INT NOT NULL AUTO_INCREMENT,
+email VARCHAR (100) NOT NULL,
+senha VARCHAR(45) NOT NULL,
+descricao VARCHAR(255) NULL,
+reset_token VARCHAR(255) NULL,
+reset_token_expira DATETIME NULL,
+id_funcionario INT NOT NULL,
+PRIMARY KEY (id_login),
+FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario)
+) ENGINE=InnoDB;
+
+-- Tabela: Ingrediente
+CREATE TABLE ingredientes (
+    id_ingrediente INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(45) NOT NULL,
+    descricao VARCHAR(255) NULL,
+    PRIMARY KEY (id_ingrediente)
+) ENGINE=InnoDB;
+
+-- Tabela: Medida
+CREATE TABLE medidas (
+    id_medida SMALLINT NOT NULL AUTO_INCREMENT,
+    descricao VARCHAR(20) NOT NULL,
+    medida CHAR(20) NOT NULL,
+    PRIMARY KEY (id_medida)
+) ENGINE=InnoDB;
+
+-- Tabela: Receita
+CREATE TABLE receitas (
+    nome_receita VARCHAR(100) NOT NULL,
+    data_criacao DATE NOT NULL,
+    id_funcionario INT NOT NULL,
+    id_categoria SMALLINT NOT NULL,
+    modo_preparo VARCHAR(1000) NOT NULL,
+    porcoes DECIMAL(5,1) NOT NULL,
+    tempo_preparo INT NULL COMMENT 'Tempo em minutos',
+    dificuldade ENUM('Fácil', 'Médio', 'Difícil') NULL,
+    descricao VARCHAR(255) NULL,
+    PRIMARY KEY (nome_receita),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario),
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+) ENGINE=InnoDB;
+
+-- Tabela: Igrediente_receita
+CREATE TABLE receita_ingrediente (
+    nome_receita VARCHAR(100) NOT NULL,
+    id_ingrediente INT NOT NULL,
+    id_medida SMALLINT NOT NULL,
+    quantidade_ingrediente DECIMAL(5,1) NOT NULL,
+    descricao VARCHAR(255) NULL,
+    PRIMARY KEY (nome_receita, id_ingrediente),
+    FOREIGN KEY (nome_receita) REFERENCES receitas(nome_receita),
+    FOREIGN KEY (id_ingrediente) REFERENCES ingredientes(id_ingrediente),
+    FOREIGN KEY (id_medida) REFERENCES medidas(id_medida)
+) ENGINE=InnoDB;
+
+-- Tabela: Referencia 
+CREATE TABLE historico_restaurante (
+    id_funcionario INT NOT NULL,
+    id_restaurante INT NOT NULL,
+    data_inicio DATE NOT NULL,
+    data_fim DATE NULL,
+    descricao VARCHAR(255) NULL,
+    PRIMARY KEY (id_funcionario, id_restaurante),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario),
+    FOREIGN KEY (id_restaurante) REFERENCES restaurantes(id_restaurante)
+) ENGINE=InnoDB;
+
+-- Tabela: Livro
+CREATE TABLE livros (
+    id_livro SMALLINT NOT NULL AUTO_INCREMENT,
+    titulo VARCHAR(100) NOT NULL,
+    isbn VARCHAR(130) NOT NULL,
+    descricao VARCHAR(255) NULL,
+    id_funcionario INT NOT NULL,
+    PRIMARY KEY (id_livro),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario)
+) ENGINE=InnoDB;
+
+-- Tabela: Publicacao
+CREATE TABLE publicacoes (
+    id_publicacao INT NOT NULL,
+    id_livro SMALLINT NOT NULL,
+    id_funcionario INT NOT NULL,
+    nome_receita VARCHAR(100) NOT NULL,
+    descricao VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id_livro, nome_receita),
+    FOREIGN KEY (id_livro) REFERENCES livros(id_livro),
+    FOREIGN KEY (nome_receita) REFERENCES receitas(nome_receita),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario)
+) ENGINE=InnoDB;
+
+-- tabela de degustacao
+CREATE TABLE degustacoes (
+	id_funcionario INT NOT NULL,
+    nome_receita VARCHAR(100) NOT NULL,
+    data_degustacao DATE NOT NULL,
+    nota DECIMAL NOT NULL,
+    descricao VARCHAR(255) NULL,
+    PRIMARY KEY (id_funcionario, nome_receita),
+    FOREIGN KEY (nome_receita) REFERENCES receitas(nome_receita),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario)
+) ENGINE=InnoDB;
+
+-- tabela de foto_funcionario
+CREATE TABLE foto_funcionario (
+    id_foto_funcionario INT NOT NULL AUTO_INCREMENT,
+    tipo_foto BLOB NOT NULL,
+    data_upload DATETIME NOT NULL,
+    descricao VARCHAR(255) NULL,
+    id_funcionario INT NOT NULL,
+    PRIMARY KEY (id_foto_funcionario),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario)
+) ENGINE=InnoDB;
+
+-- tabela de  foto_receita
+CREATE TABLE foto_receita (
+    id_foto_receita INT NOT NULL AUTO_INCREMENT,
+    tipo BLOB NOT NULL,
+    data_upload DATETIME NOT NULL,
+    descricao VARCHAR(255) NULL,
+    id_funcionario INT NOT NULL,
+	nome_receita VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id_foto_receita),
+    FOREIGN KEY (nome_receita) REFERENCES receitas(nome_receita),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario)
+) ENGINE=InnoDB;
+
+/* UNSIGNED serve para dizer que o campo não pode ter valores negativos */
+CREATE TABLE livro_receita (
+    id_livro SMALLINT NOT NULL,
+    nome_receita VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id_livro, nome_receita),
+    FOREIGN KEY (id_livro) REFERENCES livros(id_livro),
+    FOREIGN KEY (nome_receita) REFERENCES receitas(nome_receita)
+) ENGINE=InnoDB;
+
+/* adicionei */
+/* para alterar o cpf */
+/* tenho que usar char pois o cpf não é um valor que vou usar para fazer algum tipo de conta*/
+ALTER TABLE funcionarios
+MODIFY COLUMN cpf CHAR(11) NOT NULL;
+
+/* troquei o "tempo_preparo" de int para varchar(10) */
+ALTER TABLE receitas
+MODIFY COLUMN tempo_preparo varchar(10);
