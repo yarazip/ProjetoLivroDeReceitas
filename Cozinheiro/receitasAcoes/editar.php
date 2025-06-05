@@ -97,14 +97,14 @@ if (isset($_POST['atualizar'])) {
         $conn->commit();
         $_SESSION['message'] = "Receita '" . htmlspecialchars($nome) . "' atualizada com sucesso!";
         $_SESSION['message_type'] = "success";
-        header("Location: ../../receitasChef.php");
+        header("Location: ../receitasChef.php");
         exit;
     } catch (Exception $e) {
         $conn->rollBack();
         error_log("Erro ao atualizar receita: " . $e->getMessage());
         $_SESSION['message'] = "Erro ao atualizar receita: " . $e->getMessage();
         $_SESSION['message_type'] = "error";
-        header("Location: ../../receitasChef.php");
+        header("Location: ../receitasChef.php");
         exit;
     }
 }
@@ -138,13 +138,13 @@ if (isset($_GET['nome'])) {
     } else {
         $_SESSION['message'] = "Receita não encontrada para edição.";
         $_SESSION['message_type'] = "error";
-        header("Location: ../../receitasChef.php");
+        header("Location: ../receitasChef.php");
         exit;
     }
 } else {
     $_SESSION['message'] = "Parâmetro 'nome' da receita ausente para edição.";
     $_SESSION['message_type'] = "error";
-    header("Location: ../../receitasChef.php");
+    header("Location: ../receitasChef.php");
     exit;
 }
 ?>
@@ -377,7 +377,7 @@ if (isset($_GET['nome'])) {
             </fieldset>
 
             <button type="submit" name="atualizar">Atualizar Receita</button>
-            <a href="../../receitasChef.php" class="button-cancel"><button type="button">Cancelar</button></a>
+            <a href="../receitasChef.php" class="button-cancel"><button type="button">Cancelar</button></a>
         </form>
     </div>
 </div>

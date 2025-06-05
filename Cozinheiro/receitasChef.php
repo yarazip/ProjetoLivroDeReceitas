@@ -241,11 +241,12 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             Sem foto
                         <?php endif; ?>
                     </td>
-                    <td>
-                        <a href="receitasAcoes/consultar.php?nome=<?= urlencode($r['nome_receita']) ?>">Consultar</a> |
-                        <a href="receitasAcoes/editar.php?nome=<?= urlencode($r['nome_receita']) ?>">Editar</a> |
-                        <a href="receitasAcoes/excluir.php?excluir=<?= urlencode($r['nome_receita']) ?>">Excluir</a>
-                    </td>
+     <td>
+    <a href="receitasAcoes/consultar.php?nome=<?= urlencode($r['nome_receita']) ?>">Consultar</a> |
+    <a href="adicionarReceitas.php?nome=<?= urlencode($r['nome_receita']) ?>">Adicionar</a> |
+    <a href="receitasAcoes/editar.php?nome=<?= urlencode($r['nome_receita']) ?>">Editar</a> |
+    <a href="receitasAcoes/confirmarExclusaoReceita.php?nome=<?= urlencode($r['nome_receita']) ?>">Excluir</a>
+</td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
