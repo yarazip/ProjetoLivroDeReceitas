@@ -1,151 +1,31 @@
 <?php
-require_once '../BancoDeDados/conexao.php';
-
-//para ver com mais detalhe os erros
+session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// ADICIONAR FUNCIONÁRIO
-if (isset($_POST['adicionar'])) {
-    $cpf = $_POST['cpf'];
-    $nome = $_POST['nome'];
-    $data_admissao = $_POST['data_admissao'];
-    $salario = $_POST['salario'];
-    $descricao = $_POST['descricao'];
-    $id_cargo = $_POST['id_cargo'];
-    //adicionei
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
+require_once '../BancoDeDados/conexao.php';
 
-    // Upload da foto em base64 (opcional)
-    $foto = null;
-    if (!empty($_FILES['foto_funcionario']['tmp_name'])) {
-        $foto = file_get_contents($_FILES['foto_funcionario']['tmp_name']);
-    }
-
-    // Inserir na tabela funcionarios
-    $sql = "INSERT INTO funcionarios (CPF, nome, salario, data_admissao, foto_funcionario, descricao, id_cargo)
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$cpf, $nome, $salario, $data_admissao, $foto, $descricao, $id_cargo]);
-
-    $id_funcionario = $conn->lastInsertId();
-
-    //adicionei
-    // Inserir na tabela login
-    $sqlLogin = "INSERT INTO logins (email, senha, id_funcionario) VALUES (?, ?, ?)";
-    $stmtLogin = $conn->prepare($sqlLogin);
-    $stmtLogin->execute([$email, $senha, $id_funcionario]);
-
-    header("Location: funcionarioADM.php");
+// Verifica se o usuário está logado e se tem permissão de Administrador
+if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'Administrador') {
+    $_SESSION['message'] = "Você não tem permissão para acessar esta área.";
+    $_SESSION['message_type'] = "error";
+    header("Location: ../LoginSenha/login.php");
     exit;
 }
 
-// EDITAR FUNCIONÁRIO
-if (isset($_POST['editar'])) {
-    $id = $_POST['id'];
-    $cpf = $_POST['cpf'];
-    $nome = $_POST['nome'];
-    $data_admissao = $_POST['data_admissao'];
-    $salario = $_POST['salario'];
-    $descricao = $_POST['descricao'];
-    $id_cargo = $_POST['id_cargo'];
-    //adicionei
-    $email = $_POST['email'];
-
-    if (!empty($_FILES['foto_funcionario']['tmp_name'])) {
-        $foto = file_get_contents($_FILES['foto_funcionario']['tmp_name']);
-        $sql = "UPDATE funcionarios SET CPF = ?, nome = ?, salario = ?, data_admissao = ?, foto_funcionario = ?, descricao = ?, id_cargo = ? WHERE id_funcionario = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$cpf, $nome, $salario, $data_admissao, $foto, $descricao, $id_cargo, $id]);
-    } else {
-        $sql = "UPDATE funcionarios SET CPF = ?, nome = ?, salario = ?, data_admissao = ?, descricao = ?, id_cargo = ? WHERE id_funcionario = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$cpf, $nome, $salario, $data_admissao, $descricao, $id_cargo, $id]);
-    }
-
-    //adicionei
-    // Verifica se já existe login
-    $sqlCheck = "SELECT COUNT(*) FROM logins WHERE id_funcionario = ?";
-    $stmtCheck = $conn->prepare($sqlCheck);
-    $stmtCheck->execute([$id]);
-    $exists = $stmtCheck->fetchColumn();
-
-    //adicionei
-    if ($exists) {
-        $sqlEmail = "UPDATE logins SET email = ? WHERE id_funcionario = ?";
-        $stmtEmail = $conn->prepare($sqlEmail);
-        $stmtEmail->execute([$email, $id]);
-
-        //adicionei
-    } else {
-        // Se não existe, cria
-        $sqlLogin = "INSERT INTO logins (email, id_funcionario) VALUES (?, ?)";
-        $stmtLogin = $conn->prepare($sqlLogin);
-        $stmtLogin->execute([$email, $id]);
-    }
-
-    header("Location: funcionarioADM.php");
-    exit;
-}
-
-if (isset($_GET['excluir'])) {
-    $id = $_GET['excluir'];
-
-    // Excluir registros relacionados em degustacoes
-    $stmt = $conn->prepare("DELETE FROM degustacoes WHERE id_funcionario = ?");
-    $stmt->execute([$id]);
-
-    // Excluir registros relacionados em historico_restaurante
-    $stmt = $conn->prepare("DELETE FROM historico_restaurante WHERE id_funcionario = ?");
-    $stmt->execute([$id]);
-
-    // Excluir login do funcionário
-    $stmt = $conn->prepare("DELETE FROM logins WHERE id_funcionario = ?");
-    $stmt->execute([$id]);
-
-    // Agora exclui o funcionário
-    $stmt = $conn->prepare("DELETE FROM funcionarios WHERE id_funcionario = ?");
-    $stmt->execute([$id]);
-
-    header("Location: funcionarioADM.php");
-    exit;
-}
-
-
-
-// BUSCAR FUNCIONÁRIO PARA EDIÇÃO
-$funcionarioEditar = null;
-$loginEditar = null;
-
-if (isset($_GET['editar'])) {
-    $idEditar = $_GET['editar'];
-    $sql = "SELECT * FROM funcionarios WHERE id_funcionario = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$idEditar]);
-    $funcionarioEditar = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $sqlLogin = "SELECT * FROM logins WHERE id_funcionario = ?";
-    $stmtLogin = $conn->prepare($sqlLogin);
-    $stmtLogin->execute([$idEditar]);
-    $loginEditar = $stmtLogin->fetch(PDO::FETCH_ASSOC);
-}
-//adicionei
-// PESQUISAR FUNCIONÁRIO
+// Lógica de PESQUISAR FUNCIONÁRIO
 $termo = trim($_GET['pesquisa'] ?? '');
 
-$sql = "SELECT f.*, c.nome AS nome_cargo, l.email 
+$sql = "SELECT f.*, c.nome AS nome_cargo, l.email
         FROM funcionarios f
         JOIN cargos c ON f.id_cargo = c.id_cargo
         LEFT JOIN logins l ON f.id_funcionario = l.id_funcionario
-        WHERE f.nome LIKE ?";
+        WHERE f.nome LIKE ?"; // Pesquisa apenas pelo nome do funcionário
 $stmt = $conn->prepare($sql);
 $stmt->execute(["%$termo%"]);
 $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-$cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -154,13 +34,48 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="../../styles/func.css" />
     <link rel="stylesheet" href="../../styles/funcionario.css" />
     <title>Funcionários Administração</title>
+    <style>
+        /* Estilos para mensagens */
+        .message-success, .message-error {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        /* Estilos da tabela e filtros para melhor visualização */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; vertical-align: top; }
+        th { background-color: #f2f2f2; }
+        .search-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 20px; }
+        .search-bar label { font-weight: bold; }
+        .search-bar input[type="text"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .search-bar button { padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .search-bar .clear-filters-button { margin-left: 10px; background-color: #dc3545; color: white; }
+        .foto-funcionario { max-width: 60px; height: auto; display: block; margin: 0 auto; }
+        .add-button-container { text-align: right; margin-bottom: 20px; }
+        .add-button {
+            padding: 10px 20px;
+            background-color: #28a745; /* Verde para adicionar */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .add-button:hover { opacity: 0.9; }
+    </style>
 </head>
 <body>
 <div class="container">
-   <div class="menu">
-         <h1 class="logo">Código de Sabores</h1>
+    <div class="menu">
+        <h1 class="logo">Código de Sabores</h1>
         <nav>
             <a href="cargosADM.php">Cargo</a>
             <a href="restauranteADM.php">Restaurantes</a>
@@ -169,74 +84,37 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
         </nav>
     </div>
 
-    <div class="insert-bar">
-    <h2><?= $funcionarioEditar ? 'Editar Funcionário' : 'Adicionar Funcionário' ?></h2>
-    <form method="post" enctype="multipart/form-data">
-        <?php if ($funcionarioEditar): ?>
-            <input type="hidden" name="id" value="<?= $funcionarioEditar['id_funcionario'] ?>" />
-        <?php endif; ?>
-
-        <!-- CPF -->
-        <div class="form-row">
-            <input type="text" name="cpf" placeholder="CPF" required value="<?= $funcionarioEditar['CPF'] ?? '' ?>" />
+    <?php
+    // Exibir mensagens de feedback
+    if (isset($_SESSION['message'])): ?>
+        <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
+            <?= htmlspecialchars($_SESSION['message']) ?>
         </div>
+        <?php
+        unset($_SESSION['message']);
+        unset($_SESSION['message_type']);
+    endif;
+    ?>
 
-        <!-- Nome -->
-        <div class="form-row">
-            <input type="text" name="nome" placeholder="Nome do funcionário" required value="<?= $funcionarioEditar['nome'] ?? '' ?>" />
-        </div>
-
-        <!-- Data de Admissão -->
-        <div class="form-row">
-            <input type="date" name="data_admissao" placeholder="Data de Admissão" required value="<?= $funcionarioEditar['data_admissao'] ?? '' ?>" />
-        </div>
-
-        <!-- Salário -->
-        <div class="form-row">
-            <input type="text" step="0.01" name="salario" placeholder="Salário" required value="<?= $funcionarioEditar['salario'] ?? '' ?>" />
-        </div>
-
-        <!-- Foto -->
-        <div class="form-row">
-            <input type="file" name="foto_funcionario" accept="image/*" />
-        </div>
-
-        <!-- Cargo -->
-        <div class="form-row">
-            <select name="id_cargo" required>
-                <option value="">Selecione o cargo</option>
-                <?php foreach ($cargos as $cargo): ?>
-                    <option value="<?= $cargo['id_cargo'] ?>" <?= (isset($funcionarioEditar['id_cargo']) && $funcionarioEditar['id_cargo'] == $cargo['id_cargo']) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cargo['nome']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <!-- Descrição -->
-        <div class="form-row">
-            <textarea name="descricao" placeholder="Descrição"><?= $funcionarioEditar['descricao'] ?? '' ?></textarea>
-        </div>
-        
-        <!-- Email -->
-        <input type="email" name="email" placeholder="Email" required value="<?= $loginEditar['email'] ?? '' ?>" />
-
-        <!-- Senha -->
-        <?php if (!$funcionarioEditar): ?>
-            <input type="password" name="senha" placeholder="Senha" required />
-        <?php endif; ?>
-
-        <!-- Actions -->
-        <div class="form-actions">
-            <?php if ($funcionarioEditar): ?>
-                <button type="submit" name="editar">Salvar Alterações</button> 
-                <a href="funcionarioADM.php">Cancelar</a>
-            <?php else: ?>
-                <button type="submit" name="adicionar">Adicionar</button>
+    <h2>Pesquisar Funcionários</h2>
+    <div class="search-bar">
+        <form method="GET">
+            <label for="pesquisa">Pesquisar por Nome:</label>
+            <input type="text" id="pesquisa" name="pesquisa" placeholder="Ex: João da Silva" value="<?= htmlspecialchars($termo) ?>">
+            <button type="submit">Pesquisar</button>
+            <?php if (!empty($termo)): ?>
+                <a href="funcionarioADM.php" class="clear-filters-button">Limpar Pesquisa</a>
             <?php endif; ?>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+
+    <hr>
+
+    <div class="add-button-container">
+        <a href="adicionarFuncionario.php" class="add-button">Adicionar Novo Funcionário</a>
+    </div>
+
+    <h2>Lista de Funcionários</h2>
     <table border="1" cellpadding="5">
         <thead>
             <tr>
@@ -253,30 +131,29 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($funcionarios as $f): ?>
-                <tr>
-                    <td><?= $f['id_funcionario'] ?></td>
-                    <td><?= isset($f['cpf']) ? htmlspecialchars($f['cpf']) : '' ?></td>
-                    <td><?= htmlspecialchars($f['nome']) ?></td>
-                    <td><?= htmlspecialchars($f['email'] ?? 'Sem email') ?></td>
-                    <td><?= htmlspecialchars($f['data_admissao']) ?></td>
-                    <td>R$ <?= number_format($f['salario'], 2, ',', '.') ?></td>
-                    <td><?= htmlspecialchars($f['nome_cargo']) ?></td>
-                    <td><?= htmlspecialchars($f['descricao']) ?></td>
-                    <td>
-                        <?php if ($f['foto_funcionario']): ?>
-                            <img src="data:image/jpeg;base64,<?= base64_encode($f['foto_funcionario']) ?>" alt="Foto" width="60" />
-                        <?php else: ?>
-                            Sem foto
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <a href="?editar=<?= $f['id_funcionario'] ?>">Editar</a> 
-                        
-                        <a href="?excluir=<?= $f['id_funcionario'] ?>" onclick="return confirm('Deseja excluir este funcionário?')">Excluir</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
+            <?php if (empty($funcionarios)): ?>
+                <tr><td colspan="10">Nenhum funcionário encontrado.</td></tr>
+            <?php else: ?>
+                <?php foreach ($funcionarios as $f): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($f['id_funcionario'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($f['CPF'] ?? '') ?></td> <td><?= htmlspecialchars($f['nome'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($f['email'] ?? 'Sem email') ?></td>
+                        <td><?= htmlspecialchars($f['data_admissao'] ?? '') ?></td>
+                        <td>R$ <?= number_format($f['salario'] ?? 0, 2, ',', '.') ?></td> <td><?= htmlspecialchars($f['nome_cargo'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($f['descricao'] ?? '') ?></td> <td>
+                            <?php if (!empty($f['foto_funcionario'])): ?> <img src="data:image/jpeg;base64,<?= base64_encode($f['foto_funcionario']) ?>" alt="Foto" class="foto-funcionario" />
+                            <?php else: ?>
+                                Sem foto
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <a href="editarFuncionario.php?id=<?= htmlspecialchars($f['id_funcionario'] ?? '') ?>">Editar</a> |
+                            <a href="funcionarioAcoes/confirmarExclusaoFuncionario.php?id=<?= htmlspecialchars($f['id_funcionario'] ?? '') ?>">Excluir</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
