@@ -6,8 +6,14 @@ error_reporting(E_ALL);
 
 require_once '../BancoDeDados/conexao.php';
 
-// Verifica se o usuário está logado e se tem permissão (Cozinheiro ou Administrador)
-if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'Cozinheiro' && $_SESSION['cargo'] !== 'Administrador')) {
+// Pega o cargo da sessão, converte para minúsculas. Usa '' se não existir.
+$cargo_usuario = strtolower($_SESSION['cargo'] ?? '');
+
+// Lista de cargos permitidos nesta página
+$cargos_permitidos = ['cozinheiro', 'cozinheira', 'administrador'];
+
+// Verifica se o usuário está logado e se o cargo dele está na lista de permitidos
+if (!isset($_SESSION['id_login']) || !in_array($cargo_usuario, $cargos_permitidos)) {
     $_SESSION['message'] = "Você não tem permissão para acessar esta página.";
     $_SESSION['message_type'] = "error";
     header("Location: ../LoginSenha/login.php");
