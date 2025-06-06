@@ -6,12 +6,19 @@ error_reporting(E_ALL);
 
 require_once '../BancoDeDados/conexao.php';
 
-// Verifica se o usuário está logado e se tem permissão (Degustador ou Administrador)
-if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'Degustador' && $_SESSION['cargo'] !== 'Administrador')) {
-    $_SESSION['message'] = "Você não tem permissão para editar degustações.";
+// Pega o cargo da sessão e converte para minúsculas. Usa '' se não existir.
+$cargo_usuario = strtolower($_SESSION['cargo'] ?? '');
+
+// Lista de cargos permitidos para esta página
+$cargos_permitidos = ['degustador', 'degustadora', 'administrador'];
+
+// Verifica se o usuário está logado e se o cargo dele está na lista de permitidos
+if (!isset($_SESSION['id_login']) || !in_array($cargo_usuario, $cargos_permitidos)) {
+    // Define a mensagem de erro antes de redirecionar
+    $_SESSION['message'] = "Você não tem permissão para acessar esta página.";
     $_SESSION['message_type'] = "error";
     header("Location: ../LoginSenha/login.php");
-    exit;
+    exit; // Para a execução do script imediatamente
 }
 
 // O ID do funcionário logado vem da sessão, usado para verificar permissão de edição

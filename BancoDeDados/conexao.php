@@ -16,4 +16,23 @@ try {
 } catch(PDOException $e) {
     die("Erro de conexão: " . $e->getMessage());
 }
+
+// --- FUNÇÕES DE FEEDBACK (FLASH MESSAGES) ---
+function set_flash_message($message, $type = 'success') {
+    $_SESSION['flash_message'] = [
+        'message' => $message,
+        'type' => $type
+    ];
+}
+
+function display_flash_message() {
+    if (isset($_SESSION['flash_message'])) {
+        $flash = $_SESSION['flash_message'];
+        // Adicionei classes CSS para estilizar as mensagens
+        $class = $flash['type'] === 'success' ? 'flash-success' : 'flash-error';
+        echo '<div class="' . $class . '">' . htmlspecialchars($flash['message']) . '</div>';
+        unset($_SESSION['flash_message']);
+    }
+}
+?>
 ?>
