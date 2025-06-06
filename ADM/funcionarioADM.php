@@ -46,7 +46,7 @@ $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             font-weight: bold;
         }
         .message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6fb; }
 
         /* Estilos da tabela e filtros para melhor visualização */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -137,17 +137,43 @@ $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($funcionarios as $f): ?>
                     <tr>
                         <td><?= htmlspecialchars($f['id_funcionario'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($f['CPF'] ?? '') ?></td> <td><?= htmlspecialchars($f['nome'] ?? '') ?></td>
+                        <td>
+                            <?php
+                            $cpf_valor = $f['CPF'] ?? ''; // Pega o valor do CPF, ou string vazia se NULL
+
+                            if (!empty($cpf_valor)) { // Só tenta processar se não for vazio/nulo
+                                // Remove qualquer caractere não numérico e pega os primeiros 11 dígitos
+                                $cpf_limpo_e_limitado = substr(preg_replace('/\D/', '', $cpf_valor), 0, 11);
+
+                                // Se tiver exatamente 11 dígitos, formata; caso contrário, exibe como está.
+                                if (strlen($cpf_limpo_e_limitado) === 11) {
+                                    $cpf_formatado = preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "$1.$2.$3-$4", $cpf_limpo_e_limitado);
+                                    echo htmlspecialchars($cpf_formatado);
+                                } else {
+                                    // Se não tiver 11 dígitos, exibe o CPF limpo (e limitado) sem formatação
+                                    echo htmlspecialchars($cpf_limpo_e_limitado);
+                                }
+                            } else {
+                                // Se o CPF for vazio ou nulo, exibe "N/A"
+                                echo "N/A";
+                            }
+                            ?>
+                        </td>
+                        <td><?= htmlspecialchars($f['nome'] ?? '') ?></td>
                         <td><?= htmlspecialchars($f['email'] ?? 'Sem email') ?></td>
                         <td><?= htmlspecialchars($f['data_admissao'] ?? '') ?></td>
-                        <td>R$ <?= number_format($f['salario'] ?? 0, 2, ',', '.') ?></td> <td><?= htmlspecialchars($f['nome_cargo'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($f['descricao'] ?? '') ?></td> <td>
-                            <?php if (!empty($f['foto_funcionario'])): ?> <img src="data:image/jpeg;base64,<?= base64_encode($f['foto_funcionario']) ?>" alt="Foto" class="foto-funcionario" />
+                        <td>R$ <?= number_format($f['salario'] ?? 0, 2, ',', '.') ?></td>
+                        <td><?= htmlspecialchars($f['nome_cargo'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($f['descricao'] ?? '') ?></td>
+                        <td>
+                            <?php if (!empty($f['foto_funcionario'])): ?>
+                                <img src="data:image/jpeg;base64,<?= base64_encode($f['foto_funcionario']) ?>" alt="Foto" class="foto-funcionario" />
                             <?php else: ?>
                                 Sem foto
                             <?php endif; ?>
                         </td>
                         <td>
+                            <a href="funcionarioAcoes/consultarFuncionario.php?id=<?= htmlspecialchars($f['id_funcionario'] ?? '') ?>">Consultar</a> |
                             <a href="editarFuncionario.php?id=<?= htmlspecialchars($f['id_funcionario'] ?? '') ?>">Editar</a> |
                             <a href="funcionarioAcoes/confirmarExclusaoFuncionario.php?id=<?= htmlspecialchars($f['id_funcionario'] ?? '') ?>">Excluir</a>
                         </td>
