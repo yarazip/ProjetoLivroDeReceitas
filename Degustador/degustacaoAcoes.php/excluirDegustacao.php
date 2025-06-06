@@ -49,4 +49,3 @@ try {
     header("Location: ../receitasDegustador.php");
     exit;
 }
-?>

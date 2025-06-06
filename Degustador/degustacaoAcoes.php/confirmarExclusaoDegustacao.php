@@ -111,9 +111,8 @@ try {
         .confirmation-box .buttons .cancel-button:hover {
             background-color: #5a6268;
         }
-        /* Adicionado estilo para o link-botão cancelar */
         .cancel-button-link {
-            text-decoration: none; /* Remove sublinhado padrão do link */
+            text-decoration: none;
         }
     </style>
 </head>
