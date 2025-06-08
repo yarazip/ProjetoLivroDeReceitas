@@ -115,7 +115,7 @@ if (isset($_GET['nome'])) {
     $nome_receita_param = $_GET['nome'];
 
     // Buscar receita principal
-    $stmt = $conn->prepare("SELECT nome_receita, data_criacao, id_funcionario, id_categoria, modo_preparo, porcoes, tempo_preparo, dificuldade, descricao, ingredientes_lista_texto
+    $stmt = $conn->prepare("SELECT nome_receita, data_criacao, id_funcionario, id_categoria, modo_preparo, porcoes, tempo_preparo, dificuldade, descricao 
                             FROM receitas WHERE nome_receita = ?");
     $stmt->execute([$nome_receita_param]);
     $receita_editar = $stmt->fetch(PDO::FETCH_ASSOC);

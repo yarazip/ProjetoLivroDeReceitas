@@ -1,46 +1,58 @@
 <?php
-require_once 'config.php'; // Inclui a configuração, sessão e conexão
+session_start();
+require_once '../BancoDeDados/conexao.php';
 
-// Verifica se o método é POST, por segurança
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: listar_livros.php");
+if (!isset($_GET['id'])) {
+    header("Location: livrosEditor.php");
     exit;
 }
 
-// MODIFICADO: Pega o ID via POST em vez de GET
-$id_livro = filter_input(INPUT_POST, 'id_livro', FILTER_VALIDATE_INT);
+$id_livro = $_GET['id'];
 
-if (!$id_livro) {
-    set_flash_message("ID inválido para exclusão.", 'error');
-    header("Location: listar_livros.php");
-    exit;
+// Buscar o título do livro para mostrar na confirmação
+$stmt = $conn->prepare("SELECT titulo FROM livros WHERE id_livro = ?");
+$stmt->execute([$id_livro]);
+$livro = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$livro) {
+    die("Livro não encontrado.");
 }
 
-try {
-    $conn->beginTransaction();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmar'])) {
+    try {
+        $conn->beginTransaction();
 
-    // Deleta os registros na tabela de associação primeiro
-    $stmt1 = $conn->prepare("DELETE FROM livro_receita WHERE id_livro = ?");
-    $stmt1->execute([$id_livro]);
+        $stmt = $conn->prepare("DELETE FROM livro_receita WHERE id_livro = ?");
+        $stmt->execute([$id_livro]);
 
-    // Deleta o livro da tabela principal
-    $stmt2 = $conn->prepare("DELETE FROM livros WHERE id_livro = ?");
-    $stmt2->execute([$id_livro]);
+        $stmt = $conn->prepare("DELETE FROM livros WHERE id_livro = ?");
+        $stmt->execute([$id_livro]);
 
-    // Confirma se alguma linha foi realmente deletada na tabela de livros
-    if ($stmt2->rowCount() > 0) {
         $conn->commit();
-        set_flash_message("Livro excluído com sucesso!");
-    } else {
-        $conn->rollBack();
-        set_flash_message("Livro não encontrado ou já excluído.", 'error');
-    }
-    
-} catch (Exception $e) {
-    $conn->rollBack();
-    set_flash_message("Erro ao excluir o livro: " . $e->getMessage(), 'error');
-}
 
-// Redireciona de volta para a lista
-header("Location: listar_livros.php");
-exit;
+        header("Location: livrosEditor.php");
+        exit;
+    } catch (Exception $e) {
+        $conn->rollBack();
+        die("Erro ao excluir livro: " . $e->getMessage());
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar Exclusão</title>
+    <link rel="stylesheet" href="../styles/func.css">
+</head>
+<body>
+    <h1>Confirmar Exclusão</h1>
+    <p>Tem certeza que deseja excluir o livro: <strong><?= htmlspecialchars($livro['titulo']) ?></strong>?</p>
+
+    <form method="POST" action="">
+        <button type="submit" name="confirmar">Sim, Excluir</button>
+        <a href="livrosEditor.php">Cancelar</a>
+    </form>
+</body>
+</html>

@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:wght@400;500;600&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
 :root {
     --logo-font: 'Rock Salt', sans-serif;
@@ -26,7 +25,6 @@ body {
     background-color: var(--background);
     color: var(--dark-grey);
     padding: 10px;
-    font-size: 16px; /* Tamanho base garantido */
 }
 
 .container {
@@ -35,7 +33,6 @@ body {
     padding: 10px;
 }
 
-/* Menu */
 .menu {
     display: flex;
     justify-content: space-between;
@@ -45,6 +42,15 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
+}
+.menu nav a.active {
+    font-weight: 600;
+    color: var(--dark-grey);
+}
+
+.menu nav a.active::after {
+    width: 100%;
+    background-color: var(--dark-grey);
 }
 
 .menu h1 {
@@ -67,7 +73,6 @@ body {
     position: relative;
     padding: 5px 0;
     font-weight: 500;
-    transition: all 0.3s ease;
 }
 
 .menu nav a::after {
@@ -81,17 +86,10 @@ body {
     transition: width 0.3s ease;
 }
 
-.menu nav a:hover::after,
-.menu nav a.active::after {
+.menu nav a:hover::after {
     width: 100%;
 }
 
-.menu nav a.active {
-    font-weight: 600;
-    color: var(--dark-grey);
-}
-
-/* Mensagens */
 .message-info,
 .message-success,
 .message-danger {
@@ -99,7 +97,7 @@ body {
     margin-bottom: 15px;
     border-radius: 5px;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .message-info {
@@ -120,7 +118,6 @@ body {
     border-left: 5px solid var(--danger-color);
 }
 
-/* Barra de pesquisa */
 .search-bar {
     margin-bottom: 20px;
     background-color: var(--highlights);
@@ -138,32 +135,28 @@ body {
 
 .search-bar label {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .search-bar input {
     flex: 1;
     min-width: 150px;
-    padding: 10px 12px;
+    padding: 8px 12px;
     border: 1px solid var(--light-grey);
     border-radius: 5px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
-.search-bar button,
-.clear-filters-button {
-    padding: 10px 15px;
+.search-bar button {
+    padding: 8px 15px;
+    background-color: var(--dark-grey);
+    color: var(--highlights);
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     transition: background-color 0.3s;
-}
-
-.search-bar button {
-    background-color: var(--dark-grey);
-    color: var(--highlights);
 }
 
 .search-bar button:hover {
@@ -171,9 +164,15 @@ body {
 }
 
 .clear-filters-button {
+    padding: 8px 12px;
     background-color: var(--light-grey);
     color: var(--dark-grey);
+    border: none;
+    border-radius: 5px;
     text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
 }
 
 .clear-filters-button:hover {
@@ -187,20 +186,19 @@ hr {
     margin: 15px 0;
 }
 
-/* Botões */
 .add-button-container {
     margin-bottom: 15px;
 }
 
 .add-button {
     display: inline-block;
-    padding: 12px 20px;
+    padding: 10px 20px;
     background-color: var(--dark-grey);
     color: var(--highlights);
     text-decoration: none;
     border-radius: 5px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     transition: background-color 0.3s;
 }
 
@@ -208,27 +206,29 @@ hr {
     background-color: var(--black);
 }
 
-/* Títulos */
 h2 {
     color: var(--black);
     margin-bottom: 15px;
     font-size: 1.3rem;
 }
 
-/* Tabela */
+.lista-cargos {
+    overflow-x: auto;
+    background-color: var(--highlights);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: var(--highlights);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
-th, td {
-    padding: 12px 15px;
+th,
+td {
+    padding: 10px 12px;
     text-align: left;
     border-bottom: 1px solid var(--light-grey);
 }
@@ -243,19 +243,19 @@ tr:hover {
     background-color: rgba(0, 0, 0, 0.02);
 }
 
-/* Botões de ação */
 .action-buttons {
     display: flex;
     gap: 10px;
+    justify-content: center;
 }
 
-.edit-button, 
+.edit-button,
 .delete-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -273,25 +273,29 @@ tr:hover {
     border: 1px solid var(--danger-color);
 }
 
-.edit-button:hover,
-.delete-button:hover {
-    transform: scale(1.1);
-}
-
 .edit-button:hover {
     background-color: rgba(117, 117, 117, 0.2);
+    transform: scale(1.1);
 }
 
 .delete-button:hover {
     background-color: rgba(244, 67, 54, 0.2);
+    transform: scale(1.1);
 }
 
 .action-buttons i {
-    font-size: 14px;
+    font-size: 13px;
 }
 
-/* Media Queries - Responsividade */
 @media (max-width: 768px) {
+    body {
+        padding: 8px;
+    }
+    
+    .container {
+        padding: 8px;
+    }
+    
     .menu {
         flex-direction: column;
         gap: 12px;
@@ -299,7 +303,7 @@ tr:hover {
     }
     
     .menu h1 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
     
     .menu nav {
@@ -322,64 +326,44 @@ tr:hover {
     .search-bar button,
     .clear-filters-button {
         width: 100%;
-        font-size: 1rem;
     }
     
     table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-        font-size: 1rem;
+        font-size: 0.85rem;
     }
     
-    th, td {
-        padding: 10px 12px;
-        font-size: 0.95rem;
+    th,
+    td {
+        padding: 8px 10px;
     }
     
     .action-buttons {
         gap: 8px;
     }
     
-    h2 {
-        font-size: 1.3rem;
+    .edit-button,
+    .delete-button {
+        width: 28px;
+        height: 28px;
     }
 }
 
 @media (max-width: 480px) {
-    body {
-        padding: 8px;
-    }
-    
-    .container {
-        padding: 8px;
-    }
-    
-    .menu h1 {
-        font-size: 1.3rem;
-    }
-    
     .menu nav a {
-        font-size: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
     }
     
     .add-button {
-        padding: 10px 16px;
-        font-size: 1rem;
+        padding: 8px 15px;
+        font-size: 0.85rem;
     }
     
-    th, td {
-        padding: 8px 10px;
-        font-size: 0.95rem;
-    }
-    
-    .edit-button, 
-    .delete-button {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .action-buttons i {
-        font-size: 14px;
+    th,
+    td {
+        padding: 6px 8px;
     }
 }

@@ -2,15 +2,37 @@
 session_start();
 require_once '../BancoDeDados/conexao.php';
 
-// Excluir livro
-if (isset($_GET['excluir'])) {
-    $id_livro = $_GET['excluir'];
+// Verifica se funcionário está logado (id_funcionario)
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../../LoginSenha/login.php");
+    exit;
+}
 
-    $stmt = $conn->prepare("DELETE FROM livro_receita WHERE id_livro = ?");
-    $stmt->execute([$id_livro]);
+// Exclusão via POST (mais seguro que GET)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir'])) {
+    $id_livro = $_POST['excluir'];
 
-    $stmt = $conn->prepare("DELETE FROM livros WHERE id_livro = ?");
-    $stmt->execute([$id_livro]);
+    // Começa a transação para apagar livro e receitas associadas
+    $conn->beginTransaction();
+
+    try {
+        // Apaga registros na tabela livro_receita
+        $stmt = $conn->prepare("DELETE FROM livro_receita WHERE id_livro = ?");
+        $stmt->execute([$id_livro]);
+
+        // Apaga livro
+        $stmt = $conn->prepare("DELETE FROM livros WHERE id_livro = ?");
+        $stmt->execute([$id_livro]);
+
+        $conn->commit();
+
+        $_SESSION['message'] = "Livro excluído com sucesso.";
+        $_SESSION['message_type'] = "success";
+    } catch (Exception $e) {
+        $conn->rollBack();
+        $_SESSION['message'] = "Erro ao excluir livro: " . $e->getMessage();
+        $_SESSION['message_type'] = "error";
+    }
 
     header("Location: livrosEditor.php");
     exit;
@@ -77,6 +99,8 @@ if (isset($_POST['adicionar'])) {
         }
 
         $conn->commit();
+        header("Location: livrosEditor.php");
+        exit;
     } catch (Exception $e) {
         $conn->rollBack();
         die("Erro ao adicionar livro: " . $e->getMessage());
@@ -102,6 +126,7 @@ $sql = "SELECT * FROM livros";
 $stmt = $conn->query($sql);
 $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -116,28 +141,26 @@ $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <h1 class="logo">Código de Sabores</h1>
             <nav>
                 <a href="livrosEditor.php">Livros</a>
-                <a href="visualizarLivros.php">Gerar PDF</a>
+                <a href="gerarPDF.php">Gerar PDF</a>
             </nav>
         </div>
 
         <div class="insert-bar">
             <form method="POST" action="livrosEditor.php">
-                <input type="hidden" name="id_livro" value="<?= $livro_editar['id_livro'] ?? '' ?>">
-                <input type="text" name="titulo" placeholder="Título" value="<?= $livro_editar['titulo'] ?? '' ?>" required>
-                <input type="number" name="isbn" placeholder="ISBN" value="<?= $livro_editar['isbn'] ?? '' ?>" required>
-                <input type="text" name="descricao" placeholder="Descrição" value="<?= $livro_editar['descricao'] ?? '' ?>" required>
+                <input type="hidden" name="id_livro" value="<?= htmlspecialchars($livro_editar['id_livro'] ?? '') ?>">
+                <input type="text" name="titulo" placeholder="Título" value="<?= htmlspecialchars($livro_editar['titulo'] ?? '') ?>" required>
+                <input type="number" name="isbn" placeholder="ISBN" value="<?= htmlspecialchars($livro_editar['isbn'] ?? '') ?>" required>
+                <input type="text" name="descricao" placeholder="Descrição" value="<?= htmlspecialchars($livro_editar['descricao'] ?? '') ?>" required>
                 <?php
-            
-            // Supondo que você tenha guardado o nome do funcionário na sessão no login (pode adicionar isso)
-            echo "Funcionário logado: " . htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido');
-            ?>
+                echo "Funcionário logado: " . htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido');
+                ?>
 
                 <label>Selecione as Receitas:</label>
                 <select name="receitas[]" multiple size="5" required>
                     <?php foreach ($receitasDisponiveis as $receita): ?>
-                        <option value="<?= $receita['nome_receita'] ?>" 
+                        <option value="<?= htmlspecialchars($receita['nome_receita']) ?>" 
                             <?= in_array($receita['nome_receita'], $receitas_livro) ? 'selected' : '' ?>>
-                            <?= $receita['nome_receita'] ?>
+                            <?= htmlspecialchars($receita['nome_receita']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -150,6 +173,14 @@ $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="livros-lista">
             <h2>Livros Cadastrados</h2>
+            <?php if (!empty($_SESSION['message'])): ?>
+                <div class="message <?= htmlspecialchars($_SESSION['message_type']) ?>">
+                    <?= htmlspecialchars($_SESSION['message']) ?>
+                </div>
+                <?php 
+                unset($_SESSION['message'], $_SESSION['message_type']);
+                ?>
+            <?php endif; ?>
             <table border="1" cellpadding="8" cellspacing="0">
                 <thead>
                     <tr>
@@ -164,14 +195,19 @@ $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php foreach ($livros as $livro): ?>
                         <tr>
-                            <td><?= $livro['id_livro'] ?></td>
+                            <td><?= htmlspecialchars($livro['id_livro']) ?></td>
                             <td><?= htmlspecialchars($livro['titulo']) ?></td>
                             <td><?= htmlspecialchars($livro['isbn']) ?></td>
                             <td><?= htmlspecialchars($livro['descricao']) ?></td>
-                            <td><?= $livro['id_funcionario'] ?></td>
+                            <td><?= htmlspecialchars($livro['id_funcionario']) ?></td>
                             <td>
-                                <a href="?editar=<?= $livro['id_livro'] ?>">Editar</a> | 
-                                <a href="?excluir=<?= $livro['id_livro'] ?>" onclick="return confirm('Deseja excluir?')">Excluir</a>
+                              <td>
+    | <a href="visualizarLivros.php?id=<?= $livro['id_livro'] ?>">Visualizar</a>
+    | <a href="editar_livro.php?id=<?= $livro['id_livro'] ?>">Editar</a>
+    | <a href="excluir_livro.php?id=<?= $livro['id_livro'] ?>">Excluir</a>
+</td>
+
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach ?>

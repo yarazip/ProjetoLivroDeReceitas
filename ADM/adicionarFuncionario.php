@@ -8,7 +8,7 @@ require_once '../BancoDeDados/conexao.php';
 
 // Verifica se o usuário está logado e se tem permissão de Administrador
 if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'administrador') {
-    $_SESSION['message'] = "Você não tem permissão para adicionar funcionários.";
+    // $_SESSION['message'] = "Você não tem permissão para adicionar funcionários.";
     $_SESSION['message_type'] = "error";
     header("Location: ../LoginSenha/login.php");
     exit;

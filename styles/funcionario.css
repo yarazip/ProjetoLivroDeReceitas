@@ -1,5 +1,6 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:wght@400;500;600&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
 :root {
     --logo-font: 'Rock Salt', sans-serif;
@@ -13,58 +14,26 @@
     --success-color: #4CAF50;
     --danger-color: #f44336;
     --edit-color: #757575;
+    --view-color: #2196F3;
 }
 
-/* Layout Base */
-body {
-    background-color: var(--background);
-    font-family: var(--main-font);
+* {
     margin: 0;
     padding: 0;
-    color: var(--black);
-    line-height: 1.6;
+    box-sizing: border-box;
+    font-family: var(--main-font);
 }
-
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-}
-
-/* Menu Superior */
-.menu {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--highlights);
-    padding: 15px 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-.logo {
-    font-family: var(--logo-font);
-    font-size: 1.8rem;
-    color: var(--black);
-    margin: 0;
-    white-space: nowrap;
-}
-
 
 body {
-    font-family: var(--main-font);
     background-color: var(--background);
-    margin: 0;
-    padding: 0;
-    color: var(--black);
-    line-height: 1.6;
+    color: var(--dark-grey);
+    padding: 10px;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
 }
 
 .menu {
@@ -72,17 +41,18 @@ body {
     justify-content: space-between;
     align-items: center;
     background-color: var(--highlights);
-    padding: 15px 30px;
+    padding: 12px 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-.logo {
+.menu h1 {
     font-family: var(--logo-font);
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--black);
     margin: 0;
+    white-space: nowrap;
 }
 
 .menu nav {
@@ -92,245 +62,333 @@ body {
 
 .menu nav a {
     color: var(--black);
+    font-size: 1rem;
     text-decoration: none;
-    font-weight: 500;
-    padding: 5px 0;
     position: relative;
+    padding: 5px 0;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 .menu nav a::after {
     content: "";
     position: absolute;
-    bottom: 0;
     left: 0;
+    bottom: 0;
     width: 0;
     height: 2px;
     background-color: var(--black);
     transition: width 0.3s ease;
 }
 
-.menu nav a:hover::after {
+.menu nav a:hover::after,
+.menu nav a.active::after {
     width: 100%;
 }
-/* Formulário - Ajustes para inputs organizados */
-.insert-bar {
-    background-color: var(--highlights);
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box; /* Garante que padding não some à largura */
-}
 
-.insert-bar h2 {
-    margin: 0 0 20px 0;
-    font-size: 1.3rem;
-    color: var(--dark-grey);
+.menu nav a.active {
     font-weight: 600;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--light-grey);
-}
-
-.form-row {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.form-row label {
-    margin-bottom: 6px;
-    font-weight: 500;
     color: var(--dark-grey);
-    font-size: 0.95rem;
 }
 
-.insert-bar input,
-.insert-bar select,
-.insert-bar textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--light-grey);
-    border-radius: 4px;
-    font-size: 0.95rem;
-    font-family: var(--main-font);
-    box-sizing: border-box; /* Importante para width 100% considerar padding */
-    transition: border-color 0.3s ease;
+.message-info,
+.message-success,
+.message-danger {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
-.insert-bar input:focus,
-.insert-bar select:focus,
-.insert-bar textarea:focus {
-    border-color: var(--medium-grey);
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(149, 149, 149, 0.2);
+.message-info {
+    background-color: #e7f3fe;
+    color: #0c5460;
+    border-left: 5px solid #31708f;
 }
 
-.insert-bar textarea {
-    min-height: 100px;
-    resize: vertical;
-    line-height: 1.5;
+.message-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid var(--success-color);
 }
 
-.insert-bar input[type="file"] {
-    padding: 8px;
-    background-color: var(--background);
+.message-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid var(--danger-color);
 }
 
-/* Ajustes para grupos de inputs lado a lado */
-.form-group {
-    display: flex;
-    gap: 15px;
-}
-
-.form-group .form-row {
-    flex: 1;
-    min-width: 0; /* Permite que os inputs se ajustem corretamente */
-}
-
-/* Ajustes para telas pequenas */
-@media (max-width: 768px) {
-    .form-group {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .insert-bar {
-        padding: 15px;
-    }
-    
-    .insert-bar input,
-    .insert-bar select,
-    .insert-bar textarea {
-        padding: 8px 10px;
-    }
-}
-
-.table-container {
-    width: 100%;
-    overflow-x: auto;
+.search-bar {
     margin-bottom: 20px;
     background-color: var(--highlights);
+    padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-bar label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.search-bar input {
+    flex: 1;
+    min-width: 150px;
+    padding: 8px 12px;
+    border: 1px solid var(--light-grey);
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.search-bar button {
+    padding: 8px 15px;
+    background-color: var(--dark-grey);
+    color: var(--highlights);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: var(--black);
+}
+
+.clear-filters-button {
+    padding: 8px 12px;
+    background-color: var(--light-grey);
+    color: var(--dark-grey);
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.clear-filters-button:hover {
+    background-color: var(--medium-grey);
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--light-grey);
+    margin: 15px 0;
+}
+
+.add-button-container {
+    margin-bottom: 15px;
+}
+
+.add-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--dark-grey);
+    color: var(--highlights);
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover {
+    background-color: var(--black);
+}
+
+h2 {
+    color: var(--black);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 800px;
+    background-color: var(--highlights);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-size: 0.9rem;
 }
 
-table th,
-table td {
+th, td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid var(--light-grey);
 }
 
-table th {
+th {
     background-color: var(--light-grey);
-    color: var(--dark-grey);
     font-weight: 600;
-    position: sticky;
-    top: 0;
+    color: var(--black);
 }
 
-table tr:hover {
-    background-color: #f9f9f9;
+tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
-table img {
-    max-width: 60px;
-    max-height: 60px;
-    border-radius: 4px;
+.foto-funcionario {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--light-grey);
 }
 
-table a {
-    padding: 6px 12px;
-    border-radius: 4px;
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.view-button,
+.edit-button, 
+.delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     text-decoration: none;
-    font-size: 0.85rem;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
-table a:first-child {
-    background-color: var(--edit-color);
-    color: white;
+.view-button {
+    color: var(--view-color);
+    background-color: rgba(33, 150, 243, 0.1);
+    border: 1px solid var(--view-color);
 }
 
-table a:last-child {
-    background-color: var(--danger-color);
-    color: white;
+.edit-button {
+    color: var(--edit-color);
+    background-color: rgba(117, 117, 117, 0.1);
+    border: 1px solid var(--edit-color);
 }
 
-table a:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
+.delete-button {
+    color: var(--danger-color);
+    background-color: rgba(244, 67, 54, 0.1);
+    border: 1px solid var(--danger-color);
 }
 
+.view-button:hover {
+    background-color: rgba(33, 150, 243, 0.2);
+    transform: scale(1.1);
+}
+
+.edit-button:hover {
+    background-color: rgba(117, 117, 117, 0.2);
+    transform: scale(1.1);
+}
+
+.delete-button:hover {
+    background-color: rgba(244, 67, 54, 0.2);
+    transform: scale(1.1);
+}
+
+.action-buttons i {
+    font-size: 13px;
+}
 
 @media (max-width: 768px) {
+    body {
+        padding: 8px;
+    }
+    
+    .container {
+        padding: 8px;
+    }
+    
     .menu {
         flex-direction: column;
-        gap: 15px;
-        padding: 15px;
+        gap: 12px;
+        padding: 12px 15px;
+    }
+    
+    .menu h1 {
+        font-size: 1.3rem;
     }
     
     .menu nav {
+        gap: 12px;
         flex-wrap: wrap;
         justify-content: center;
     }
     
-    .form-actions {
+    .search-bar {
+        padding: 12px;
+    }
+    
+    .search-bar form {
         flex-direction: column;
-    }
-    
-    .insert-bar button,
-    .insert-bar a {
-        width: 100%;
-    }
-    
-    table th,
-    table td {
-        padding: 8px 10px;
-        font-size: 0.85rem;
-    }
-    
-    table td:last-child {
-        display: flex;
-        flex-direction: column;
+        align-items: stretch;
         gap: 8px;
     }
     
-    table a {
+    .search-bar input,
+    .search-bar button,
+    .clear-filters-button {
         width: 100%;
-        text-align: center;
-        margin: 2px 0;
     }
-
-/* Table scrollbar styling */
-.table-container::-webkit-scrollbar {
-    height: 6px;
+    
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        font-size: 0.85rem;
+    }
+    
+    th, td {
+        padding: 8px 10px;
+    }
+    
+    .foto-funcionario {
+        width: 40px;
+        height: 40px;
+    }
 }
 
-.table-container::-webkit-scrollbar-track {
-    background: var(--light-grey);
-    border-radius: 0 0 8px 8px;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-    background: var(--medium-grey);
-    border-radius: 3px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-    background: var(--dark-grey);
-}}
-.insert-bar h2 {
-    margin: 0 0 15px 0; /* Top Right Bottom Left */
-    font-size: 1.2rem;
-    color: var(--dark-grey);
-    font-weight: 600;
-    text-align: left;
-    width: 100%;
+@media (max-width: 480px) {
+    .menu nav a {
+        font-size: 0.9rem;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+    }
+    
+    .add-button {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
+    
+    th, td {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+    }
+    
+    .view-button,
+    .edit-button, 
+    .delete-button {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .foto-funcionario {
+        width: 30px;
+        height: 30px;
+    }
 }
