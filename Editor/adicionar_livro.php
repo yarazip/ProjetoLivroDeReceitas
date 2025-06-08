@@ -1,5 +1,6 @@
 <?php
-require_once 'config.php'; // Inclui a configuração, sessão e conexão
+require_once '../BancoDeDados/conexao.php';
+require_once '../dompdf/autoload.inc.php';
 
 // Processa o formulário quando ele for enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -1,9 +1,10 @@
 <?php
-require_once 'config.php'; // Inclui a configuração, sessão e conexão
+require_once '../BancoDeDados/conexao.php';
+require_once '../dompdf/autoload.inc.php';
 
 // Verifica se o método é POST, por segurança
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: listar_livros.php");
+    header("Location: visualizarLivros.php");
     exit;
 }
 
@@ -12,7 +13,7 @@ $id_livro = filter_input(INPUT_POST, 'id_livro', FILTER_VALIDATE_INT);
 
 if (!$id_livro) {
     set_flash_message("ID inválido para exclusão.", 'error');
-    header("Location: listar_livros.php");
+    header("Location: visualizarLivros.php");
     exit;
 }
 
@@ -42,5 +43,5 @@ try {
 }
 
 // Redireciona de volta para a lista
-header("Location: listar_livros.php");
+header("Location: visualizarLivros.php");
 exit;

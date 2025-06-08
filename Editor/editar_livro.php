@@ -1,5 +1,6 @@
 <?php
-require_once 'config.php'; // Inclui a configuração, sessão e conexão
+require_once '../BancoDeDados/conexao.php';
+require_once '../dompdf/autoload.inc.php';
 
 // Pega o ID da URL. Se não houver, redireciona.
 $id_livro = $_GET['id'] ?? null;

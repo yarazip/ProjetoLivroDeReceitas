@@ -1,11 +1,12 @@
 <?php
-require_once 'config.php'; // Inclui a configuração, sessão e conexão
+require_once '../BancoDeDados/conexao.php';
+require_once '../dompdf/autoload.inc.php';
 
 // Pega o ID da URL. Se não houver ou for inválido, redireciona.
 $id_livro = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$id_livro) {
     set_flash_message("ID do livro é inválido.", 'error');
-    header("Location: listar_livros.php");
+    header("Location: visualizarLivros.php");
     exit;
 }
 
@@ -17,7 +18,7 @@ $livro = $stmt->fetch(PDO::FETCH_ASSOC);
 // Se o livro com o ID fornecido não for encontrado
 if (!$livro) {
     set_flash_message("Livro não encontrado.", 'error');
-    header("Location: listar_livros.php");
+    header("Location: visualizarLivros.php");
     exit;
 }
 ?>
@@ -82,7 +83,7 @@ if (!$livro) {
                 <button type="submit" class="confirm-btn">Sim, Excluir</button>
             </form>
             
-            <a href="listar_livros.php" class="cancel-btn">Não, Cancelar</a>
+            <a href="visualizarLivros.php" class="cancel-btn">Não, Cancelar</a>
         </div>
     </div>
 </body>
