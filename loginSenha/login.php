@@ -1,76 +1,67 @@
 <?php
+//medei essa parte de php todinha
 session_start();
 require_once '../BancoDeDados/conexao.php';
 
-// Limpa a mensagem de erro antiga se o usuário apenas recarregar a página
-if ($_SERVER["REQUEST_METHOD"] !== "POST" && isset($_SESSION['login_error'])) {
-    unset($_SESSION['login_error']);
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
-    $senha_digitada = $_POST['senha'];
+    $senha = $_POST['senha'];
+
 
     try {
-        // Passo 1: Busca o usuário APENAS pelo email
-        $sql = "SELECT l.id_login, l.email, l.senha AS senha_hash, f.nome AS nome_funcionario, c.nome AS nome_cargo
-                FROM logins l
-                JOIN funcionarios f ON l.id_funcionario = f.id_funcionario
-                JOIN cargos c ON f.id_cargo = c.id_cargo
-                WHERE l.email = :email
-                LIMIT 1";
+        // Consulta para juntar login, funcionario e cargo
+        $sql = "SELECT l.id_login, l.email, l.id_funcionario, f.nome AS nome_funcionario, c.nome AS nome_cargo
+        FROM logins l
+        JOIN funcionarios f ON l.id_funcionario = f.id_funcionario
+        JOIN cargos c ON f.id_cargo = c.id_cargo
+        WHERE l.email = :email AND l.senha = :senha
+        LIMIT 1";
+
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':senha', $senha);
         $stmt->execute();
+
 
         if ($stmt->rowCount() == 1) {
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            // Passo 2: Verifica se a senha digitada corresponde ao hash do banco
-            if (password_verify($senha_digitada, $usuario['senha_hash'])) {
-                // Senha correta! Login bem-sucedido.
-                $_SESSION['id_login'] = $usuario['id_login'];
-                $_SESSION['email'] = $usuario['email'];
-                $_SESSION['cargo'] = $usuario['nome_cargo'];
-                $_SESSION['nome_funcionario'] = $usuario['nome_funcionario'];
-                
-                // Pega o cargo, remove espaços e converte para minúsculas para o redirecionamento
-                $cargo_formatado = trim(strtolower($usuario['nome_cargo']));
 
-                switch ($cargo_formatado) {
-                    case 'administrador':
-                        header("Location: ../ADM/cargosADM.php");
-                        break;
-                    case 'cozinheira':
-                    case 'cozinheiro':
-                        header("Location: ../Cozinheiro/categoriaChef.php");
-                        break;
-                    case 'editor':
-                        header("Location: ../Editor/livrosEditor.php");
-                        break;
-                    case 'degustadora':
-                    case 'degustador':
-                        header("Location: ../Degustador/receitasDegustador.php");
-                        break;
-                    default:
-                        $_SESSION['login_error'] = "Seu cargo não possui uma página de acesso.";
-                        header("Location: login.php");
-                        break;
-                }
-                exit();
+
+            $_SESSION['id_login'] = $usuario['id_login'];
+            $_SESSION['email'] = $usuario['email'];
+            $_SESSION['id_funcionario'] = $usuario['id_funcionario'];
+            $_SESSION['cargo'] = $usuario['nome_cargo'];
+            $_SESSION['nome_funcionario'] = $usuario['nome_funcionario'];
+
+
+            // Redireciona conforme cargo
+            switch (strtolower($usuario['nome_cargo'])) {
+                case 'administrador':
+                    header("Location: ../ADM/cargosADM.php");
+                    break;
+                case 'cozinheiro':
+                    header("Location: ../Cozinheiro/categoriaChef.php");
+                    break;
+                case 'editor':
+                    header("Location: ../Editor/livrosEditor.php");
+                    break;
+                case 'degustador':
+                    header("Location: ../Degustador/receitasDegustador.php");
+                    break;
+                default:
+                    // Se não reconhecido, manda pra página padrão
+                    header("Location: ../LoginSenha/login.php");
+                    break;
             }
+            exit();
+        } else {
+            echo "<script>alert('Email ou senha inválidos!'); window.history.back();</script>";
+            exit();
         }
-        
-        // Se o email não foi encontrado ou a senha estava incorreta
-        $_SESSION['login_error'] = "Email ou senha inválidos.";
-        header("Location: login.php");
-        exit();
-
     } catch (PDOException $e) {
-        // Em produção, o ideal é registrar o erro e não exibir para o usuário
-        // error_log("Erro no login: " . $e->getMessage());
-        die("Ocorreu um erro crítico no sistema. Contate o administrador.");
+        die("Erro ao consultar o banco: " . $e->getMessage());
     }
 }
 ?>
@@ -79,41 +70,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Código de Sabores | Login</title>
+    <title>Codigo de Sabores</title>
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../styles/login.css">
+    <!-- <script src="./scripts/script.js"></script> -->
+    <title>Codigo de Sabores|Login</title>
 </head>
 <body>
-    <div class="logo">
-        <h1>Código De Sabores</h1>
+   <div class="header">
+        <h1 class="logo-login">Código de Sabores</h1>
     </div>
+    <h2 class ="login" >LOGIN</h2>
     <div class="container">
-        <h2>LOGIN</h2>
-
-        <?php
-            // Exibe a mensagem de erro, se ela existir na sessão
-            if (isset($_SESSION['login_error'])) {
-                echo '<p style="color: #D8000C; background-color: #FFD2D2; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 15px;">' 
-                     . htmlspecialchars($_SESSION['login_error']) 
-                     . '</p>';
-                unset($_SESSION['login_error']); // Limpa a mensagem para não mostrar novamente
-            }
-        ?>
-
+        <!-- Seção de Login -->
         <div class="login-section">
            <div class="login-container">
-             <form method="post" action="login.php">
+              <form method="post" action="">
                  <input type="email" name="email" placeholder="Email" required>
                  <input type="password" name="senha" placeholder="Senha" required>
                  <button type="submit">Entrar</button>
-             </form>
-           </div>
+                 <div class="esqueciSenha">
+                        <a href="../loginSenha/esqueciasenha.html">Esqueci a Senha</a>
+                        <!-- <a href="">Não possui cadastro? Clique aqui!</a> -->
+                        </div>  
+              </form>
+            </div>
         </div>
-        
-         <div class="links">
-               <a href="../loginSenha/esqueciasenha.html">Esqueci a Senha</a>
-         </div>  
-         <img src="../assets/dishLogin.png" alt="Imagem Giratória" class="rotating-image">
+       
+                <img src="../assets/dishLogin.png" alt="Imagem Giratória" class="rotating-image">
+
+
+        </div>
     </div>
 </body>
 </html>
+
+
+

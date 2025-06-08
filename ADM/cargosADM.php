@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 require_once '../BancoDeDados/conexao.php';
 
 // Verifica se o usuário está logado e se tem permissão de Administrador
-if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'Administrador') {
+if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'administrador') {
     $_SESSION['message'] = "Você não tem permissão para acessar esta área.";
     $_SESSION['message_type'] = "error";
     header("Location: ../LoginSenha/login.php");
@@ -128,7 +128,11 @@ $cargos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?= htmlspecialchars($cargo['descricao']) ?></td>
                                 <td>
                                     <a href="editarCargo.php?id=<?= htmlspecialchars($cargo['id_cargo']) ?>">Editar</a> |
-                                    <a href="cargosAcoes/confirmarExclusaoCargo.php?id=<?= htmlspecialchars($cargo['id_cargo']) ?>">Excluir</a>
+                                 <a href="/ADM/cargosAcoes/confirmarExclusaoCargo.php?id=<?= htmlspecialchars($cargo['id_cargo']) ?>">Excluir</a>
+
+
+
+
                                 </td>
                             </tr>
                         <?php endforeach; ?>

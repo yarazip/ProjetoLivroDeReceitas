@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 require_once '../BancoDeDados/conexao.php';
 
 // Verifica se o usuário está logado e se tem permissão (Cozinheiro ou Administrador)
-if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'Cozinheiro' && $_SESSION['cargo'] !== 'Administrador')) {
+if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'cozinheiro' && $_SESSION['cargo'] !== 'administrador')) {
     $_SESSION['message'] = "Você não tem permissão para adicionar ingredientes.";
     $_SESSION['message_type'] = "error";
     header("Location: ../LoginSenha/login.php");

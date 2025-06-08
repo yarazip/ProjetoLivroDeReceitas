@@ -136,6 +136,7 @@ $degustacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($deg['descricao'] ?? 'N/A') ?></td>
                     <td>
                         <a href="editarDegustacao.php?id_funcionario=<?= htmlspecialchars($deg['id_funcionario']) ?>&nome_receita=<?= urlencode($deg['nome_receita']) ?>">Editar</a> |
+                        
                         <a href="degustacaoAcoes/confirmarExclusaoDegustacao.php?id_funcionario=<?= htmlspecialchars($deg['id_funcionario']) ?>&nome_receita=<?= urlencode($deg['nome_receita']) ?>">Excluir</a>
                     </td>
                 </tr>

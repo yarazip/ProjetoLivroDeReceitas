@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 require_once '../../BancoDeDados/conexao.php';
 
 // Verifica se o usuário está logado como cozinheiro (ou outro cargo autorizado para excluir)
-if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'Cozinheiro') {
+if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'cozinheiro') {
     $_SESSION['message'] = "Você não tem permissão para excluir receitas.";
     $_SESSION['message_type'] = "error";
     header("Location: ../../LoginSenha/login.php");

@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 require_once '../../BancoDeDados/conexao.php';
 
 // Verifica se o usuário está logado e se tem permissão (Degustador ou Administrador)
-if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'Degustador' && $_SESSION['cargo'] !== 'Administrador')) {
+if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'degustador' && $_SESSION['cargo'] !== 'administrador')) {
     $_SESSION['message'] = "Você não tem permissão para realizar esta ação.";
     $_SESSION['message_type'] = "error";
     header("Location: ../../LoginSenha/login.php");
