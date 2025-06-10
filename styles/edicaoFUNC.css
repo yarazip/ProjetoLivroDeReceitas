@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:wght@400;500;600&display=swap');
+
+:root {
+    --logo-font: 'Rock Salt', sans-serif;
+    --main-font: 'Source Sans 3', sans-serif;
+    --highlights: #ffffff;
+    --background: #eeeeee;
+    --light-grey: #d9d9d9;
+    --medium-grey: #959595;
+    --dark-grey: #333333;
+    --black: #000000;
+    --success-color: #4CAF50;
+    --danger-color: #f44336;
+    --edit-color: #757575;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--main-font);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--dark-grey);
+    padding: 10px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--highlights);
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+.menu h1 {
+    font-family: var(--logo-font);
+    font-size: 1.5rem;
+    color: var(--black);
+    margin: 0;
+    white-space: nowrap;
+}
+
+.menu nav {
+    display: flex;
+    gap: 20px;
+}
+
+.menu nav a {
+    color: var(--black);
+    font-size: 1rem;
+    text-decoration: none;
+    position: relative;
+    padding: 5px 0;
+    font-weight: 500;
+}
+
+.menu nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--black);
+    transition: width 0.3s ease;
+}
+
+.menu nav a:hover::after {
+    width: 100%;
+}
+
+.message-info,
+.message-success,
+.message-danger {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.message-info {
+    background-color: #e7f3fe;
+    color: #0c5460;
+    border-left: 5px solid #31708f;
+}
+
+.message-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid var(--success-color);
+}
+
+.message-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid var(--danger-color);
+}
+
+h2 {
+    color: var(--black);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.insert-bar {
+    background-color: var(--highlights);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-row {
+    margin-bottom: 15px;
+}
+
+.form-row label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--dark-grey);
+}
+
+.form-row input[type="text"],
+.form-row input[type="number"],
+.form-row input[type="email"],
+.form-row input[type="date"],
+.form-row select,
+.form-row textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--light-grey);
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+    outline: none;
+    border-color: var(--dark-grey);
+}
+
+.form-row textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-row input[type="file"] {
+    padding: 5px 0;
+}
+
+.current-photo {
+    text-align: center;
+    margin-top: -60px;
+}
+
+.current-photo p {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: var(--medium-grey);
+}
+
+.current-photo img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--light-grey);
+}
+
+.current-photo.no-photo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--light-grey);
+    color: var(--medium-grey);
+    font-size: 0.7rem;
+    text-align: center;
+    padding: 5px;
+    margin: 5px auto;
+    line-height: 1.2;
+    border: 1px dashed var(--medium-grey);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-actions button[type="submit"] {
+    background-color: var(--dark-grey);
+    color: white;
+}
+
+.form-actions button[type="submit"]:hover {
+    background-color: var(--black);
+}
+
+.form-actions button[type="button"] {
+    background-color: var(--medium-grey);
+    color: white;
+}
+
+.form-actions button[type="button"]:hover {
+    background-color: var(--dark-grey);
+}
+
+@media (max-width: 768px) {
+    .menu {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px 15px;
+    }
+
+    .menu h1 {
+        font-size: 1.3rem;
+    }
+
+    .menu nav {
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .insert-bar {
+        padding: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu nav a {
+        font-size: 0.9rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    .current-photo img {
+        width: 80px;
+        height: 80px;
+    }
+}

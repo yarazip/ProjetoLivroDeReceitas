@@ -27,7 +27,8 @@ $restaurantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../styles/func.css"> <link rel="stylesheet" href="../styles/restaurante.css"> <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../styles/restaurante.css"> 
+    <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
     <title>Gerenciar Restaurantes | ADM</title>
   
 </head>

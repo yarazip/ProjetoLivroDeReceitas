@@ -1,0 +1,247 @@
+  @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:wght@400;500;600&display=swap');
+
+        :root {
+            --logo-font: 'Rock Salt', sans-serif;
+            --main-font: 'Source Sans 3', sans-serif;
+            --highlights: #ffffff;
+            --background: #eeeeee;
+            --light-grey: #d9d9d9;
+            --medium-grey: #959595;
+            --dark-grey: #333333;
+            --black: #000000;
+            --success-color: #4CAF50;
+            --danger-color: #f44336;
+            --edit-color: #757575;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--main-font);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--dark-grey);
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--highlights);
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .menu h1 {
+            font-family: var(--logo-font);
+            font-size: 1.5rem;
+            color: var(--black);
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .menu nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .menu nav a {
+            color: var(--black);
+            font-size: 1rem;
+            text-decoration: none;
+            position: relative;
+            padding: 5px 0;
+            font-weight: 500;
+        }
+
+        .menu nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--black);
+            transition: width 0.3s ease;
+        }
+
+        .menu nav a:hover::after {
+            width: 100%;
+        }
+
+        .funcionario-details {
+            background-color: var(--highlights);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .funcionario-details h2 {
+            color: var(--black);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .photo-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .photo-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--light-grey);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            padding: 12px;
+            background-color: var(--background);
+            border-radius: 5px;
+        }
+
+        .info-item strong {
+            display: block;
+            color: var(--black);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .info-item span {
+            display: block;
+            line-height: 1.4;
+        }
+
+        .full-width-item {
+            grid-column: 1 / -1;
+        }
+
+        .section-title {
+            color: var(--black);
+            margin: 25px 0 15px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            background-color: var(--highlights);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-grey);
+        }
+
+        .history-table th {
+            background-color: var(--light-grey);
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .history-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--dark-grey);
+            color: var(--highlights);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-button:hover {
+            background-color: var(--black);
+        }
+
+        @media (max-width: 768px) {
+            .menu {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px 15px;
+            }
+            
+            .menu h1 {
+                font-size: 1.3rem;
+            }
+            
+            .menu nav {
+                gap: 12px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .funcionario-details {
+                padding: 20px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .history-table {
+                font-size: 0.85rem;
+            }
+            
+            .history-table th,
+            .history-table td {
+                padding: 8px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu nav a {
+                font-size: 0.9rem;
+            }
+            
+            .funcionario-details h2 {
+                font-size: 1.3rem;
+            }
+            
+            .photo-section img {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+        }
+

@@ -75,7 +75,6 @@ $historicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Histórico de Referências | ADM</title>
-    <link rel="stylesheet" href="../../styles/func.css">
     <link rel="stylesheet" href="../styles/referencia.css">
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
    
@@ -153,20 +152,22 @@ function isActive($page) {
                     <label for="data_fim">Data Fim (até):</label>
                     <input type="date" id="data_fim" name="data_fim" value="<?= htmlspecialchars($filtro_data_fim) ?>">
                 </div>
-                
-                <button type="submit">Aplicar Filtros</button>
-                <?php if (!empty($termo_pesquisa) || !empty($filtro_funcionario) || !empty($filtro_restaurante) || !empty($filtro_data_inicio) || !empty($filtro_data_fim)): ?>
-                    <a href="referenciaADM.php" class="clear-filters-button"><button type="button">Limpar Filtros</button></a>
+              <div class ="filtros">
+                  
+                  <button type="submit">Aplicar Filtros</button>
+                  <?php if (!empty($termo_pesquisa) || !empty($filtro_funcionario) || !empty($filtro_restaurante) || !empty($filtro_data_inicio) || !empty($filtro_data_fim)): ?>
+                      <a href="referenciaADM.php" class="clear-filters-button"><button type="button">Limpar Filtros</button></a>
+              </div>
                 <?php endif; ?>
             </form>
         </div>
 
-        <hr>
 
+    </div>
+        
         <div class="add-button-container">
             <a href="adicionarReferencia.php" class="add-button">Adicionar Nova Referência</a>
         </div>
-
         <h2>Lista de Históricos de Referências</h2>
 
         <table border="1" cellpadding="5">
@@ -192,14 +193,17 @@ function isActive($page) {
                             <td><?= htmlspecialchars($h['data_fim'] ?? 'Atual') ?></td>
                             <td><?= htmlspecialchars($h['descricao'] ?? 'N/A') ?></td>
                             <td>
-                                <a href="editarReferencia.php?id_func=<?= htmlspecialchars($h['id_funcionario']) ?>&id_rest=<?= htmlspecialchars($h['id_restaurante']) ?>">Editar</a> |
-                                <a href="referenciaAcoes/confirmarExclusaoReferencia.php?id_func=<?= htmlspecialchars($h['id_funcionario']) ?>&id_rest=<?= htmlspecialchars($h['id_restaurante']) ?>">Excluir</a>
+    <a href="editarReferencia.php?id_func=<?= htmlspecialchars($h['id_funcionario']) ?>&id_rest=<?= htmlspecialchars($h['id_restaurante']) ?>" class="edit-button" title="Editar">
+        <i class="fas fa-pencil-alt"></i>
+    </a>
+    <a href="referenciaAcoes/confirmarExclusaoReferencia.php?id_func=<?= htmlspecialchars($h['id_funcionario']) ?>&id_rest=<?= htmlspecialchars($h['id_restaurante']) ?>" class="delete-button" title="Excluir">
+        <i class="fas fa-trash-alt"></i>
+    </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
         </table>
-    </div>
 </body>
 </html>

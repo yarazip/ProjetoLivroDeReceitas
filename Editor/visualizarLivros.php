@@ -29,48 +29,19 @@ $receitas = $stmt->fetchAll(PDO::FETCH_COLUMN);
 <head>
     <meta charset="UTF-8">
     <title>Visualizar Livro</title>
-    <link rel="stylesheet" href="../styles/func.css">
-    <style>
-        /* Estilo simples para visualização limpa */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 2rem;
-            background-color: #f9f9f9;
-        }
-        .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 600px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            margin-bottom: 1rem;
-            color: #333;
-        }
-        p {
-            font-size: 1.1rem;
-            margin: 0.5rem 0;
-        }
-        ul {
-            margin-left: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        button {
-            padding: 0.6rem 1.2rem;
-            font-size: 1rem;
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #004d99;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/visualizarLIVROS.css">
+    
 </head>
 <body>
+     <div class="container">
+        <div class="menu">
+            <h1 class="logo">Código de Sabores</h1>
+            <nav>
+                <a href="livrosEditor.php">Livros</a>
+                <a href="gerarPDF.php">Gerar PDF</a>
+            </nav>
+        </div>
+
     <div class="container">
         <h1><?= htmlspecialchars($livro['titulo']) ?></h1>
         <p><strong>ISBN:</strong> <?= htmlspecialchars($livro['isbn']) ?></p>

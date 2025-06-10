@@ -219,16 +219,19 @@ h2 {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
 table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    background-color: var(--highlights);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
 }
 
-th,
-td {
-    padding: 10px 12px;
+th, td {
+    padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid var(--light-grey);
 }
@@ -242,6 +245,7 @@ th {
 tr:hover {
     background-color: rgba(0, 0, 0, 0.02);
 }
+
 
 .action-buttons {
     display: flex;

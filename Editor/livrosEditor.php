@@ -132,7 +132,9 @@ $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Livros Editor</title>
-    <link rel="stylesheet" href="../styles/func.css">
+    <link rel="stylesheet" href="../styles/livrosEDITOR.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="shortcut icon" href="../assets/favicon.png">
 </head>
 <body>
@@ -201,10 +203,18 @@ $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($livro['descricao']) ?></td>
                             <td><?= htmlspecialchars($livro['id_funcionario']) ?></td>
                             <td>
-                              <td>
-    | <a href="visualizarLivros.php?id=<?= $livro['id_livro'] ?>">Visualizar</a>
-    | <a href="editar_livro.php?id=<?= $livro['id_livro'] ?>">Editar</a>
-    | <a href="excluir_livro.php?id=<?= $livro['id_livro'] ?>">Excluir</a>
+  <div class="action-buttons">
+    <a href="visualizarLivros.php?id=<?= htmlspecialchars($livro['id_livro']) ?>" class="view-button" title="Visualizar">
+        <i class="fas fa-eye"></i>
+    </a>
+    <a href="editar_livro.php?id=<?= htmlspecialchars($livro['id_livro']) ?>" class="edit-button" title="Editar">
+        <i class="fas fa-pencil-alt"></i>
+    </a>
+    <a href="excluir_livro.php?id=<?= htmlspecialchars($livro['id_livro']) ?>" class="delete-button" title="Excluir">
+        <i class="fas fa-trash"></i>
+    </a>
+</div>
+
 </td>
 
                                 </form>

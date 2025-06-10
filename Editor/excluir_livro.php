@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmar'])) {
 <head>
     <meta charset="UTF-8">
     <title>Confirmar Exclusão</title>
-    <link rel="stylesheet" href="../styles/func.css">
+    <link rel="stylesheet" href="../styles/excluirLIVRO.css">
 </head>
 <body>
     <h1>Confirmar Exclusão</h1>

@@ -27,7 +27,7 @@ $cargos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../styles/cargosADM.css">
 </head>
@@ -80,7 +80,6 @@ function isActive($page) {
         </div>
 
         <h2>Lista de Cargos</h2>
-        <div class="lista-cargos">
             <table border="1" cellpadding="10" cellspacing="0">
                 <thead>
                     <tr>
