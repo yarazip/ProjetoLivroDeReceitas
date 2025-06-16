@@ -11,8 +11,11 @@ if (!isset($_POST['id_livro'])) {
 
 $id_livro = (int)$_POST['id_livro'];
 
-// Buscar dados do livro
-$sqlLivro = "SELECT * FROM livros WHERE id_livro = ?";
+// Buscar dados do livro com data_publicacao e info do editor
+$sqlLivro = "SELECT l.*, f.nome AS nome_editor, f.email AS email_editor
+             FROM livros l
+             LEFT JOIN funcionarios f ON l.id_editor = f.id_funcionario
+             WHERE l.id_livro = ?";
 $stmtLivro = $conn->prepare($sqlLivro);
 $stmtLivro->execute([$id_livro]);
 $livro = $stmtLivro->fetch(PDO::FETCH_ASSOC);
@@ -21,11 +24,21 @@ if (!$livro) {
     die("Livro não encontrado.");
 }
 
-// Buscar receitas associadas ao livro
-$sqlReceitas = "SELECT r.nome_receita, r.modo_preparo, r.tempo_preparo, r.porcoes, r.dificuldade, r.descricao 
-                FROM receitas r 
-                INNER JOIN livro_receita lr ON r.nome_receita = lr.nome_receita 
-                WHERE lr.id_livro = ?";
+// Buscar receitas associadas ao livro com cozinheiro, degustador e avaliação
+$sqlReceitas = "
+SELECT 
+    r.nome_receita, r.modo_preparo, r.tempo_preparo, r.porcoes, r.dificuldade, r.descricao,
+    c.nome AS nome_cozinheiro,
+    d.nome AS nome_degustador,
+    a.nota AS avaliacao_nota,
+    a.comentario AS avaliacao_comentario
+FROM receitas r
+INNER JOIN livro_receita lr ON r.nome_receita = lr.nome_receita
+LEFT JOIN funcionarios c ON r.id_funcionario = c.id_funcionario
+LEFT JOIN avaliacoes a ON a.id_receita = r.id_receita
+LEFT JOIN degustadores d ON a.id_degustador = d.id_degustador
+WHERE lr.id_livro = ?
+";
 $stmtReceitas = $conn->prepare($sqlReceitas);
 $stmtReceitas->execute([$id_livro]);
 $receitas = $stmtReceitas->fetchAll(PDO::FETCH_ASSOC);
@@ -51,7 +64,7 @@ $html = '
         text-align: center;
         font-size: 20pt;
         font-weight: bold;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }
     h2 {
         font-size: 16pt;
@@ -70,29 +83,61 @@ $html = '
     hr {
         margin: 20px 0;
     }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        vertical-align: top;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
     .page-break {
         page-break-after: always;
     }
 </style>
 ';
 
-// Cabeçalho do livro
+// Cabeçalho do livro com data de publicação e editor
 $html .= '<h1>' . htmlspecialchars($livro['titulo']) . '</h1>';
 $html .= '<p><strong>ISBN:</strong> ' . htmlspecialchars($livro['isbn']) . '</p>';
-$html .= '<p><strong>Descrição:</strong> ' . htmlspecialchars($livro['descricao']) . '</p>';
+$html .= '<p><strong>Data de Publicação:</strong> ' . htmlspecialchars($livro['data_publicacao']) . '</p>';
+$html .= '<p><strong>Editor Responsável:</strong> ' . htmlspecialchars($livro['nome_editor']) . ' (' . htmlspecialchars($livro['email_editor']) . ')</p>';
 
 $html .= '<h2>Receitas</h2>';
 
-// Receitas
+// Receitas em tabela
+$html .= '<table>';
+$html .= '<thead><tr>
+            <th>Nome da Receita</th>
+            <th>Cozinheiro</th>
+            <th>Degustador</th>
+            <th>Avaliação</th>
+          </tr></thead><tbody>';
+
 foreach ($receitas as $r) {
-    $html .= '<h3>' . htmlspecialchars($r['nome_receita']) . '</h3>';
-    $html .= '<p><strong>Modo de Preparo:</strong> ' . nl2br(htmlspecialchars($r['modo_preparo'])) . '</p>';
-    $html .= '<p><strong>Tempo de Preparo:</strong> ' . htmlspecialchars($r['tempo_preparo']) . ' minutos</p>';
-    $html .= '<p><strong>Porções:</strong> ' . htmlspecialchars($r['porcoes']) . '</p>';
-    $html .= '<p><strong>Dificuldade:</strong> ' . htmlspecialchars($r['dificuldade']) . '</p>';
-    $html .= '<p><strong>Descrição:</strong> ' . htmlspecialchars($r['descricao']) . '</p>';
-    $html .= '<div class="page-break"></div>';
+    $avaliacao = 'Sem avaliação';
+    if ($r['avaliacao_nota'] !== null) {
+        $avaliacao = 'Nota: ' . htmlspecialchars($r['avaliacao_nota']);
+        if (!empty($r['avaliacao_comentario'])) {
+            $avaliacao .= '<br>Comentário: ' . htmlspecialchars($r['avaliacao_comentario']);
+        }
+    }
+    $html .= '<tr>';
+    $html .= '<td>' . htmlspecialchars($r['nome_receita']) . '</td>';
+    $html .= '<td>' . htmlspecialchars($r['nome_cozinheiro'] ?? 'N/A') . '</td>';
+    $html .= '<td>' . htmlspecialchars($r['nome_degustador'] ?? 'N/A') . '</td>';
+    $html .= '<td>' . $avaliacao . '</td>';
+    $html .= '</tr>';
 }
+
+$html .= '</tbody></table>';
 
 // Gerar e exibir PDF
 $dompdf->loadHtml($html);

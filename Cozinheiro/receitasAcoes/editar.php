@@ -36,18 +36,17 @@ if (isset($_POST['atualizar'])) {
     $conn->beginTransaction();
 
     try {
-        // Atualizar dados da receita principal
-        // Se a coluna 'ingredientes_lista_texto' não for mais usada, remova-a da query e do Array de execute.
-        $sql = "UPDATE receitas SET
-            nome_receita = ?, data_criacao = ?, id_funcionario = ?, id_categoria = ?,
-            modo_preparo = ?, porcoes = ?, tempo_preparo = ?, dificuldade = ?, descricao = ?
-            WHERE nome_receita = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([
-            $nome, $data, $id_funcionario, $id_categoria,
-            $modo_preparo, $porcoes, $tempo_preparo, $dificuldade, $descricao_geral,
-            $nome_original
-        ]);
+    // Atualizar dados da receita principal
+    $sql = "UPDATE receitas SET
+        nome_receita = ?, data_criacao = ?, id_funcionario = ?, id_categoria = ?,
+        modo_preparo = ?, porcoes = ?, tempo_preparo = ?, dificuldade = ?, descricao = ?
+        WHERE nome_receita = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([
+        $nome, $data, $id_funcionario, $id_categoria,
+        $modo_preparo, $porcoes, $tempo_preparo, $dificuldade, $descricao_geral,
+        $nome_original
+    ]);
 
         // Excluir ingredientes antigos e reinserir os atualizados
         $stmt_delete_ing = $conn->prepare("DELETE FROM receita_ingrediente WHERE nome_receita = ?");
@@ -115,7 +114,7 @@ if (isset($_GET['nome'])) {
     $nome_receita_param = $_GET['nome'];
 
     // Buscar receita principal
-    $stmt = $conn->prepare("SELECT nome_receita, data_criacao, id_funcionario, id_categoria, modo_preparo, porcoes, tempo_preparo, dificuldade, descricao, ingredientes_lista_texto
+    $stmt = $conn->prepare("SELECT nome_receita, data_criacao, id_funcionario, id_categoria, modo_preparo, porcoes, tempo_preparo, dificuldade, descricao
                             FROM receitas WHERE nome_receita = ?");
     $stmt->execute([$nome_receita_param]);
     $receita_editar = $stmt->fetch(PDO::FETCH_ASSOC);
