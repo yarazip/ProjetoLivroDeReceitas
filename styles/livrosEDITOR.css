@@ -1,0 +1,328 @@
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:wght@400;500;600&display=swap');
+
+:root {
+    --logo-font: 'Rock Salt', sans-serif;
+    --main-font: 'Source Sans 3', sans-serif;
+    --highlights: #ffffff;
+    --background: #eeeeee;
+    --light-grey: #d9d9d9;
+    --medium-grey: #959595;
+    --dark-grey: #333333;
+    --black: #000000;
+    --success-color: #4CAF50;
+    --danger-color: #f44336;
+    --edit-color: #757575;
+    --info-color: #2196F3;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--main-font);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--dark-grey);
+    padding: 10px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--highlights);
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+.menu h1 {
+    font-family: var(--logo-font);
+    font-size: 1.5rem;
+    color: var(--black);
+    margin: 0;
+    white-space: nowrap;
+}
+
+.menu nav {
+    display: flex;
+    gap: 20px;
+}
+
+.menu nav a {
+    color: var(--black);
+    font-size: 1rem;
+    text-decoration: none;
+    position: relative;
+    padding: 5px 0;
+    font-weight: 500;
+}
+
+.menu nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--black);
+    transition: width 0.3s ease;
+}
+
+.menu nav a:hover::after {
+    width: 100%;
+}
+
+.insert-bar {
+    background-color: var(--highlights);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.insert-bar form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.insert-bar input[type="text"],
+.insert-bar input[type="number"],
+.insert-bar select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--light-grey);
+    border-radius: 5px;
+    font-size: 0.95rem;
+}
+
+.insert-bar select[multiple] {
+    height: auto;
+    min-height: 100px;
+}
+
+.insert-bar label {
+    font-weight: 500;
+    color: var(--dark-grey);
+    margin-bottom: -10px;
+}
+
+.insert-bar button[type="submit"] {
+    background-color: var(--dark-grey);
+    color: var(--highlights);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.insert-bar button[type="submit"]:hover {
+    background-color: var(--black);
+}
+
+.livros-lista {
+    background-color: var(--highlights);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.livros-lista h2 {
+    color: var(--black);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.message {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.message-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid var(--success-color);
+}
+
+.message-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid var(--danger-color);
+}
+
+.message-info {
+    background-color: #e7f3fe;
+    color: #0c5460;
+    border-left: 5px solid var(--info-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--highlights);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--light-grey);
+}
+
+th {
+    background-color: var(--light-grey);
+    font-weight: 600;
+    color: var(--black);
+}
+
+tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+td a {
+    color: var(--dark-grey);
+    text-decoration: none;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: color 0.3s;
+}
+
+td a:hover {
+    color: var(--black);
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 8px;
+    }
+    
+    .menu {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px 15px;
+    }
+    
+    .menu h1 {
+        font-size: 1.3rem;
+    }
+    
+    .menu nav {
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .insert-bar,
+    .livros-lista {
+        padding: 15px;
+    }
+    
+    table {
+        font-size: 0.85rem;
+    }
+    
+    th,
+    td {
+        padding: 8px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu nav a {
+        font-size: 0.9rem;
+    }
+    
+    .insert-bar input[type="text"],
+    .insert-bar input[type="number"],
+    .insert-bar select,
+    .insert-bar button[type="submit"] {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+    
+    th,
+    td {
+        padding: 6px 8px;
+    }
+    
+    td a {
+        display: block;
+        margin: 5px 0;
+    }
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.view-button,
+.edit-button, 
+.delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.view-button {
+    color: var(--view-color);
+    background-color: rgba(33, 150, 243, 0.1);
+    border: 1px solid var(--view-color);
+}
+
+.edit-button {
+    color: var(--edit-color);
+    background-color: rgba(117, 117, 117, 0.1);
+    border: 1px solid var(--edit-color);
+}
+
+.delete-button {
+    color: var(--danger-color);
+    background-color: rgba(244, 67, 54, 0.1);
+    border: 1px solid var(--danger-color);
+}
+
+.view-button:hover {
+    background-color: rgba(33, 150, 243, 0.2);
+    transform: scale(1.1);
+}
+
+.edit-button:hover {
+    background-color: rgba(117, 117, 117, 0.2);
+    transform: scale(1.1);
+}
+
+.delete-button:hover {
+    background-color: rgba(244, 67, 54, 0.2);
+    transform: scale(1.1);
+}
+
+.action-buttons i {
+    font-size: 13px;
+}

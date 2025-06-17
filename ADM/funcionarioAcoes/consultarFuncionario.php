@@ -7,8 +7,8 @@ error_reporting(E_ALL);
 require_once '../../BancoDeDados/conexao.php';
 
 // Verifica se o usuário está logado e se tem permissão de Administrador
-if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'Administrador') {
-    $_SESSION['message'] = "Você não tem permissão para acessar esta área.";
+if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'administrador') {
+    // $_SESSION['message'] = "Você não tem permissão para acessar esta área.";
     $_SESSION['message_type'] = "error";
     header("Location: ../../LoginSenha/login.php");
     exit;
@@ -67,102 +67,9 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="../../styles/func.css">
+    <link rel="stylesheet" href="../../styles/consultaADM.css">
     <title>Consultar Funcionário | ADM</title>
-    <style>
-        .funcionario-details {
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            max-width: 800px;
-            margin: 30px auto;
-        }
-        .funcionario-details h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 25px;
-        }
-        .funcionario-details .photo-section {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .funcionario-details .photo-section img {
-            max-width: 200px;
-            height: auto;
-            border: 5px solid #ddd;
-            border-radius: 50%; /* Torna a imagem redonda */
-            object-fit: cover; /* Garante que a imagem preencha o círculo */
-            width: 200px; /* Largura e altura fixas para o círculo */
-            height: 200px;
-        }
-        .funcionario-details .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Duas colunas */
-            gap: 15px 25px; /* Espaçamento entre linhas e colunas */
-            margin-bottom: 30px;
-        }
-        .funcionario-details .info-item {
-            padding: 10px 0;
-            border-bottom: 1px dashed #eee;
-        }
-        .funcionario-details .info-item:last-child {
-            border-bottom: none;
-        }
-        .funcionario-details .info-item strong {
-            display: block;
-            color: #555;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-        }
-        .funcionario-details .info-item span {
-            font-size: 1.1em;
-            color: #333;
-        }
-        .funcionario-details .full-width-item {
-            grid-column: 1 / -1; /* Ocupa todas as colunas */
-        }
-        .funcionario-details .back-button {
-            display: block;
-            width: fit-content;
-            margin: 20px auto 0;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 1em;
-            cursor: pointer;
-            text-align: center;
-        }
-        .funcionario-details .back-button:hover {
-            opacity: 0.9;
-        }
-        .section-title {
-            grid-column: 1 / -1;
-            font-size: 1.3em;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 15px;
-            color: #444;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-        }
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        .history-table th, .history-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        .history-table th {
-            background-color: #f2f2f2;
-        }
-    </style>
+  
 </head>
 <body>
     <div class="container">

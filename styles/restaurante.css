@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:wght@400;500;600&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
 :root {
     --logo-font: 'Rock Salt', sans-serif;
@@ -14,35 +15,41 @@
     --edit-color: #757575;
 }
 
-body {
-    background-color: var(--background);
-    font-family: var(--main-font);
+* {
     margin: 0;
     padding: 0;
-    color: var(--black);
-    line-height: 1.6;
+    box-sizing: border-box;
+    font-family: var(--main-font);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--dark-grey);
+    padding: 10px;
+    font-size: 16px; /* Tamanho base garantido */
 }
 
 .container {
     max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
+    margin: 0 auto;
+    padding: 10px;
 }
 
+/* Menu */
 .menu {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: var(--highlights);
-    padding: 15px 30px;
+    padding: 12px 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-.logo {
+.menu h1 {
     font-family: var(--logo-font);
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--black);
     margin: 0;
     white-space: nowrap;
@@ -50,16 +57,17 @@ body {
 
 .menu nav {
     display: flex;
-    gap: 40px;
+    gap: 20px;
 }
 
 .menu nav a {
     color: var(--black);
-    font-size: 1.1rem;
+    font-size: 1rem;
     text-decoration: none;
     position: relative;
     padding: 5px 0;
     font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 .menu nav a::after {
@@ -73,234 +81,305 @@ body {
     transition: width 0.3s ease;
 }
 
-.menu nav a:hover::after {
+.menu nav a:hover::after,
+.menu nav a.active::after {
     width: 100%;
 }
 
-.search-bar,
-.insert-bar {
-    background-color: var(--highlights);
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: center;
-}
-
-.search-bar form,
-.insert-bar form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    flex: 1;
-}
-
-.search-bar input,
-.insert-bar input,
-.insert-bar textarea {
-    flex: 1 1 250px;
-    padding: 12px 15px;
-    border: 1px solid var(--light-grey);
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-}
-
-textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.search-bar input:focus,
-.insert-bar input:focus,
-.insert-bar textarea:focus {
-    outline: none;
-    border-color: var(--dark-grey);
-}
-
-.search-bar button,
-.insert-bar button {
-    padding: 12px 25px;
-    background: var(--dark-grey);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.3s;
-}
-
-.search-bar button:hover,
-.insert-bar button:hover {
-    background: var(--black);
-    transform: translateY(-2px);
-}
-
-.insert-bar h2 {
-    margin: 0 0 10px;
-    font-size: 1.2rem;
+.menu nav a.active {
+    font-weight: 600;
     color: var(--dark-grey);
 }
 
-.compact-form {
+/* Mensagens */
+.message-info,
+.message-success,
+.message-danger {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.message-info {
+    background-color: #e7f3fe;
+    color: #0c5460;
+    border-left: 5px solid #31708f;
+}
+
+.message-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid var(--success-color);
+}
+
+.message-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid var(--danger-color);
+}
+
+/* Barra de pesquisa */
+.search-bar {
+    margin-bottom: 20px;
+    background-color: var(--highlights);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar form {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
-.compact-input {
-    flex: 1 1 180px;
-    padding: 8px 12px;
+.search-bar label {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.search-bar input {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px 12px;
     border: 1px solid var(--light-grey);
-    border-radius: 4px;
-    font-size: 0.85rem;
-    min-height: 36px;
-    transition: border-color 0.2s;
+    border-radius: 5px;
+    font-size: 0.95rem;
 }
 
-.compact-input:focus {
-    outline: none;
-    border-color: var(--dark-grey);
+.search-bar button,
+.clear-filters-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
 }
 
-.compact-textarea {
-    min-height: 60px;
-    resize: vertical;
+.search-bar button {
+    background-color: var(--dark-grey);
+    color: var(--highlights);
 }
 
+.search-bar button:hover {
+    background-color: var(--black);
+}
+
+.clear-filters-button {
+    background-color: var(--light-grey);
+    color: var(--dark-grey);
+    text-decoration: none;
+}
+
+.clear-filters-button:hover {
+    background-color: var(--medium-grey);
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--light-grey);
+    margin: 15px 0;
+}
+
+/* Botões */
+.add-button-container {
+    margin-bottom: 15px;
+}
+
+.add-button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: var(--dark-grey);
+    color: var(--highlights);
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover {
+    background-color: var(--black);
+}
+
+/* Títulos */
+h2 {
+    color: var(--black);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+/* Tabela */
 table {
     width: 100%;
     border-collapse: collapse;
     background-color: var(--highlights);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
 }
 
-table th,
-table td {
+th, td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid var(--light-grey);
 }
 
-table th {
+th {
     background-color: var(--light-grey);
-    color: var(--dark-grey);
     font-weight: 600;
+    color: var(--black);
 }
 
-table tr:hover {
-    background-color: #f9f9f9;
+tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
-table td:last-child {
+/* Botões de ação */
+.action-buttons {
     display: flex;
     gap: 10px;
 }
 
-table a {
-    padding: 6px 12px;
-    border-radius: 6px;
+.edit-button, 
+.delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
-table a:first-child {
-    background-color: var(--edit-color);
-    color: white;
+.edit-button {
+    color: var(--edit-color);
+    background-color: rgba(117, 117, 117, 0.1);
+    border: 1px solid var(--edit-color);
 }
 
-table a:last-child {
-    background-color: var(--danger-color);
-    color: white;
+.delete-button {
+    color: var(--danger-color);
+    background-color: rgba(244, 67, 54, 0.1);
+    border: 1px solid var(--danger-color);
 }
 
-table a:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
+.edit-button:hover,
+.delete-button:hover {
+    transform: scale(1.1);
 }
 
-.insert-bar a {
-    padding: 12px 20px;
-    background-color: var(--light-grey);
-    color: var(--dark-grey);
-    border-radius: 6px;
-    text-decoration: none;
-    transition: background-color 0.3s;
+.edit-button:hover {
+    background-color: rgba(117, 117, 117, 0.2);
 }
 
-.insert-bar a:hover {
-    background-color: var(--medium-grey);
-    color: white;
+.delete-button:hover {
+    background-color: rgba(244, 67, 54, 0.2);
 }
 
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-    margin-bottom: 20px;
-    background-color: var(--highlights);
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+.action-buttons i {
+    font-size: 14px;
 }
 
-.table-container::-webkit-scrollbar {
-    height: 8px;
-}
-
-.table-container::-webkit-scrollbar-track {
-    background: var(--light-grey);
-    border-radius: 0 0 8px 8px;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-    background: var(--medium-grey);
-    border-radius: 4px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-    background: var(--dark-grey);
-}
-
+/* Media Queries - Responsividade */
 @media (max-width: 768px) {
     .menu {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
+        padding: 12px 15px;
     }
+    
+    .menu h1 {
+        font-size: 1.4rem;
+    }
+    
     .menu nav {
-        gap: 20px;
-    }
-    table td:last-child {
-        flex-direction: column;
-    }
-    .search-bar, 
-    .insert-bar {
-        flex-direction: column;
-    }
-    .search-bar button,
-    .insert-bar button {
-        width: 100%;
-    }
-    .compact-input {
-        flex-basis: 100%;
-    }
-    table th,
-    table td {
-        padding: 8px 10px;
-        font-size: 0.85rem;
-    }
-    table td:last-child {
-        white-space: normal;
-        display: flex;
+        gap: 12px;
         flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .search-bar {
+        padding: 12px;
+    }
+    
+    .search-bar form {
+        flex-direction: column;
+        align-items: stretch;
         gap: 8px;
     }
-    table a {
-        padding: 5px 8px;
-        font-size: 0.8rem;
+    
+    .search-bar input,
+    .search-bar button,
+    .clear-filters-button {
+        width: 100%;
+        font-size: 1rem;
+    }
+    
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        font-size: 1rem;
+    }
+    
+    th, td {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+    
+    .action-buttons {
+        gap: 8px;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+    
+    .container {
+        padding: 8px;
+    }
+    
+    .menu h1 {
+        font-size: 1.3rem;
+    }
+    
+    .menu nav a {
+        font-size: 1rem;
+    }
+    
+    .add-button {
+        padding: 10px 16px;
+        font-size: 1rem;
+    }
+    
+    th, td {
+        padding: 8px 10px;
+        font-size: 0.95rem;
+    }
+    
+    .edit-button, 
+    .delete-button {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .action-buttons i {
+        font-size: 14px;
     }
 }

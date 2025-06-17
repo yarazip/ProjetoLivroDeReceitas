@@ -41,49 +41,22 @@ $degustacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Gerenciar Degustações | Degustador</title>
-    <link rel="stylesheet" href="../styles/func.css">
+    <link rel="stylesheet" href="../styles/receitaDEG.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
-    <style>
-        /* Seus estilos CSS */
-        .message-success, .message-error { padding: 10px; margin-bottom: 20px; border-radius: 5px; font-weight: bold; }
-        .message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6fb; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; vertical-align: top; }
-        th { background-color: #f2f2f2; }
-
-        .search-bar form { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 20px; }
-        .search-bar label { font-weight: bold; }
-        .search-bar input[type="text"] { flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        .search-bar button { padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .search-bar .clear-filters-button { margin-left: 10px; background-color: #dc3545; color: white; }
-
-        .add-button-container { text-align: right; margin-bottom: 20px; }
-        .add-button {
-            padding: 10px 20px;
-            background-color: #28a745; /* Verde para adicionar */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 1em;
-            cursor: pointer;
-        }
-        .add-button:hover { opacity: 0.9; }
-    </style>
+   
 </head>
 <body>
 <div class="container">
     <div class="menu">
         <h1 class="logo">Código de Sabores</h1>
         <nav>
-            <a href="receitasDegustador.php">Degustações</a>
-            </nav>
+            <a href="receitasDegustador.php" class="active">Degustações</a>
+        </nav>
     </div>
 
-    <?php
-    if (isset($_SESSION['message'])): ?>
+    <?php if (isset($_SESSION['message'])): ?>
         <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
             <?= htmlspecialchars($_SESSION['message']) ?>
         </div>
@@ -97,11 +70,13 @@ $degustacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="search-bar">
         <form method="GET">
             <label for="pesquisa">Pesquisar por Receita ou Avaliador:</label>
-            <input type="text" id="pesquisa" name="pesquisa" placeholder="Ex: Bolo de Chocolate, João" value="<?= htmlspecialchars($termo) ?>">
-            <button type="submit">Pesquisar</button>
-            <?php if (!empty($termo)): ?>
-                <a href="receitasDegustador.php" class="clear-filters-button"><button type="button">Limpar Pesquisa</button></a>
-            <?php endif; ?>
+            <div class="button-group">
+                <input type="text" id="pesquisa" name="pesquisa" placeholder="Ex: Bolo de Chocolate, João" value="<?= htmlspecialchars($termo) ?>">
+                <button type="submit">Pesquisar</button>
+                <?php if (!empty($termo)): ?>
+                    <a href="receitasDegustador.php" class="clear-filters-button"><button type="button">Limpar Pesquisa</button></a>
+                <?php endif; ?>
+            </div>
         </form>
     </div>
 
@@ -112,7 +87,7 @@ $degustacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <h2>Degustações Realizadas</h2>
-    <table border="1" cellpadding="8">
+    <table>
         <thead>
             <tr>
                 <th>Funcionário</th>
@@ -134,10 +109,18 @@ $degustacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($deg['data_degustacao'] ?? 'N/A') ?></td>
                     <td><?= htmlspecialchars($deg['nota'] ?? 'N/A') ?></td>
                     <td><?= htmlspecialchars($deg['descricao'] ?? 'N/A') ?></td>
-                    <td>
-                        <a href="editarDegustacao.php?id_funcionario=<?= htmlspecialchars($deg['id_funcionario']) ?>&nome_receita=<?= urlencode($deg['nome_receita']) ?>">Editar</a> |
-                        <a href="degustacaoAcoes/confirmarExclusaoDegustacao.php?id_funcionario=<?= htmlspecialchars($deg['id_funcionario']) ?>&nome_receita=<?= urlencode($deg['nome_receita']) ?>">Excluir</a>
-                    </td>
+   <td>
+       <div class="action-buttons">
+        <a href="editarDegustacao.php?id_funcionario=<?= htmlspecialchars($deg['id_funcionario']) ?>&nome_receita=<?= urlencode($deg['nome_receita']) ?>" class="edit-button" title="Editar">
+            <i class="fas fa-pencil-alt"></i>
+        </a>
+        <a href="degustacaoAcoes/confirmarExclusaoDegustacao.php?id_funcionario=<?= htmlspecialchars($deg['id_funcionario']) ?>&nome_receita=<?= urlencode($deg['nome_receita']) ?>" class="delete-button" title="Excluir">
+            <i class="fas fa-trash"></i>
+        </a>
+       </div>
+   </td>
+
+
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>

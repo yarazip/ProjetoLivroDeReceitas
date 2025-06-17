@@ -34,48 +34,33 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="../styles/func.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../styles/categoriaCHEF.css">
     <title>Gerenciar Categorias | Cozinheiro</title>
-    <style>
-        /* Seus estilos CSS */
-        .message-success, .message-error { padding: 10px; margin-bottom: 20px; border-radius: 5px; font-weight: bold; }
-        .message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; vertical-align: top; }
-        th { background-color: #f2f2f2; }
-
-        .search-bar form { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 20px; }
-        .search-bar label { font-weight: bold; }
-        .search-bar input[type="text"] { flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        .search-bar button { padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .search-bar .clear-filters-button { margin-left: 10px; background-color: #dc3545; color: white; }
-
-        .add-button-container { text-align: right; margin-bottom: 20px; }
-        .add-button {
-            padding: 10px 20px;
-            background-color: #28a745; /* Verde para adicionar */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 1em;
-            cursor: pointer;
-        }
-        .add-button:hover { opacity: 0.9; }
-    </style>
+   
 </head>
 <body>
 <div class="container">
     <div class="menu">
         <h1 class="logo">Código de Sabores</h1>
-        <nav>
-            <a href="receitasChef.php">Receitas</a>
-            <a href="ingredientesChef.php">Ingredientes</a>
-            <a href="medidasChef.php">Medidas</a>
-            <a href="categoriaChef.php">Categorias</a>
-        </nav>
+      <?php
+function isActive($page) {
+    return basename($_SERVER['PHP_SELF']) == $page ? 'active' : '';
+}
+?>
+
+  <?php
+// Get the current page filename
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+       <nav>
+    <a href="receitasChef.php" <?php if ($current_page == 'receitasChef.php') echo 'class="active"'; ?>>Receitas</a>
+    <a href="ingredientesChef.php" <?php if ($current_page == 'ingredientesChef.php') echo 'class="active"'; ?>>Ingredientes</a>
+    <a href="medidasChef.php" <?php if ($current_page == 'medidasChef.php') echo 'class="active"'; ?>>Medidas</a>
+    <a href="categoriaChef.php" <?php if ($current_page == 'categoriaChef.php') echo 'class="active"'; ?>>Categorias</a>
+</nav>
+
     </div>
 
     <?php
@@ -127,8 +112,15 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($c['nome_categoria']) ?></td>
                     <td><?= htmlspecialchars($c['descricao']) ?></td>
                     <td>
-                        <a href="editarCategoria.php?id=<?= htmlspecialchars($c['id_categoria']) ?>">Editar</a> |
-                        <a href="categoriaAcoes/confirmarExclusaoCategoria.php?id=<?= htmlspecialchars($c['id_categoria']) ?>">Excluir</a>
+                    <div class="action-buttons">
+    <a href="editarCategoria.php?id=<?= htmlspecialchars($c['id_categoria']) ?>" class="edit-button" title="Editar">
+        <i class="fas fa-pencil-alt"></i>
+    </a>
+    <a href="categoriaAcoes/confirmarExclusaoCategoria.php?id=<?= htmlspecialchars($c['id_categoria']) ?>" class="delete-button" title="Excluir">
+        <i class="fas fa-trash"></i>
+    </a>
+</div>
+
                     </td>
                 </tr>
             <?php endforeach; ?>

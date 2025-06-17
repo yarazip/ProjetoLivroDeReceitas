@@ -7,8 +7,8 @@ error_reporting(E_ALL);
 require_once '../BancoDeDados/conexao.php';
 
 // Verifica se o usuário está logado e se tem permissão de Administrador
-if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'Administrador') {
-    $_SESSION['message'] = "Você não tem permissão para adicionar funcionários.";
+if (!isset($_SESSION['id_login']) || $_SESSION['cargo'] !== 'administrador') {
+    // $_SESSION['message'] = "Você não tem permissão para adicionar funcionários.";
     $_SESSION['message_type'] = "error";
     header("Location: ../LoginSenha/login.php");
     exit;
@@ -79,61 +79,8 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon" />
-    <link rel="stylesheet" href="../../styles/func.css" /> <link rel="stylesheet" href="../../styles/funcionario.css" /> <title>Adicionar Funcionário | ADM</title>
-    <style>
-        /* Estilos adicionais para o layout do formulário */
-        .insert-bar form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 600px; /* Limita a largura do formulário */
-            margin: 20px auto; /* Centraliza */
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-        }
-        .form-row input, .form-row select, .form-row textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box; /* Inclui padding e borda na largura */
-        }
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end; /* Alinha botões à direita */
-        }
-        .form-actions button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .form-actions button[type="submit"] {
-            background-color: #28a745; /* Verde para adicionar */
-            color: white;
-        }
-        .form-actions a {
-            text-decoration: none;
-        }
-        .form-actions a button {
-            background-color: #dc3545; /* Vermelho para cancelar */
-            color: white;
-        }
-        h2 { text-align: center; margin-bottom: 20px; color: #333; }
-        .message-success, .message-error {
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    </style>
+    <link rel="stylesheet" href="../../styles/adicionarADM.css" /> <link rel="stylesheet" href="../../styles/funcionario.css" /> <title>Adicionar Funcionário | ADM</title>
+  
 </head>
 <body>
 <div class="container">
@@ -205,7 +152,7 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
 
             <div class="form-row">
                 <label for="descricao">Descrição (Opcional):</label>
-                <textarea id="descricao" name="descricao" placeholder="Breve descrição sobre o funcionário"></textarea>
+                <input id="descricao" name="descricao" placeholder="Breve descrição sobre o funcionário"></input>
             </div>
 
             <div class="form-row">

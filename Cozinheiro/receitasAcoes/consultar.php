@@ -62,68 +62,9 @@ if (isset($_GET['nome'])) {
 <head>
     <meta charset="UTF-8" />
     <title>Detalhes da Receita</title>
-    <link rel="stylesheet" href="../../styles/func.css" /> <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon" /> <style>
-        /* Estilos específicos para a página de detalhes (se não estiverem em func.css) */
-        .recipe-detail {
-            background-color: #f9f9f9;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        .recipe-detail h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        .recipe-image-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .recipe-detail-image {
-            max-width: 400px;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .recipe-info p {
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-        .recipe-info h3 {
-            margin-top: 25px;
-            margin-bottom: 10px;
-            color: #555;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-        .recipe-info ul {
-            list-style: disc;
-            margin-left: 20px;
-            margin-bottom: 20px;
-        }
-        .recipe-info ul li {
-            margin-bottom: 5px;
-        }
-        .preparo-text {
-            white-space: pre-wrap; /* Preserva quebras de linha e espaços do textarea */
-        }
-        .back-button {
-            display: block;
-            width: fit-content;
-            margin: 25px auto 0 auto;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 1.1em;
-            text-align: center;
-        }
-        .back-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="../../styles/consultaREC.css" /> 
+    <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon" /> 
+  
 </head>
 <body>
 <div class="container">

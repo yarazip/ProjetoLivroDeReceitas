@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 require_once '../BancoDeDados/conexao.php';
 
 // Verifica se o usuário está logado e se tem permissão (Cozinheiro ou Administrador)
-if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'Cozinheiro' && $_SESSION['cargo'] !== 'Administrador')) {
+if (!isset($_SESSION['id_login']) || ($_SESSION['cargo'] !== 'cozinheiro' && $_SESSION['cargo'] !== 'administrador')) {
     $_SESSION['message'] = "Você não tem permissão para adicionar receitas.";
     $_SESSION['message_type'] = "error";
     header("Location: ../LoginSenha/login.php");
@@ -110,68 +110,9 @@ if (isset($_POST['adicionar'])) {
 <head>
     <meta charset="UTF-8" />
     <title>Adicionar Nova Receita | Cozinheiro</title>
-    <link rel="stylesheet" href="../styles/func.css" />
+    <link rel="stylesheet" href="../styles/adicionarReceitas.css" />
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon" />
-    <style>
-        /* Seus estilos CSS */
-        .insert-bar form { display: flex; flex-direction: column; gap: 15px; }
-        .insert-bar fieldset { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #f9f9f9; }
-        .insert-bar legend { font-size: 1.2em; font-weight: bold; padding: 0 10px; color: #333; }
-        .insert-bar label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .insert-bar input[type="text"],
-        .insert-bar input[type="date"],
-        .insert-bar input[type="number"],
-        .insert-bar select,
-        .insert-bar textarea { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .insert-bar button { padding: 12px 25px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; margin-top: 10px; }
-        .insert-bar button:hover { opacity: 0.9; }
-        .message-success, .message-error { padding: 10px; margin-bottom: 20px; border-radius: 5px; font-weight: bold; }
-        .message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-
-        /* Estilos para o container de ingredientes */
-        .ingredientes-container {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            background-color: #fff;
-        }
-        .ingrediente-item {
-            display: flex;
-            flex-wrap: wrap; /* Para responsividade em telas menores */
-            gap: 10px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #eee; /* Linha divisória para cada ingrediente */
-            align-items: flex-end; /* Alinha os botões com os inputs */
-        }
-        .ingrediente-item:last-child {
-            border-bottom: none; /* Remove a linha do último item */
-        }
-        .ingrediente-item label {
-            flex-basis: 100%; /* Labels ocupam toda a largura antes dos inputs */
-            margin-bottom: 5px;
-        }
-        .ingrediente-item select,
-        .ingrediente-item input[type="number"],
-        .ingrediente-item input[type="text"] {
-            flex-grow: 1; /* Inputs crescem para preencher espaço */
-            margin-bottom: 0; /* Remove margin-bottom padrão */
-            min-width: 120px; /* Largura mínima para os selects/inputs */
-        }
-        .ingrediente-item input[type="number"] { width: 80px; min-width: 80px; }
-        .ingrediente-item button {
-            flex-shrink: 0; /* Botões não encolhem */
-            padding: 8px 12px;
-            font-size: 0.9em;
-            margin-top: 0; /* Remove margin-top padrão */
-        }
-        .adicionar-ingrediente { background-color: #007bff; color: white; } /* Azul para adicionar */
-        .remover-ingrediente { background-color: #dc3545; color: white; } /* Vermelho para remover */
-        /* Hidden labels for accessibility */
-        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
-    </style>
+   
 </head>
 <body>
 <div class="container">
