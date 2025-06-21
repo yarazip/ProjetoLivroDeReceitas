@@ -2,7 +2,7 @@
 $host = 'localhost';
 $dbname = 'teste_trabalho_1';
 $username = 'root';
-$password = 'yara123';
+$password = 'senha';
 // Define a porta do MySQL
 $port = '3307';
 
