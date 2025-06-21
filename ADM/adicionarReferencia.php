@@ -56,7 +56,7 @@ if (isset($_POST['adicionar'])) {
         $_SESSION['message_type'] = "error";
         error_log("Erro ao adicionar referência: " . $e->getMessage());
         if ($e->getCode() == '23000') { // Código para erro de chave duplicada (PK composta)
-             $_SESSION['message'] = "Erro: Já existe um registro de histórico para este funcionário e restaurante com esta data de início.";
+            $_SESSION['message'] = "Erro: Já existe um registro de histórico para este funcionário e restaurante com esta data de início.";
         }
         header("Location: adicionarReferencia.php"); // Redireciona de volta para o formulário
         exit;
@@ -66,14 +66,18 @@ if (isset($_POST['adicionar'])) {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="stylesheet" href="../../styles/adicionarADM.css">
     <title>Adicionar Referência | ADM</title>
-   
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
@@ -83,6 +87,10 @@ if (isset($_POST['adicionar'])) {
                 <a href="restauranteADM.php">Restaurantes</a>
                 <a href="funcionarioADM.php">Funcionário</a>
                 <a href="referenciaADM.php">Referência</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
@@ -91,7 +99,7 @@ if (isset($_POST['adicionar'])) {
             <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
                 <?= htmlspecialchars($_SESSION['message']) ?>
             </div>
-            <?php
+        <?php
             unset($_SESSION['message']);
             unset($_SESSION['message_type']);
         endif;
@@ -135,4 +143,5 @@ if (isset($_POST['adicionar'])) {
         </div>
     </div>
 </body>
+
 </html>

@@ -60,7 +60,6 @@ try {
         header("Location: receitasDegustador.php");
         exit;
     }
-
 } catch (PDOException $e) {
     error_log("Erro ao buscar degustação para edição: " . $e->getMessage());
     $_SESSION['message'] = "Erro ao carregar detalhes da degustação: " . $e->getMessage();
@@ -104,20 +103,28 @@ if (isset($_POST['salvar_edicao'])) {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="stylesheet" href="../styles/edicaoADM.css">
     <title>Editar Degustação | Degustador</title>
-    
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
             <nav>
                 <a href="receitasDegustador.php">Degustações</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
@@ -126,7 +133,7 @@ if (isset($_POST['salvar_edicao'])) {
             <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
                 <?= htmlspecialchars($_SESSION['message']) ?>
             </div>
-            <?php
+        <?php
             unset($_SESSION['message']);
             unset($_SESSION['message_type']);
         endif;
@@ -137,7 +144,8 @@ if (isset($_POST['salvar_edicao'])) {
             <form method="post" action="">
                 <input type="hidden" name="id_funcionario_original" value="<?= htmlspecialchars($degustacao_editando['id_funcionario']) ?>">
                 <input type="hidden" name="nome_receita_original" value="<?= htmlspecialchars($degustacao_editando['nome_receita']) ?>">
-                <input type="hidden" name="salvar_edicao" value="1"> <p><strong>Funcionário:</strong> <?= htmlspecialchars($degustacao_editando['nome_funcionario'] ?? 'N/A') ?> (ID: <?= htmlspecialchars($degustacao_editando['id_funcionario'] ?? 'N/A') ?>)</p>
+                <input type="hidden" name="salvar_edicao" value="1">
+                <p><strong>Funcionário:</strong> <?= htmlspecialchars($degustacao_editando['nome_funcionario'] ?? 'N/A') ?> (ID: <?= htmlspecialchars($degustacao_editando['id_funcionario'] ?? 'N/A') ?>)</p>
                 <p><strong>Receita:</strong> <?= htmlspecialchars($degustacao_editando['nome_receita'] ?? 'N/A') ?></p>
 
                 <label for="data_degustacao">Data da Degustação:</label>
@@ -155,4 +163,5 @@ if (isset($_POST['salvar_edicao'])) {
         </div>
     </div>
 </body>
+
 </html>

@@ -52,13 +52,17 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Confirmar Exclusão de Referência</title>
     <link rel="stylesheet" href="../../styles/excluirADM.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
- 
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
@@ -68,6 +72,10 @@ try {
                 <a href="../restauranteADM.php">Restaurantes</a>
                 <a href="../funcionarioADM.php">Funcionário</a>
                 <a href="../referenciaADM.php">Referência</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
@@ -88,4 +96,5 @@ try {
         </div>
     </div>
 </body>
+
 </html>

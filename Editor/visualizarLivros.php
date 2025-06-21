@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../BancoDeDados/conexao.php';
+require_once './../BancoDeDados/conexao.php';
 
 if (!isset($_GET['id'])) {
     header("Location: livrosEditor.php");

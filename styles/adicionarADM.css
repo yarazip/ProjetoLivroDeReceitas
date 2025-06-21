@@ -277,3 +277,108 @@ h2 {
 .button-group button {
     flex: 1;
 }
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    padding: 0 15px;
+    color: var(--dark-grey);
+    font-weight: 600;
+}
+
+.user-info i {
+    color: var(--medium-grey);
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Mantenha o resto do seu estilo existente para .menu */
+}
+
+.menu-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+/* Estilo para o container dos checkboxes */
+label[for="receitas"] {
+    display: block;
+    font-weight: 600;
+    color: var(--dark-grey);
+    margin-bottom: 10px;
+}
+
+.checkbox-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background-color: var(--highlights);
+    border-radius: 5px;
+    border: 1px solid var(--light-grey);
+    transition: all 0.3s ease;
+}
+
+.checkbox-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-color: var(--medium-grey);
+}
+
+.checkbox-item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--medium-grey);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.checkbox-item input[type="checkbox"]:checked {
+    background-color: var(--dark-grey);
+    border-color: var(--dark-grey);
+}
+
+.checkbox-item input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    color: var(--highlights);
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkbox-item label {
+    cursor: pointer;
+    flex-grow: 1;
+    color: var(--dark-grey);
+    user-select: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .checkbox-container {
+        gap: 6px;
+    }
+    
+    .checkbox-item {
+        padding: 6px 10px;
+    }
+}

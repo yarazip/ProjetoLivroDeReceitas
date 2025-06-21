@@ -46,13 +46,17 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Confirmar Exclusão de Funcionário</title>
     <link rel="stylesheet" href="../../styles/excluirADM.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
-   
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
@@ -62,13 +66,18 @@ try {
                 <a href="../restauranteADM.php">Restaurantes</a>
                 <a href="../funcionarioADM.php">Funcionário</a>
                 <a href="../referenciaADM.php">Referência</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
         <div class="confirmation-box">
             <h2>Confirmar Exclusão de Funcionário</h2>
             <p>Você tem certeza que deseja excluir o funcionário:<br>
-               <strong>"<?= htmlspecialchars($funcionario_info['nome']) ?>" (CPF: <?= htmlspecialchars($funcionario_info['CPF']) ?>)</strong>?</p>
+                <strong>"<?= htmlspecialchars($funcionario_info['nome']) ?>" (CPF: <?= htmlspecialchars($funcionario_info['CPF']) ?>)</strong>?
+            </p>
             <p>Esta ação é irreversível e removerá todos os dados relacionados a este funcionário (login, histórico de restaurante, degustações, etc.).</p>
             <div class="buttons">
                 <form action="excluirFuncionario.php" method="GET">
@@ -82,4 +91,5 @@ try {
         </div>
     </div>
 </body>
+
 </html>

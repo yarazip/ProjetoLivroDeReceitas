@@ -51,7 +51,6 @@ try {
     $stmt_historico = $conn->prepare($sql_historico);
     $stmt_historico->execute([$id_funcionario_consulta]);
     $historico_restaurantes = $stmt_historico->fetchAll(PDO::FETCH_ASSOC);
-
 } catch (PDOException $e) {
     error_log("Erro ao consultar funcionário: " . $e->getMessage());
     $_SESSION['message'] = "Erro ao carregar detalhes do funcionário: " . $e->getMessage();
@@ -63,14 +62,18 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="stylesheet" href="../../styles/consultaADM.css">
     <title>Consultar Funcionário | ADM</title>
-  
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
@@ -80,6 +83,10 @@ try {
                 <a href="../restauranteADM.php">Restaurantes</a>
                 <a href="../funcionarioADM.php">Funcionário</a>
                 <a href="../referenciaADM.php">Referência</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
@@ -147,10 +154,10 @@ try {
                     <span><?= nl2br(htmlspecialchars($funcionario_detalhes['descricao'] ?? 'N/A')) ?></span>
                 </div>
                 <?php if (!empty($funcionario_detalhes['descricao_login'])): ?>
-                <div class="info-item full-width-item">
-                    <strong>Descrição do Login:</strong>
-                    <span><?= nl2br(htmlspecialchars($funcionario_detalhes['descricao_login'])) ?></span>
-                </div>
+                    <div class="info-item full-width-item">
+                        <strong>Descrição do Login:</strong>
+                        <span><?= nl2br(htmlspecialchars($funcionario_detalhes['descricao_login'])) ?></span>
+                    </div>
                 <?php endif; ?>
             </div>
 
@@ -186,4 +193,5 @@ try {
         </div>
     </div>
 </body>
+
 </html>

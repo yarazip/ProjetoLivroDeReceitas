@@ -392,3 +392,32 @@ tr:hover {
         height: 30px;
     }
 }
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    padding: 0 15px;
+    color: var(--dark-grey);
+    font-weight: 600;
+}
+
+.user-info i {
+    color: var(--medium-grey);
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Mantenha o resto do seu estilo existente para .menu */
+}
+
+.menu-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+    justify-content: space-between;
+}

@@ -65,14 +65,13 @@ if (isset($_POST['salvar_edicao'])) { // Renomeado o name do botão para 'salvar
         $_SESSION['message_type'] = "success";
         header("Location: funcionarioADM.php");
         exit;
-
     } catch (PDOException $e) {
         $conn->rollBack();
         error_log("Erro ao atualizar funcionário: " . $e->getMessage());
         $_SESSION['message'] = "Erro ao atualizar funcionário: " . $e->getMessage();
         $_SESSION['message_type'] = "error";
         if ($e->getCode() == '23000') { // Código para erro de chave duplicada
-             $_SESSION['message'] = "Erro: CPF ou Email já cadastrado para outro funcionário.";
+            $_SESSION['message'] = "Erro: CPF ou Email já cadastrado para outro funcionário.";
         }
         header("Location: editarFuncionario.php?id=" . htmlspecialchars($id)); // Retorna para a página de edição
         exit;
@@ -118,102 +117,112 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon" />
     <link rel="stylesheet" href="../../styles/edicaoFUNC.css" />
     <title>Editar Funcionário | ADM</title>
-  
+
 </head>
+
 <body>
-<div class="container">
-    <div class="menu">
-        <h1 class="logo">Código de Sabores</h1>
-        <nav>
-            <a href="cargosADM.php">Cargo</a>
-            <a href="restauranteADM.php">Restaurantes</a>
-            <a href="funcionarioADM.php">Funcionário</a>
-            <a href="referenciaADM.php">Referência</a>
-        </nav>
-    </div>
-
-    <?php
-    if (isset($_SESSION['message'])): ?>
-        <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
-            <?= htmlspecialchars($_SESSION['message']) ?>
+    <div class="container">
+        <div class="menu">
+            <h1 class="logo">Código de Sabores</h1>
+            <nav>
+                <a href="cargosADM.php">Cargo</a>
+                <a href="restauranteADM.php">Restaurantes</a>
+                <a href="funcionarioADM.php">Funcionário</a>
+                <a href="referenciaADM.php">Referência</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
+            </nav>
         </div>
+
         <?php
-        unset($_SESSION['message']);
-        unset($_SESSION['message_type']);
-    endif;
-    ?>
+        if (isset($_SESSION['message'])): ?>
+            <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
+                <?= htmlspecialchars($_SESSION['message']) ?>
+            </div>
+        <?php
+            unset($_SESSION['message']);
+            unset($_SESSION['message_type']);
+        endif;
+        ?>
 
-<h2>Editar Funcionário</h2>
-<div class="insert-bar">
-    <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id_funcionario" value="<?= htmlspecialchars($funcionarioEditar['id_funcionario']) ?>" />
-        <input type="hidden" name="salvar_edicao" value="1"> <div class="form-row">
-            <label for="cpf">CPF:</label>
-            <input type="text" id="cpf" name="cpf" placeholder="CPF (somente números)" required pattern="\d{11}" title="O CPF deve conter 11 dígitos numéricos." maxlength="11" value="<?= htmlspecialchars($funcionarioEditar['CPF'] ?? '') ?>" />
-        </div>
-        
-        <div class="form-row">
-            <label for="nome">Nome Completo:</label>
-            <input type="text" id="nome" name="nome" placeholder="Nome do funcionário" required value="<?= htmlspecialchars($funcionarioEditar['nome'] ?? '') ?>" />
-        </div>
-        
-        <div class="form-row">
-            <label for="data_admissao">Data de Admissão:</label>
-            <input type="date" id="data_admissao" name="data_admissao" required value="<?= htmlspecialchars($funcionarioEditar['data_admissao'] ?? '') ?>" />
-        </div>
-        
-        <div class="form-row">
-            <label for="salario">Salário:</label>
-            <input type="number" id="salario" name="salario" placeholder="Salário (ex: 2500.00)" step="0.01" min="0" required value="<?= htmlspecialchars($funcionarioEditar['salario'] ?? '') ?>" />
-        </div>
-        
-        <div class="form-row">
-            <label for="id_cargo">Cargo:</label>
-            <select id="id_cargo" name="id_cargo" required>
-                <option value="">Selecione o cargo</option>
-                <?php foreach ($cargos as $cargo): ?>
-                    <option value="<?= htmlspecialchars($cargo['id_cargo']) ?>" <?= (isset($funcionarioEditar['id_cargo']) && $funcionarioEditar['id_cargo'] == $cargo['id_cargo']) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cargo['nome']) ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            
-            <div class="form-row">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Email (será o login)" required value="<?= htmlspecialchars($loginEditar['email'] ?? '') ?>" />
-            </div>
-            
-            <div class="form-row">
-                <label for="descricao">Descrição (Opcional):</label>
-                <textarea id="descricao" name="descricao" placeholder="Breve descrição sobre o funcionário"><?= htmlspecialchars($funcionarioEditar['descricao'] ?? '') ?></textarea>
-            </div>
-            
-            <div class="form-row">
-                <label for="foto_funcionario">Nova Foto do Funcionário (Opcional):</label>
-                <input type="file" id="foto_funcionario" name="foto_funcionario" accept="image/*" />
-                <?php if ($funcionarioEditar['foto_funcionario']): ?>
-                    <div class="current-photo">
-                        <p>Foto atual:</p>
-                        <img src="data:image/jpeg;base64,<?= base64_encode($funcionarioEditar['foto_funcionario']) ?>" alt="Foto Atual" />
-                    </div>
+        <h2>Editar Funcionário</h2>
+        <div class="insert-bar">
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id_funcionario" value="<?= htmlspecialchars($funcionarioEditar['id_funcionario']) ?>" />
+                <input type="hidden" name="salvar_edicao" value="1">
+                <div class="form-row">
+                    <label for="cpf">CPF:</label>
+                    <input type="text" id="cpf" name="cpf" placeholder="CPF (somente números)" required pattern="\d{11}" title="O CPF deve conter 11 dígitos numéricos." maxlength="11" value="<?= htmlspecialchars($funcionarioEditar['CPF'] ?? '') ?>" />
+                </div>
+
+                <div class="form-row">
+                    <label for="nome">Nome Completo:</label>
+                    <input type="text" id="nome" name="nome" placeholder="Nome do funcionário" required value="<?= htmlspecialchars($funcionarioEditar['nome'] ?? '') ?>" />
+                </div>
+
+                <div class="form-row">
+                    <label for="data_admissao">Data de Admissão:</label>
+                    <input type="date" id="data_admissao" name="data_admissao" required value="<?= htmlspecialchars($funcionarioEditar['data_admissao'] ?? '') ?>" />
+                </div>
+
+                <div class="form-row">
+                    <label for="salario">Salário:</label>
+                    <input type="number" id="salario" name="salario" placeholder="Salário (ex: 2500.00)" step="0.01" min="0" required value="<?= htmlspecialchars($funcionarioEditar['salario'] ?? '') ?>" />
+                </div>
+
+                <div class="form-row">
+                    <label for="id_cargo">Cargo:</label>
+                    <select id="id_cargo" name="id_cargo" required>
+                        <option value="">Selecione o cargo</option>
+                        <?php foreach ($cargos as $cargo): ?>
+                            <option value="<?= htmlspecialchars($cargo['id_cargo']) ?>" <?= (isset($funcionarioEditar['id_cargo']) && $funcionarioEditar['id_cargo'] == $cargo['id_cargo']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($cargo['nome']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Email (será o login)" required value="<?= htmlspecialchars($loginEditar['email'] ?? '') ?>" />
+                </div>
+
+                <div class="form-row">
+                    <label for="descricao">Descrição (Opcional):</label>
+                    <textarea id="descricao" name="descricao" placeholder="Breve descrição sobre o funcionário"><?= htmlspecialchars($funcionarioEditar['descricao'] ?? '') ?></textarea>
+                </div>
+
+                <div class="form-row">
+                    <label for="foto_funcionario">Nova Foto do Funcionário (Opcional):</label>
+                    <input type="file" id="foto_funcionario" name="foto_funcionario" accept="image/*" />
+                    <?php if ($funcionarioEditar['foto_funcionario']): ?>
+                        <div class="current-photo">
+                            <p>Foto atual:</p>
+                            <img src="data:image/jpeg;base64,<?= base64_encode($funcionarioEditar['foto_funcionario']) ?>" alt="Foto Atual" />
+                        </div>
                     <?php else: ?>
-                    <p class="current-photo">Nenhuma foto atual.</p>
+                        <p class="current-photo">Nenhuma foto atual.</p>
                     <?php endif; ?>
-                    </div>
-                    
-            <div class="form-actions">
-                <button type="submit">Salvar Alterações</button>
-                <a href="funcionarioADM.php"><button type="button">Cancelar</button></a>
-            </div>
-        </form>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Salvar Alterações</button>
+                    <a href="funcionarioADM.php"><button type="button">Cancelar</button></a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 </body>
+
 </html>

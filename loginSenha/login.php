@@ -67,43 +67,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codigo de Sabores</title>
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="./scripts/script.js"></script>
     <link rel="stylesheet" href="../styles/login.css">
     <!-- <script src="./scripts/script.js"></script> -->
     <title>Codigo de Sabores|Login</title>
 </head>
+
 <body>
-   <div class="header">
+    <div class="header">
         <h1 class="logo-login">Código de Sabores</h1>
     </div>
-    <h2 class ="login" >LOGIN</h2>
+    <h2 class="login">LOGIN</h2>
     <div class="container">
         <!-- Seção de Login -->
         <div class="login-section">
-           <div class="login-container">
-              <form method="post" action="">
-                 <input type="email" name="email" placeholder="Email" required>
-                 <input type="password" name="senha" placeholder="Senha" required>
-                 <button type="submit">Entrar</button>
-                 <div class="esqueciSenha">
-                        <a href="../loginSenha/esqueciasenha.html">Esqueci a Senha</a>
+            <div class="login-container">
+                <form method="post" action="">
+                    <input type="email" name="email" placeholder="Email" required>
+                    
+                    <div class="password-field">
+                        <input type="password" name="senha" id="senha" placeholder="Senha" required>
+                        <i class="fa-solid fa-eye-slash" id="toggleSenha" style="color: gray; cursor: pointer;"></i>
+
+                    </div> <button type="submit">Entrar</button>
+                    <div class="esqueciSenha">
+                        <a href="/loginSenha/esqueci_senha.php">Esqueci a Senha</a>
                         <!-- <a href="">Não possui cadastro? Clique aqui!</a> -->
-                        </div>  
-              </form>
+                    </div>
+                </form>
             </div>
         </div>
-       
-                <img src="../assets/dishLogin.png" alt="Imagem Giratória" class="rotating-image">
+
+        <img src="../assets/dishLogin.png" alt="Imagem Giratória" class="rotating-image">
 
 
-        </div>
+    </div>
     </div>
 </body>
+
 </html>
-
-
-

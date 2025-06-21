@@ -70,14 +70,18 @@ if (isset($_POST['salvar_edicao'])) {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="stylesheet" href="../styles/edicaoADM.css">
     <title>Editar Ingrediente | Cozinheiro</title>
-    
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
@@ -87,6 +91,10 @@ if (isset($_POST['salvar_edicao'])) {
                 <a href="ingredientesChef.php">Ingredientes</a>
                 <a href="medidasChef.php">Medidas</a>
                 <a href="categoriaChef.php">Categorias</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
@@ -95,7 +103,7 @@ if (isset($_POST['salvar_edicao'])) {
             <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
                 <?= htmlspecialchars($_SESSION['message']) ?>
             </div>
-            <?php
+        <?php
             unset($_SESSION['message']);
             unset($_SESSION['message_type']);
         endif;
@@ -115,4 +123,5 @@ if (isset($_POST['salvar_edicao'])) {
         </div>
     </div>
 </body>
+
 </html>

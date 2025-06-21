@@ -1,12 +1,14 @@
-// Script ESQUECI A SENHA
-function showNotification() {
-    var notification = document.getElementById('notification');
+document.addEventListener("DOMContentLoaded", function () {
+    const senhaInput = document.getElementById('senha');
+    const toggleIcon = document.getElementById('toggleSenha');
 
-    // Exibe a notificação
-    notification.classList.add('show');
+    if (senhaInput && toggleIcon) {
+        toggleIcon.addEventListener('click', () => {
+            const isPassword = senhaInput.type === 'password';
+            senhaInput.type = isPassword ? 'text' : 'password';
 
-    // Esconde a notificação após 3 segundos
-    setTimeout(function () {
-        notification.classList.remove('show');
-    }, 3000);
-}
+            toggleIcon.classList.toggle('fa-eye-slash');
+            toggleIcon.classList.toggle('fa-eye');
+        });
+    }
+});

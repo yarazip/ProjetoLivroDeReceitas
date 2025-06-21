@@ -46,13 +46,17 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Confirmar Exclusão de Ingrediente</title>
     <link rel="stylesheet" href="../../styles/excluirADM.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
-   
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
@@ -62,13 +66,18 @@ try {
                 <a href="../ingredientesChef.php">Ingredientes</a>
                 <a href="../medidasChef.php">Medidas</a>
                 <a href="../categoriaChef.php">Categorias</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
         <div class="confirmation-box">
             <h2>Confirmar Exclusão de Ingrediente</h2>
             <p>Você tem certeza que deseja excluir o ingrediente:<br>
-               <strong>"<?= htmlspecialchars($ingrediente_info['nome']) ?>" (ID: <?= htmlspecialchars($ingrediente_info['id_ingrediente']) ?>)</strong>?</p>
+                <strong>"<?= htmlspecialchars($ingrediente_info['nome']) ?>" (ID: <?= htmlspecialchars($ingrediente_info['id_ingrediente']) ?>)</strong>?
+            </p>
             <p>Esta ação é irreversível e só será possível se o ingrediente não estiver sendo usado em nenhuma receita.</p>
             <div class="buttons">
                 <form action="excluirIngrediente.php" method="GET">
@@ -82,4 +91,5 @@ try {
         </div>
     </div>
 </body>
+
 </html>

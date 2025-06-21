@@ -46,13 +46,17 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Confirmar Exclusão de Medida</title>
     <link rel="stylesheet" href="../../styles/excluirADM.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
-    
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
@@ -62,13 +66,18 @@ try {
                 <a href="../ingredientesChef.php">Ingredientes</a>
                 <a href="../medidasChef.php">Medidas</a>
                 <a href="../categoriaChef.php">Categorias</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
         <div class="confirmation-box">
             <h2>Confirmar Exclusão de Medida</h2>
             <p>Você tem certeza que deseja excluir a medida:<br>
-               <strong>"<?= htmlspecialchars($medida_info['descricao']) ?> (<?= htmlspecialchars($medida_info['medida']) ?>)" (ID: <?= htmlspecialchars($medida_info['id_medida']) ?>)</strong>?</p>
+                <strong>"<?= htmlspecialchars($medida_info['descricao']) ?> (<?= htmlspecialchars($medida_info['medida']) ?>)" (ID: <?= htmlspecialchars($medida_info['id_medida']) ?>)</strong>?
+            </p>
             <p>Esta ação é irreversível e só será possível se a medida não estiver sendo usada em nenhuma receita.</p>
             <div class="buttons">
                 <form action="excluirMedida.php" method="GET">
@@ -82,4 +91,5 @@ try {
         </div>
     </div>
 </body>
+
 </html>

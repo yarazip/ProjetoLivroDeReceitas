@@ -48,13 +48,17 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Confirmar Exclusão de Receita</title>
     <link rel="stylesheet" href="../../styles/excluirADM.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
-   
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
@@ -64,13 +68,18 @@ try {
                 <a href="../ingredientesChef.php">Ingredientes</a>
                 <a href="../medidasChef.php">Medidas</a>
                 <a href="../categoriaChef.php">Categorias</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
         <div class="confirmation-box">
             <h2>Confirmar Exclusão</h2>
             <p>Você tem certeza que deseja excluir a receita:<br>
-               <strong>"<?= htmlspecialchars($receita_info['nome_receita']) ?>"</strong>?</p>
+                <strong>"<?= htmlspecialchars($receita_info['nome_receita']) ?>"</strong>?
+            </p>
             <p>Esta ação é irreversível.</p>
             <div class="buttons">
                 <form action="excluir.php" method="GET">
@@ -78,10 +87,11 @@ try {
                     <input type="hidden" name="confirmar" value="sim">
                     <button type="submit" class="confirm-button">Sim, Excluir</button>
                 </form>
-                
+
                 <button type="button" class="cancel-button-res" onclick="window.location.href='../receitasChef.php'">Cancelar</button>
             </div>
         </div>
     </div>
 </body>
+
 </html>

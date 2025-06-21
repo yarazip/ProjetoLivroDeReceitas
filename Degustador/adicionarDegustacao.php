@@ -59,7 +59,7 @@ if (isset($_POST['adicionar'])) {
         $_SESSION['message_type'] = "error";
         error_log("Erro ao adicionar degustação: " . $e->getMessage());
         if ($e->getCode() == '23000') { // Código para erro de chave duplicada (PK composta)
-             $_SESSION['message'] = "Erro: Já existe uma degustação para este funcionário e receita.";
+            $_SESSION['message'] = "Erro: Já existe uma degustação para este funcionário e receita.";
         }
         header("Location: adicionarDegustacao.php"); // Redireciona de volta para o formulário
         exit;
@@ -69,20 +69,28 @@ if (isset($_POST['adicionar'])) {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="stylesheet" href="../styles/adicionarADM.css">
     <title>Adicionar Degustação | Degustador</title>
-    
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
             <nav>
                 <a href="receitasDegustador.php">Degustações</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
@@ -91,7 +99,7 @@ if (isset($_POST['adicionar'])) {
             <div class="message-<?= $_SESSION['message_type'] ?? 'info' ?>">
                 <?= htmlspecialchars($_SESSION['message']) ?>
             </div>
-            <?php
+        <?php
             unset($_SESSION['message']);
             unset($_SESSION['message_type']);
         endif;
@@ -125,4 +133,5 @@ if (isset($_POST['adicionar'])) {
         </div>
     </div>
 </body>
+
 </html>

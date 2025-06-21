@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../BancoDeDados/conexao.php';
+require_once './../BancoDeDados/conexao.php';
 
 // Verifica se funcionário está logado (id_funcionario)
 if (!isset($_SESSION['id_funcionario'])) {
@@ -12,15 +12,12 @@ if (!isset($_SESSION['id_funcionario'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir'])) {
     $id_livro = $_POST['excluir'];
 
-    // Começa a transação para apagar livro e receitas associadas
     $conn->beginTransaction();
 
     try {
-        // Apaga registros na tabela livro_receita
         $stmt = $conn->prepare("DELETE FROM livro_receita WHERE id_livro = ?");
         $stmt->execute([$id_livro]);
 
-        // Apaga livro
         $stmt = $conn->prepare("DELETE FROM livros WHERE id_livro = ?");
         $stmt->execute([$id_livro]);
 
@@ -129,101 +126,92 @@ $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Livros Editor</title>
     <link rel="stylesheet" href="../styles/livrosEDITOR.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="shortcut icon" href="../assets/favicon.png">
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
-            <h1 class="logo">Código de Sabores</h1>
-            <nav>
-                <a href="livrosEditor.php">Livros</a>
-                <a href="gerarPDF.php">Gerar PDF</a>
-            </nav>
+            <div class="menu-content">
+                <h1 class="logo">Código de Sabores</h1>
+                <nav>
+                    <a href="livrosEditor.php" class="active">Livros</a>
+                    <!-- <a href="listar_receitas_editor.php">Receitas</a> não funciona -->
+                    <div class="user-info">
+                        <i class="fas fa-user"></i>
+                        <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                    </div>
+
+                </nav>
+            </div>
         </div>
 
-        <div class="insert-bar">
-            <form method="POST" action="livrosEditor.php">
-                <input type="hidden" name="id_livro" value="<?= htmlspecialchars($livro_editar['id_livro'] ?? '') ?>">
-                <input type="text" name="titulo" placeholder="Título" value="<?= htmlspecialchars($livro_editar['titulo'] ?? '') ?>" required>
-                <input type="number" name="isbn" placeholder="ISBN" value="<?= htmlspecialchars($livro_editar['isbn'] ?? '') ?>" required>
-                <input type="text" name="descricao" placeholder="Descrição" value="<?= htmlspecialchars($livro_editar['descricao'] ?? '') ?>" required>
-                <?php
-                echo "Funcionário logado: " . htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido');
-                ?>
 
-                <label>Selecione as Receitas:</label>
-                <select name="receitas[]" multiple size="5" required>
-                    <?php foreach ($receitasDisponiveis as $receita): ?>
-                        <option value="<?= htmlspecialchars($receita['nome_receita']) ?>" 
-                            <?= in_array($receita['nome_receita'], $receitas_livro) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($receita['nome_receita']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
 
-                <button type="submit" name="<?= $livro_editar ? 'atualizar' : 'adicionar' ?>">
-                    <?= $livro_editar ? 'Atualizar' : 'Adicionar' ?>
-                </button>
-            </form>
-        </div>
+        <a class="add-button" href="adicionar_livro.php" class="botao">Adicionar Livro</a>
 
-        <div class="livros-lista">
-            <h2>Livros Cadastrados</h2>
-            <?php if (!empty($_SESSION['message'])): ?>
-                <div class="message <?= htmlspecialchars($_SESSION['message_type']) ?>">
-                    <?= htmlspecialchars($_SESSION['message']) ?>
-                </div>
-                <?php 
-                unset($_SESSION['message'], $_SESSION['message_type']);
-                ?>
-            <?php endif; ?>
-            <table border="1" cellpadding="8" cellspacing="0">
-                <thead>
+        </form>
+    </div>
+
+    <div class="livros-lista">
+        <h2>Livros Cadastrados</h2>
+        <?php if (!empty($_SESSION['message'])): ?>
+            <div class="message <?= htmlspecialchars($_SESSION['message_type']) ?>">
+                <?= htmlspecialchars($_SESSION['message']) ?>
+            </div>
+            <?php
+            unset($_SESSION['message'], $_SESSION['message_type']);
+            ?>
+        <?php endif; ?>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>ISBN</th>
+                    <th>Descrição</th>
+                    <th>ID Funcionário</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($livros as $livro): ?>
                     <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>ISBN</th>
-                        <th>Descrição</th>
-                        <th>ID Funcionário</th>
-                        <th>Ações</th>
+                        <td><?= htmlspecialchars($livro['id_livro']) ?></td>
+                        <td><?= htmlspecialchars($livro['titulo']) ?></td>
+                        <td><?= htmlspecialchars($livro['isbn']) ?></td>
+                        <td><?= htmlspecialchars($livro['descricao']) ?></td>
+                        <td><?= htmlspecialchars($livro['id_funcionario']) ?></td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="visualizarLivros.php?id=<?= htmlspecialchars($livro['id_livro']) ?>" class="view-button" title="Visualizar">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="editar_livro.php?id=<?= htmlspecialchars($livro['id_livro']) ?>" class="edit-button" title="Editar">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <a href="excluir_livro.php?id=<?= htmlspecialchars($livro['id_livro']) ?>" class="delete-button" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <!-- Novo link para gerar PDF -->
+                                <a href="gerarPDF.php?id_livro=<?= htmlspecialchars($livro['id_livro']) ?>" target="_blank" class="pdf-button" title="Gerar PDF">
+                                    <i class="fas fa-file-pdf"></i>
+                                </a>
+                            </div>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($livros as $livro): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($livro['id_livro']) ?></td>
-                            <td><?= htmlspecialchars($livro['titulo']) ?></td>
-                            <td><?= htmlspecialchars($livro['isbn']) ?></td>
-                            <td><?= htmlspecialchars($livro['descricao']) ?></td>
-                            <td><?= htmlspecialchars($livro['id_funcionario']) ?></td>
-                            <td>
-  <div class="action-buttons">
-    <a href="visualizarLivros.php?id=<?= htmlspecialchars($livro['id_livro']) ?>" class="view-button" title="Visualizar">
-        <i class="fas fa-eye"></i>
-    </a>
-    <a href="editar_livro.php?id=<?= htmlspecialchars($livro['id_livro']) ?>" class="edit-button" title="Editar">
-        <i class="fas fa-pencil-alt"></i>
-    </a>
-    <a href="excluir_livro.php?id=<?= htmlspecialchars($livro['id_livro']) ?>" class="delete-button" title="Excluir">
-        <i class="fas fa-trash"></i>
-    </a>
-</div>
-
-</td>
-
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
-        </div>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
     </div>
 </body>
+
 </html>

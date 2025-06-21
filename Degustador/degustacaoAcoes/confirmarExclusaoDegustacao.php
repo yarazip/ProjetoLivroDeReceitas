@@ -49,7 +49,6 @@ try {
         header("Location: ../receitasDegustador.php");
         exit;
     }
-
 } catch (PDOException $e) {
     error_log("Erro ao buscar degustação para confirmação: " . $e->getMessage());
     $_SESSION['message'] = "Erro ao carregar detalhes da degustação.";
@@ -61,19 +60,27 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Confirmar Exclusão de Degustação</title>
     <link rel="stylesheet" href="../../styles/excluirADM.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
-   
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
             <nav>
                 <a href="../receitasDegustador.php">Degustações</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
@@ -94,4 +101,5 @@ try {
         </div>
     </div>
 </body>
+
 </html>

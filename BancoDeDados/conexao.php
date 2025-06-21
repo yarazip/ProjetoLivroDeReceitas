@@ -35,4 +35,3 @@ function display_flash_message() {
     }
 }
 ?>
-?>

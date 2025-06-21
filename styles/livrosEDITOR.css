@@ -326,3 +326,93 @@ td a:hover {
 .action-buttons i {
     font-size: 13px;
 }
+
+
+/* Adicione estas regras ao seu CSS existente */
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    padding: 0 15px;
+    color: var(--dark-grey);
+    font-weight: 600;
+}
+
+.user-info i {
+    color: var(--medium-grey);
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Mantenha o resto do seu estilo existente para .menu */
+}
+
+.menu-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    padding: 0 15px;
+    color: var(--dark-grey);
+    font-weight: 600;
+}
+
+.user-info i {
+    color: var(--medium-grey);
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Mantenha o resto do seu estilo existente para .menu */
+}
+
+.menu-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+.menu nav a.active {
+    font-weight: 600;
+    color: var(--dark-grey);
+}
+
+
+.menu nav a.active::after {
+    width: 100%;
+    background-color: var(--dark-grey);
+}
+
+.add-button {
+    display: inline-block;
+    padding: 10px 15px; /* Reduzi o padding horizontal */
+    width: 150px; /* Largura fixa */
+    background-color: var(--dark-grey);
+    color: var(--highlights);
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+    text-align: center; /* Centraliza o texto */
+    box-sizing: border-box; /* Inclui padding na largura */
+}
+
+.add-button:hover {
+    background-color: var(--black);
+}

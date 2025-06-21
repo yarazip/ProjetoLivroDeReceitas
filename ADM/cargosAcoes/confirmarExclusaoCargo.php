@@ -47,29 +47,38 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Confirmar Exclusão de Cargo</title>
     <link rel="stylesheet" href="../../styles/excluirADM.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="shortcut icon" href="../../assets/favicon.png" type="image/x-icon">
-   
+
 </head>
+
 <body>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
             <nav>
+
                 <a href="../cargosADM.php">Cargo</a>
                 <a href="../restauranteADM.php">Restaurantes</a>
                 <a href="../funcionarioADM.php">Funcionário</a>
                 <a href="../referenciaADM.php">Referência</a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>
+                </div>
             </nav>
         </div>
 
         <div class="confirmation-box">
             <h2>Confirmar Exclusão de Cargo</h2>
             <p>Você tem certeza que deseja excluir o cargo:<br>
-               <strong>"<?= htmlspecialchars($cargo_info['nome']) ?>" (ID: <?= htmlspecialchars($cargo_info['id_cargo']) ?>)</strong>?</p>
+                <strong>"<?= htmlspecialchars($cargo_info['nome']) ?>" (ID: <?= htmlspecialchars($cargo_info['id_cargo']) ?>)</strong>?
+            </p>
             <p>Esta ação é irreversível e pode causar inconsistências se houver funcionários associados a este cargo.</p>
             <div class="buttons">
                 <form action="excluirCargo.php" method="GET">
@@ -83,4 +92,5 @@ try {
         </div>
     </div>
 </body>
+
 </html>
