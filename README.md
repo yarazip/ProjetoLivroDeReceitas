@@ -1,52 +1,60 @@
-# 📖 Sistema de Publicação de Livros de Receitas  (Projeto da Faculdade)
+# 📖 Sistema de Publicação de Livros de Receitas (Projeto da Faculdade)
 
-🚧 **Projeto em Desenvolvimento** 🚧  
+🚀 **Projeto Concluído**  
 
-Este projeto tem como objetivo criar um **Sistema de Publicação de Livros de Receitas**, onde **chefs** poderão cadastrar e compartilhar receitas em diversas categorias, como **Receitas de Animes**, **Massas**, **Sobremesas** e muito mais.  
+Este projeto tem como objetivo criar um **Sistema de Publicação de Livros de Receitas**, onde **chefs e funcionários** podem cadastrar, visualizar, editar e excluir receitas organizadas em categorias como **Receitas de Animes**, **Massas**, **Sobremesas**, entre outras.
 
-Atualmente, o projeto contém **a página de login**, o **estilo (CSS) dessa página** e as páginas de inserção de dados **somente o front-end** utilizadas na interface.  
+---
 
-## ✨ Status Atual  
+## ✅ Funcionalidades Concluídas
 
-- ✅ **Página de Login** – Interface inicial para chefs acessarem o sistema. *(Apenas design, sem funcionalidade de autenticação no momento.)*  
-- ✅ **Estilização (CSS)** – Aplicação de estilos para a tela de login.  
-- ✅ **Imagens** – Recursos gráficos para a interface.  
-- ✅ **Layout de inserção** – Desenvolvimento das páginas principais, como listagem de livros e receitas.
-- ✅ **Layout de inserção** – Desenvolvimento das páginas principais, como listagem de livros e receitas. **Próximo passo** - layout esqueci a senha e página de cadastro
-- 🚧 **Back-end** -  desenvolver o back end para login de cada funionário para inserir e deletar as informações correspondentes
-- 🚧 **layout da Página principal de acesso** -  desenvolver uma página com identidade visual para visualizar as receitas e os livros
+- 🔐 **Autenticação com PHP e MySQL** (login por email/senha)
+- 👥 **Controle de Acesso por Cargo** (Administrador, Editor, Cozinheiro, Degustador)
+- 📚 **Cadastro de Livros com Múltiplas Receitas**
+- 🧾 **Edição e Exclusão de Livros e Receitas**
+- 📄 **Geração de PDFs com DomPDF**
+- 🧭 **Redirecionamento com base no tipo de usuário**
+- 🎨 **Front-end responsivo com HTML, CSS e JavaScript**
+- 👁️‍🗨️ **Campo de senha com botão "mostrar/ocultar"**
+- 🛡️ **Proteção de rotas com sessões (`$_SESSION`)**
+- 🗂️ **Banco de Dados Relacional com MySQL**
 
-#
+---
 
-## Caso de Uso
+## 🛠️ Tecnologias Utilizadas
 
-![Diagrama de Caso de Uso](https://github.com/yarazip/ProjetoLivroDeReceitas/raw/main/CasoDeUso/CasoDeUso.png) 
+- **HTML5** – Estruturação semântica
+- **CSS3** – Estilo responsivo e moderno
+- **JavaScript** – Funcionalidades dinâmicas (exibir senha, alerts)
+- **PHP Puro** – Lógica de back-end e controle de sessão
+- **MySQL** – Banco de dados relacional
+- **DOMPDF** – Geração de PDFs para livros de receitas
+- **Font Awesome** – Ícones modernos
 
+---
 
-## 🛠️ Tecnologias Utilizadas  
+## 🧩 Diagrama de Caso de Uso
 
-- **HTML** – Estruturação das páginas.  
-- **CSS** – Estilização da interface, incluindo design responsivo.
-- **JavaScript** – Alert simples de email enviado.
+![Diagrama de Caso de Uso](https://github.com/yarazip/ProjetoLivroDeReceitas/raw/main/CasoDeUso/CasoDeUso.png)
 
-## 🚀 Como Executar o Projeto  
+---
 
-1. Clone este repositório ou faça o download dos arquivos.  
-2. Abra o arquivo **`login.html`** em seu navegador para visualizar a página de login e esqueci a senha.
-3. Abra o arquivo **`cargosADM.html`** para visualizar a ferramnta de inserção e pesquisa (*front-end*)
+## 🗂️ Estrutura de Diretórios
 
-## 🎯 Próximos Passos  
+- `/LoginSenha/` – Login e recuperação de senha
+- `/Editor/` – Gestão de livros e receitas
+- `/ADM/` – Gestão de cargos e funcionários
+- `/Cozinheiro/` – Cadastro de receitas
+- `/Degustador/` – Visualização e avaliação
+- `/BancoDeDados/` – Conexão e scripts SQL
+- `/styles/` – Arquivos CSS
+- `/assets/` – Imagens e ícones
+- `/scripts/` – JavaScript separado (ex: exibir senha)
 
-- Criar a **página inicial** do sistema 🏠  
-- Desenvolver a **listagem de livros de receitas** 📚  
-- Implementar a **página de detalhes das receitas** 🍽️  
-- Criar a **página de categorias de receitas** 🔍  
-- Melhorar a responsividade para dispositivos móveis 📱  
+---
 
-## 🤝 Contribuição  
+## 🚀 Como Executar o Projeto
 
-1. Faça um **fork** do projeto.  
-2. Crie uma **branch** (`git checkout -b feature-nova`).  
-3. Faça suas alterações e **commit** (`git commit -am 'Adicionando nova funcionalidade'`).  
-4. Faça um **push** para a branch (`git push origin feature-nova`).  
-5. Abra um **Pull Request** para análise.  
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/yarazip/ProjetoLivroDeReceitas.git
