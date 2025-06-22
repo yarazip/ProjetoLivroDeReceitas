@@ -47,11 +47,48 @@ if ($foto_stmt) {
         if ($foto_result->num_rows > 0) {
             $foto = $foto_result->fetch_assoc();
             $foto_data = $foto['tipo'];
-            // Se você armazenou o tipo de imagem, descomente a linha abaixo
-            // $foto_type = $foto['tipo_imagem']; // Você precisaria ter este campo na tabela
         }
     }
     $foto_stmt->close();
+}
+
+// Buscar ingredientes detalhados
+$ingredientes_detalhados = [];
+$ing_stmt = $conexao->prepare("
+    SELECT i.nome AS nome_ingrediente, ri.quantidade_ingrediente, m.medida
+    FROM receita_ingrediente ri
+    JOIN ingredientes i ON i.id_ingrediente = ri.id_ingrediente
+    JOIN medidas m ON m.id_medida = ri.id_medida
+    WHERE ri.nome_receita = ?
+");
+if ($ing_stmt) {
+    $ing_stmt->bind_param("s", $nome_receita);
+    if ($ing_stmt->execute()) {
+        $ing_result = $ing_stmt->get_result();
+        while ($ing = $ing_result->fetch_assoc()) {
+            $ingredientes_detalhados[] = $ing;
+        }
+    }
+    $ing_stmt->close();
+}
+
+// Buscar degustações
+$degustacoes = [];
+$deg_stmt = $conexao->prepare("
+    SELECT d.*, f.nome as nome_funcionario
+    FROM degustacoes d
+    JOIN funcionarios f ON d.id_funcionario = f.id_funcionario
+    WHERE d.nome_receita = ?
+");
+if ($deg_stmt) {
+    $deg_stmt->bind_param("s", $nome_receita);
+    if ($deg_stmt->execute()) {
+        $deg_result = $deg_stmt->get_result();
+        while ($deg = $deg_result->fetch_assoc()) {
+            $degustacoes[] = $deg;
+        }
+    }
+    $deg_stmt->close();
 }
 
 $conexao->close();
@@ -66,7 +103,7 @@ $tem_foto = !is_null($foto_data);
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($receita['nome_receita']) ?> | Código de Sabores</title>
-        <script src="script.js"></script>
+    <script src="script.js"></script>
 
     <link rel="stylesheet" href="../styles/exibirReceitas.css">
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
@@ -77,7 +114,7 @@ $tem_foto = !is_null($foto_data);
     <header>
         <h1 class="logo">Código de Sabores</h1>
         <nav class="nav-links">
-            <a href="../mainview.html">Home</a>
+            <!-- <a href="../mainview.html">Home</a> -->
             <a href="../Receitas/listarReceitas.php">Receitas</a>
         </nav>
         <div class="header-right">
@@ -90,12 +127,11 @@ $tem_foto = !is_null($foto_data);
 
     <section class="recipe-hero">
         <?php if ($tem_foto): ?>
-    <img src="data:image/jpeg;base64,<?= base64_encode($foto_data) ?>" 
-         alt="Foto da Receita <?= htmlspecialchars($nome_receita) ?>" ">
-<?php else: ?>
-    <p>Foto não disponível.</p>
-<?php endif; ?>
-
+            <img src="data:image/jpeg;base64,<?= base64_encode($foto_data) ?>" 
+                 alt="Foto da Receita <?= htmlspecialchars($nome_receita) ?>" >
+        <?php else: ?>
+            <p>Foto não disponível.</p>
+        <?php endif; ?>
 
         <h1><?= htmlspecialchars($receita['nome_receita']) ?></h1>
         <p><?= nl2br(htmlspecialchars($receita['descricao'] ?? '')) ?></p>
@@ -105,38 +141,33 @@ $tem_foto = !is_null($foto_data);
         <main class="recipe-content">
             <article>
                 <h2><?= htmlspecialchars($receita['nome_receita']) ?></h2>
-               <?php if ($tem_foto): ?>
-    <img src="data:image/jpeg;base64,<?= base64_encode($foto_data) ?>" 
-         alt="Foto da Receita <?= htmlspecialchars($nome_receita) ?>" 
-         style="max-width: 400px;">
-<?php else: ?>
-    <p>Foto não disponível.</p>
-<?php endif; ?>
-
+                
+                <?php if ($tem_foto): ?>
+                    <img src="data:image/jpeg;base64,<?= base64_encode($foto_data) ?>" 
+                         alt="Foto da Receita <?= htmlspecialchars($nome_receita) ?>" 
+                         style="max-width: 400px;">
+                <?php else: ?>
+                    <p>Foto não disponível.</p>
+                <?php endif; ?>
 
                 <h3>Ingredientes</h3>
                 <ul class="ingredients-list">
-                    <?php
-                    // Verifica se existem ingredientes e se não está vazio
-                    if (!empty($receita['ingredientes'])) {
-                        // Divide os ingredientes por quebra de linha
-                        $ingredientes = explode("\n", $receita['ingredientes']);
-                        foreach ($ingredientes as $ingrediente) {
-                            if (!empty(trim($ingrediente))) {
-                                echo "<li>" . htmlspecialchars(trim($ingrediente)) . "</li>";
-                            }
-                        }
-                    } else {
-                        echo "<li>Nenhum ingrediente listado</li>";
-                    }
-                    ?>
-
+                    <?php if (!empty($ingredientes_detalhados)): ?>
+                        <?php foreach ($ingredientes_detalhados as $ing): ?>
+                            <li>
+                                <?= htmlspecialchars($ing['quantidade_ingrediente']) ?>
+                                <?= htmlspecialchars($ing['medida']) ?> de
+                                <?= htmlspecialchars($ing['nome_ingrediente']) ?>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li>Ingredientes não cadastrados.</li>
+                    <?php endif; ?>
                 </ul>
 
                 <h3>Modo de Preparo</h3>
                 <ol class="instructions-list">
                     <?php
-                    // Divide o modo de preparo por quebra de linha
                     $etapas = explode("\n", $receita['modo_preparo']);
                     foreach ($etapas as $etapa):
                         if (!empty(trim($etapa))): ?>
@@ -151,6 +182,24 @@ $tem_foto = !is_null($foto_data);
                     <p><?= nl2br(htmlspecialchars($receita['descricao'])) ?></p>
                 <?php endif; ?>
             </article>
+
+            <section class="degustacoes-section">
+                <h2>Degustações</h2>
+                <?php if (!empty($degustacoes)): ?>
+                    <ul class="degustacoes-list">
+                        <?php foreach ($degustacoes as $deg): ?>
+                            <li>
+                                <strong><?= htmlspecialchars($deg['nome_funcionario']) ?></strong>
+                                (<?= htmlspecialchars($deg['data_degustacao']) ?>) - 
+                                Nota: <strong><?= htmlspecialchars($deg['nota']) ?></strong><br>
+                                <?= nl2br(htmlspecialchars($deg['descricao'])) ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p>Esta receita ainda não foi degustada.</p>
+                <?php endif; ?>
+            </section>
         </main>
 
         <aside class="recipe-sidebar">
