@@ -1,204 +1,253 @@
-/* styles/adicion.css */
-@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:wght@400;500;600&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:wght@400;500;600&display=swap');
 
-:root {
-    --logo-font: 'Rock Salt', sans-serif;
-    --main-font: 'Source Sans 3', sans-serif;
-    --highlights: #ffffff;
-    --background: #eeeeee;
-    --light-grey: #d9d9d9;
-    --medium-grey: #959595;
-    --dark-grey: #333333;
-    --black: #000000;
-    --success-color: #4CAF50;
-    --danger-color: #f44336;
-    --edit-color: #757575;
-    --primary-color: #333333;
-    --primary-hover: #000000;
-}
+        :root {
+            --logo-font: 'Rock Salt', sans-serif;
+            --main-font: 'Source Sans 3', sans-serif;
+            --highlights: #ffffff;
+            --background: #eeeeee;
+            --light-grey: #d9d9d9;
+            --medium-grey: #959595;
+            --dark-grey: #333333;
+            --black: #000000;
+            --success-color: #4CAF50;
+            --danger-color: #f44336;
+            --edit-color: #757575;
+            --info-color: #2196F3;
+        }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: var(--main-font);
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--main-font);
+        }
 
-body {
-    background-color: var(--background);
-    color: var(--dark-grey);
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+        body {
+            background-color: var(--background);
+            color: var(--dark-grey);
+            padding: 10px;
+        }
 
-h1 {
-    color: var(--black);
-    margin-bottom: 25px;
-    font-size: 1.8rem;
-    text-align: center;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
 
-form {
-    background-color: var(--highlights);
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto 25px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+        .menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--highlights);
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
 
-input[type="text"],
-input[type="number"] {
-    padding: 12px 15px;
-    border: 1px solid var(--light-grey);
-    border-radius: 5px;
-    font-size: 1rem;
-    width: 100%;
-    transition: border-color 0.3s;
-}
+        .menu-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
 
-input[type="text"]:focus,
-input[type="number"]:focus {
-    outline: none;
-    border-color: var(--medium-grey);
-}
+        .logo {
+            font-family: var(--logo-font);
+            font-size: 1.5rem;
+            color: var(--black);
+            margin: 0;
+            white-space: nowrap;
+        }
 
-label {
-    font-weight: 600;
-    color: var(--black);
-    margin-bottom: -15px; /* Ajuste para alinhamento */
-}
+        .menu nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
 
-select {
-    padding: 12px 15px;
-    border: 1px solid var(--light-grey);
-    border-radius: 5px;
-    font-size: 1rem;
-    width: 100%;
-    background-color: var(--highlights);
-    transition: border-color 0.3s;
-}
+        .menu nav a {
+            color: var(--black);
+            font-size: 1rem;
+            text-decoration: none;
+            position: relative;
+            padding: 5px 0;
+            font-weight: 500;
+        }
 
-select:focus {
-    outline: none;
-    border-color: var(--medium-grey);
-}
+        .menu nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--black);
+            transition: width 0.3s ease;
+        }
 
-button[type="submit"] {
-    padding: 12px 20px;
-    background-color: var(--primary-color);
-    color: var(--highlights);
-    border: none;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-}
+        .menu nav a:hover::after,
+        .menu nav a.active::after {
+            width: 100%;
+        }
 
-button[type="submit"]:hover {
-    background-color: var(--primary-hover);
-}
+        .menu nav a.active {
+            font-weight: 600;
+            color: var(--dark-grey);
+        }
 
-a {
-    display: block;
-    padding: 12px 20px;
-    background-color: var(--light-grey);
-    color: var(--dark-grey);
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: background-color 0.3s;
-    text-align: center;
-    max-width: 600px;
-    margin: 25px auto 0 auto;
-    width: calc(100% - 60px);
-    box-sizing: border-box;
-}
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+            padding: 0 15px;
+            color: var(--dark-grey);
+            font-weight: 600;
+        }
 
-@media (max-width: 480px) {
-    a {
-        width: calc(100% - 40px); 
-    }
-}
-a:hover {
-    background-color: var(--medium-grey);
-}
+        .user-info i {
+            color: var(--medium-grey);
+        }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    body {
-        padding: 15px;
-    }
-    
-    form {
-        padding: 25px;
-    }
-    
-    h1 {
-        font-size: 1.6rem;
-    }
-}
+        .logout-button {
+            float: right;
+            color: var(--medium-grey);
+            font-size: 1.25rem;
+            margin: 10px 20px;
+            transition: color 0.3s;
+        }
 
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-    
-    form {
-        padding: 20px;
-        gap: 15px;
-    }
-    
-    h1 {
-        font-size: 1.4rem;
-        margin-bottom: 20px;
-    }
-    
-    input[type="text"],
-    input[type="number"],
-    select {
-        padding: 10px 12px;
-    }
-    
-    button[type="submit"],
-    a {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-}
+        .logout-button:hover i {
+            color: var(--dark-grey);
+        }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-left: auto;
-    padding: 0 15px;
-    color: var(--dark-grey);
-    font-weight: 600;
-}
+        h1 {
+            color: var(--black);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
 
-.user-info i {
-    color: var(--medium-grey);
-}
+        form {
+            background-color: var(--highlights);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
 
-.menu {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* Mantenha o resto do seu estilo existente para .menu */
-}
+        form input[type="text"],
+        form input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--light-grey);
+            border-radius: 5px;
+            font-size: 0.95rem;
+        }
 
-.menu-content {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-grow: 1;
-    justify-content: space-between;
-}
+        form label {
+            display: block;
+            font-weight: 500;
+            color: var(--dark-grey);
+            margin-bottom: 10px;
+        }
+
+        .checkbox-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background-color: var(--background);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .checkbox-item:hover {
+            background-color: var(--light-grey);
+        }
+
+        button[type="submit"] {
+            background-color: var(--dark-grey);
+            color: var(--highlights);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--black);
+        }
+
+        .voltar {
+            display: inline-block;
+            background-color: var(--medium-grey);
+            color: var(--highlights);
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .voltar:hover {
+            background-color: var(--dark-grey);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 8px;
+            }
+            
+            .menu {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px 15px;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .menu nav {
+                gap: 12px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            form {
+                padding: 15px;
+            }
+            
+            .checkbox-list {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu nav a {
+                font-size: 0.9rem;
+            }
+            
+            form input[type="text"],
+            form input[type="number"],
+            button[type="submit"],
+            .voltar {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+        }

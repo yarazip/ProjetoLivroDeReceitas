@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -55,6 +59,9 @@ if (isset($_POST['adicionar'])) {
 </head>
 
 <body>
+        <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
@@ -86,7 +93,7 @@ if (isset($_POST['adicionar'])) {
             <form method="post" action="">
                 <label for="nome_categoria">Nome da Categoria:</label>
                 <input type="text" id="nome_categoria" name="nome_categoria" placeholder="Ex: Sobremesas, Salgados" required>
-                <label for="descricao_cat">Descrição (Opcional):</label>
+                <label for="descricao_cat">Descrição:</label>
                 <input type="text" id="descricao_cat" name="descricao" placeholder="Uma breve descrição sobre a categoria.">
                 <button type="submit" name="adicionar">Adicionar Categoria</button>
                 <a href="categoriaChef.php"><button type="button">Cancelar</button></a>

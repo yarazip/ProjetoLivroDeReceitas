@@ -199,6 +199,19 @@ h2 {
     border: 1px dashed var(--medium-grey);
 }
 
+.choose-photo {
+    padding: 12px 20px;
+    background-color: var(--primary-color) !important;
+    color: var(--highlights);
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
 .form-actions {
     display: flex;
     justify-content: center;
@@ -306,4 +319,14 @@ h2 {
     gap: 20px;
     flex-grow: 1;
     justify-content: space-between;
+}
+.logout-button {
+    float: right;
+    color: var(--medium-grey);
+    font-size: 1.25rem;
+    margin: 10px 20px;
+}
+
+.logout-button:hover i {
+    color: var(--dark-grey); /* Muda para cinza escuro no hover */
 }

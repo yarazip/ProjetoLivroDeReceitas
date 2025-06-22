@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -82,6 +86,9 @@ if (isset($_POST['adicionar'])) {
 </head>
 
 <body>
+        <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
@@ -108,7 +115,6 @@ if (isset($_POST['adicionar'])) {
         <h2>Adicionar Nova Degustação</h2>
         <div class="insert-bar">
             <form method="post" action="">
-                <p><strong>Degustador logado:</strong> <?= htmlspecialchars($nome_funcionario_logado) ?></p>
 
                 <label for="nome_receita">Receita Avaliada:</label>
                 <select id="nome_receita" name="nome_receita" required>
@@ -124,7 +130,7 @@ if (isset($_POST['adicionar'])) {
                 <label for="nota">Nota (0-10):</label>
                 <input type="number" id="nota" name="nota" placeholder="Ex: 8.5" step="0.1" min="0" max="10" required>
 
-                <label for="descricao">Observações (Opcional):</label>
+                <label for="descricao">Observações:</label>
                 <input id="descricao" name="descricao" placeholder="Escreva suas observações sobre a receita." rows="4"></input>
 
                 <button type="submit" name="adicionar">Adicionar Degustação</button>

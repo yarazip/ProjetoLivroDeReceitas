@@ -57,25 +57,12 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Listar Receitas - Editor</title>
     <link rel="stylesheet" href="../styles/func.css" />
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon" />
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        tr:nth-child(even){background-color: #f2f2f2;}
-    </style>
+  
 </head>
 <body>
+        <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
 <div class="container">
     <h1>Receitas do Editor</h1>
     <?php if (count($receitas) === 0): ?>

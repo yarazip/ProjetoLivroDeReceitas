@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -130,6 +134,9 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
 </head>
 
 <body>
+    <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
@@ -199,13 +206,13 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
                 </div>
 
                 <div class="form-row">
-                    <label for="descricao">Descrição (Opcional):</label>
+                    <label for="descricao">Descrição:</label>
                     <textarea id="descricao" name="descricao" placeholder="Breve descrição sobre o funcionário"><?= htmlspecialchars($funcionarioEditar['descricao'] ?? '') ?></textarea>
                 </div>
 
                 <div class="form-row">
-                    <label for="foto_funcionario">Nova Foto do Funcionário (Opcional):</label>
-                    <input type="file" id="foto_funcionario" name="foto_funcionario" accept="image/*" />
+                    <label for="foto_funcionario">Nova Foto do Funcionário:</label>
+                    <input class="choose-photo" type="file" id="foto_funcionario" name="foto_funcionario" accept="image/*" />
                     <?php if ($funcionarioEditar['foto_funcionario']): ?>
                         <div class="current-photo">
                             <p>Foto atual:</p>

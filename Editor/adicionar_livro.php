@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
 require_once '../BancoDeDados/conexao.php';
 require_once '../dompdf/autoload.inc.php';
 
@@ -56,17 +60,21 @@ $receitas_livro = $receitas_livro ?? [];
     <title>Adicionar Livro</title>
     <link rel="stylesheet" href="../styles/adicionarADM.css">
     <link rel="stylesheet" href="../styles/livrosEDITOR.css">
+    <link rel="stylesheet" href="../assets/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 <body>
+        <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
      <div class="container">
         <div class="menu">
             <div class="menu-content">
                 <h1 class="logo">Código de Sabores</h1>
                 <nav>
                     <a href="livrosEditor.php" class="active">Livros</a>
-                    <a href="listar_receitas_editor.php">Receitas</a>
+                    <!-- <a href="listar_receitas_editor.php">Receitas</a> -->
                     <div class="user-info">
                         <i class="fas fa-user"></i>
                         <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>

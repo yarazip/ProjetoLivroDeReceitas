@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -14,7 +18,7 @@ $cargos_permitidos = ['cozinheiro', 'cozinheira', 'administrador'];
 
 // Verifica se o usuário está logado e se o cargo dele está na lista de permitidos
 if (!isset($_SESSION['id_login']) || !in_array($cargo_usuario, $cargos_permitidos)) {
-    $_SESSION['message'] = "Você não tem permissão para acessar esta página.";
+    // $_SESSION['message'] = "Você não tem permissão para acessar esta página.";
     $_SESSION['message_type'] = "error";
     header("Location: ../LoginSenha/login.php");
     exit;
@@ -45,6 +49,9 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
+        <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>

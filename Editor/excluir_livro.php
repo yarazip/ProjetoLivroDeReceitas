@@ -69,6 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmar_exclusao'])
 
 </head>
 <body>
+     <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
       <div class="container">
         <div class="menu">
             <div class="menu-content">

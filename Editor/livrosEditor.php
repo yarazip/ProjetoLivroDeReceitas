@@ -1,5 +1,12 @@
+<!-- LISTAR LIVROS  -->
 <?php
 session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
+
+
 require_once './../BancoDeDados/conexao.php';
 
 // Verifica se funcionário está logado (id_funcionario)
@@ -128,15 +135,21 @@ $livros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt-BR">
 
 <head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
     <meta charset="UTF-8">
     <title>Livros Editor</title>
     <link rel="stylesheet" href="../styles/livrosEDITOR.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="shortcut icon" href="../assets/favicon.png">
 </head>
 
 <body>
+<a href="../LoginSenha/logout.php" class="logout-button">
+    <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+</a>
     <div class="container">
         <div class="menu">
             <div class="menu-content">

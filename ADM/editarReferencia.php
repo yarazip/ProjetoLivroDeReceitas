@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -100,6 +104,9 @@ if (isset($_POST['atualizar'])) { // O name do botão no formulário é 'atualiz
 </head>
 
 <body>
+    <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
@@ -162,10 +169,10 @@ if (isset($_POST['atualizar'])) { // O name do botão no formulário é 'atualiz
                 <label for="data_inicio">Data de Início:</label>
                 <input type="date" id="data_inicio" name="data_inicio" required value="<?= htmlspecialchars($registroEditar['data_inicio']) ?>">
 
-                <label for="data_fim">Data de Fim (Opcional):</label>
+                <label for="data_fim">Data de Fim:</label>
                 <input type="date" id="data_fim" name="data_fim" value="<?= htmlspecialchars($registroEditar['data_fim'] ?? '') ?>">
 
-                <label for="descricao">Descrição (Opcional):</label>
+                <label for="descricao">Descrição:</label>
                 <input id="descricao" name="descricao" placeholder="Detalhes sobre a atuação no restaurante." rows="4"><?= htmlspecialchars($registroEditar['descricao'] ?? '') ?></input>
 
                 <button type="submit">Atualizar</button>

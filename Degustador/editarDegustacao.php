@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -116,6 +120,9 @@ if (isset($_POST['salvar_edicao'])) {
 </head>
 
 <body>
+        <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
@@ -154,7 +161,7 @@ if (isset($_POST['salvar_edicao'])) {
                 <label for="nota">Nota (0-10):</label>
                 <input type="number" id="nota" name="nota" placeholder="Ex: 8.5" step="0.1" min="0" max="10" required value="<?= htmlspecialchars($degustacao_editando['nota']) ?>">
 
-                <label for="descricao">Observações (Opcional):</label>
+                <label for="descricao">Observações:</label>
                 <textarea id="descricao" name="descricao" placeholder="Escreva suas observações sobre a receita." rows="4"><?= htmlspecialchars($degustacao_editando['descricao'] ?? '') ?></textarea>
 
                 <button type="submit">Salvar Alterações</button>

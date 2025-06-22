@@ -441,3 +441,13 @@ td a:last-child {
     flex-grow: 1;
     justify-content: space-between;
 }
+.logout-button {
+    float: right;
+    color: var(--medium-grey);
+    font-size: 1.25rem;
+    margin: 10px 20px;
+}
+
+.logout-button:hover i {
+    color: var(--dark-grey); /* Muda para cinza escuro no hover */
+}

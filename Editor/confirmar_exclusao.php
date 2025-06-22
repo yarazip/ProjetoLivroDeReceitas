@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
 require_once '../BancoDeDados/conexao.php';
 require_once '../dompdf/autoload.inc.php';
 
@@ -27,46 +32,12 @@ if (!$livro) {
 <head>
     <meta charset="UTF-8">
     <title>Confirmar Exclusão</title>
-    <link rel="stylesheet" href="../styles/func.css"> <style>
-        .confirmation-box {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            text-align: center;
-        }
-        .confirmation-box h2 {
-            color: #c0392b; /* Vermelho */
-        }
-        .book-details {
-            background-color: #fff;
-            padding: 15px;
-            border: 1px solid #eee;
-            margin: 20px 0;
-            text-align: left;
-        }
-        .actions a, .actions button {
-            display: inline-block;
-            padding: 12px 25px;
-            margin: 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .actions .confirm-btn {
-            background-color: #c0392b; /* Vermelho */
-        }
-        .actions .cancel-btn {
-            background-color: #7f8c8d; /* Cinza */
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/func.css"> 
 </head>
 <body>
+        <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
     <div class="confirmation-box">
         <h2>Confirmar Exclusão</h2>
         <p>Você tem certeza que deseja excluir permanentemente o livro abaixo? <strong>Esta ação não pode ser desfeita.</strong></p>

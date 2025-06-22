@@ -382,3 +382,13 @@ label[for="receitas"] {
         padding: 6px 10px;
     }
 }
+.logout-button {
+    float: right;
+    color: var(--medium-grey);
+    font-size: 1.25rem;
+    margin: 10px 20px;
+}
+
+.logout-button:hover i {
+    color: var(--dark-grey); /* Muda para cinza escuro no hover */
+}

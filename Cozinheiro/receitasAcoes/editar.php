@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_funcionario'])) {
+    header("Location: ../LoginSenha/login.php");
+    exit();
+}
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -168,6 +172,9 @@ if (isset($_GET['nome'])) {
 </head>
 
 <body>
+        <a href="../LoginSenha/logout.php" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-lg gray-icon"></i>
+    </a>
     <div class="container">
         <div class="menu">
             <h1 class="logo">Código de Sabores</h1>
@@ -310,7 +317,7 @@ if (isset($_GET['nome'])) {
                     <label for="modo_preparo">Modo de Preparo:</label>
                     <textarea id="modo_preparo" name="modo_preparo" placeholder="Modo de Preparo" rows="6" required><?= htmlspecialchars($receita_editar['modo_preparo'] ?? '') ?></textarea>
 
-                    <label for="descricao_geral">Descrição Geral da Receita (Opcional):</label>
+                    <label for="descricao_geral">Descrição Geral da Receita:</label>
                     <textarea id="descricao_geral" name="descricao_geral" placeholder="Descrição Geral"><?= htmlspecialchars($receita_editar['descricao'] ?? '') ?></textarea>
                 </fieldset>
 
