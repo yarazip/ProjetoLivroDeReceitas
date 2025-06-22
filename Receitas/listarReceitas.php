@@ -49,8 +49,8 @@ $result = $conn->query($sql);
     <header>
         <h1 class="logo">Código de Sabores</h1>
         <nav class="nav-links">
-            <a href="mainview.html">Sobre Nós</a>
-            <a href="mainview.html">Fale Conosco</a>
+            <!-- <a href="mainview.html">Sobre Nós</a> -->
+            <!-- <a href="mainview.html">Fale Conosco</a> -->
         </nav>
         <div class="header-right">
             <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
@@ -58,7 +58,7 @@ $result = $conn->query($sql);
                 <i class="fas fa-sun"></i>
             </button>
             <div class="header-buttons">
-                <a href="../loginSenha/login.html" class="get-started-btn">Entrar</a>
+                <!-- <a href="../loginSenha/login.html" class="get-started-btn">Entrar</a> -->
             </div>
         </div>
     </header>
