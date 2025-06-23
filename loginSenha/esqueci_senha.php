@@ -8,19 +8,20 @@ use PHPMailer\PHPMailer\Exception;
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
     $email = $_POST['email'];
-
+    
     // Verifica se o e-mail existe no sistema
     $sql = "SELECT * FROM logins WHERE email = :email";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":email", $email);
     $stmt->execute();
-
+    
     if ($stmt->rowCount() > 0) {
         // Gera token
         $token = bin2hex(random_bytes(32));
         $expiracao = date("Y-m-d H:i:s", strtotime("+1 hour"));
-
+        
         // Salva o token no banco
         $insert = "INSERT INTO recuperacao_senha (email, token, expiracao) VALUES (:email, :token, :exp)";
         $stmtInsert = $conn->prepare($insert);
@@ -36,28 +37,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mensagem = "Olá! Clique no link abaixo para redefinir sua senha:\n\n$link\n\nEsse link expira em 1 hora.";
         $cabecalhos = "From: codigodesabores@gmail.com";
 
-        $mail = new PHPMailer(true);
+        // $mail = new PHPMailer(true);
+
+$mail = new PHPMailer(true);
 
 try {
     $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com'; // Ex: smtp.gmail.com
+    $mail->Host = 'smtp.gmail.com'; 
     $mail->SMTPAuth = true;
-    $mail->Username = 'lucasferrari.blz2028@gmail.com'; 
-    $mail->Password = 'beat pwfn vkpa pilq';
-    $mail->SMTPSecure = 'ssl';
-    $mail->Port = 465;
+    $mail->Username = 'email'; 
+    $mail->Password = 'senha'; 
+    $mail->SMTPSecure = 'ssl'; 
+    $mail->Port = 465; 
+    $mail->CharSet = 'UTF-8';
 
-    $mail->setFrom('codigodesabores@gmail.com', 'Código de Sabores');
+    $mail->setFrom('codigosabores@gmail.com', 'Código de Sabores'); // email e nome exibido no remetente
     $mail->addAddress($email);
 
     $mail->isHTML(true);
     $mail->Subject = $assunto;
-    $mail->Body = nl2br($mensagem); // ou crie um HTML estilizado
+    $mail->Body = nl2br($mensagem);
 
     $mail->send();
 } catch (Exception $e) {
     echo "Erro ao enviar e-mail: {$mail->ErrorInfo}";
 }
+
 
         echo "<script>alert('Um link foi enviado para seu e-mail!'); window.location.href = 'login.php';</script>";
     } else {
