@@ -75,6 +75,8 @@ try {
                 <a href="../ingredientesChef.php">Ingredientes</a>
                 <a href="../medidasChef.php">Medidas</a>
                 <a href="../categoriaChef.php">Categorias</a>
+                <a href="../../Receitas/listarReceitas.php">Página de Receitas</a>
+
                 <div class="user-info">
                     <i class="fas fa-user"></i>
                     <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>

@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                     <div class="password-field">
                         <input type="password" name="senha" id="senha" placeholder="Senha" required>
-                        <i class="fa-solid fa-eye-slash" id="toggleSenha" style="color: gray; cursor: pointer;"></i>
+                        <i class="fa-solid fa-eye-slash" id="toggleSenha"></i>
 
                     </div> <button type="submit">Entrar</button>
                     <div class="esqueciSenha">

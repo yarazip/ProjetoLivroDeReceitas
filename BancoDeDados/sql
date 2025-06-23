@@ -189,3 +189,8 @@ MODIFY COLUMN cpf CHAR(11) NOT NULL;
 /* troquei o "tempo_preparo" de int para varchar(10) */
 ALTER TABLE receitas
 MODIFY COLUMN tempo_preparo varchar(10);
+
+-- TROQUEI PARA ARMAZENAR FOTOS MAIORES
+ALTER TABLE foto_receita
+MODIFY tipo LONGBLOB NOT NULL;
+

@@ -97,6 +97,8 @@ $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <a href="ingredientesChef.php" <?php if ($current_page == 'ingredientesChef.php') echo 'class="active"'; ?>>Ingredientes</a>
                 <a href="medidasChef.php" <?php if ($current_page == 'medidasChef.php') echo 'class="active"'; ?>>Medidas</a>
                 <a href="categoriaChef.php" <?php if ($current_page == 'categoriaChef.php') echo 'class="active"'; ?>>Categorias</a>
+                <a href="../../Receitas/listarReceitas.php">Página de Receitas</a>
+
                 <div class="user-info">
                     <i class="fas fa-user"></i>
                     <span><?= htmlspecialchars($_SESSION['nome_funcionario'] ?? 'Desconhecido') ?></span>

@@ -56,27 +56,13 @@ $conn->close();
     />
     <title>Receitas | Código de Sabores</title>
     <script src="../js/Receitas.js"></script>
-    <style>
-        .recipe-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .no-image {
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #777;
-        }
-    </style>
+   
 </head>
 <body class="light-mode">
     <header>
         <h1 class="logo">Código de Sabores</h1>
         <nav class="nav-links">
-            <!-- Links adicionais podem ser colocados aqui -->
+            <a href="../Cozinheiro/receitasChef.php"> Voltar para página do cozinheiro</a>
         </nav>
         <div class="header-right">
             <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
@@ -84,7 +70,6 @@ $conn->close();
                 <i class="fas fa-sun"></i>
             </button>
             <div class="header-buttons">
-                <!-- Botões adicionais aqui -->
             </div>
         </div>
     </header>

@@ -114,7 +114,7 @@ $tem_foto = !is_null($foto_data);
     <header>
         <h1 class="logo">Código de Sabores</h1>
         <nav class="nav-links">
-            <!-- <a href="../mainview.html">Home</a> -->
+            <a href="../Cozinheiro/receitasChef.php"> Voltar para página do cozinheiro</a>
             <a href="../Receitas/listarReceitas.php">Receitas</a>
         </nav>
         <div class="header-right">
@@ -213,12 +213,12 @@ $tem_foto = !is_null($foto_data);
             </div>
 
             <div class="recipe-info-card">
-                <h3>Compartilhe</h3>
+                <!-- <h3>Compartilhe</h3>
                 <div class="redes">
                     <a href="#"><i class="fab fa-facebook fa-2x"></i></a>
                     <a href="#"><i class="fab fa-instagram fa-2x"></i></a>
                     <a href="#"><i class="fab fa-whatsapp fa-2x"></i></a>
-                </div>
+                </div> -->
             </div>
         </aside>
     </div>

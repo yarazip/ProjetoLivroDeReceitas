@@ -82,6 +82,15 @@ header {
     gap: 30px;
 }
 
+.nav-links nav a.active {
+    font-weight: 600;
+    color: var(--dark-grey);
+}
+
+.nav-links nav a.active::after {
+    width: 100%;
+    background-color: var(--dark-grey);
+}
 .nav-links a {
     text-decoration: none;
     font-size: 17px;
