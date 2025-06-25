@@ -125,7 +125,7 @@ if (isset($_POST['salvar_edicao'])) {
                 <input type="hidden" name="salvar_edicao" value="1"> <label for="descricao">Descrição da Medida:</label>
                 <input type="text" id="descricao" name="descricao" placeholder="Descrição da Medida" required value="<?= htmlspecialchars($medida_editando['descricao']) ?>">
                 <label for="medida">Símbolo da Medida:</label>
-                <input type="text" id="medida" name="medida" placeholder="Símbolo da Medida" required maxlength="20" value="<?= htmlspecialchars($medida_editando['medida']) ?>">
+                <input type="text" id="medida" name="medida" placeholder="Símbolo da Medida" value="<?= htmlspecialchars($medida_editando['medida']) ?>">
                 <button type="submit">Salvar Alterações</button>
                 <a href="medidasChef.php"><button type="button">Cancelar</button></a>
             </form>

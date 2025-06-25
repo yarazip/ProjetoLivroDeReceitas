@@ -83,10 +83,9 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<script src="../loginSenha/scripts/script.js"></script>
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon" />
     <link rel="stylesheet" href="../../styles/adicionarADM.css" />
-    <link rel="stylesheet" href="../../styles/funcionario.css" />
     <title>Adicionar Funcionário | ADM</title>
 
 </head>
@@ -163,7 +162,10 @@ $cargos = $conn->query("SELECT id_cargo, nome FROM cargos")->fetchAll(PDO::FETCH
 
                 <div class="form-row">
                     <label for="senha">Senha:</label>
-                    <input type="password" id="senha" name="senha" placeholder="Senha" required />
+                    <div class="input-wrapper">
+                        <input type="password" id="senha3" name="senha" placeholder="Digite a senha do funcionário" required />
+                        <i class="fa-solid fa-eye-slash" id="toggleSenha3"></i>
+                    </div>
                 </div>
 
                 <div class="form-row">

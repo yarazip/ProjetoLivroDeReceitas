@@ -392,3 +392,22 @@ label[for="receitas"] {
 .logout-button:hover i {
     color: var(--dark-grey); /* Muda para cinza escuro no hover */
 }
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* espaço para o ícone */
+    box-sizing: border-box;
+}
+
+.input-wrapper i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #555;
+}

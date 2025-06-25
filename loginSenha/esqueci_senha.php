@@ -45,8 +45,8 @@ try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com'; 
     $mail->SMTPAuth = true;
-    $mail->Username = 'email'; 
-    $mail->Password = 'senha'; 
+    $mail->Username = 'codigosabores@gmail.com'; 
+    $mail->Password = 'vwvz qcnr rojs hxbb'; 
     $mail->SMTPSecure = 'ssl'; 
     $mail->Port = 465; 
     $mail->CharSet = 'UTF-8';
@@ -64,9 +64,11 @@ try {
 }
 
 
-        echo "<script>alert('Um link foi enviado para seu e-mail!'); window.location.href = 'login.php';</script>";
+$msg = "Um link foi enviado para seu e-mail!";
+$tipoMsg = "success";
     } else {
-        echo "<script>alert('E-mail não encontrado!'); window.history.back();</script>";
+$msg = "E-mail não encontrado!";
+$tipoMsg = "error";
     }
 }
 ?>
@@ -87,6 +89,12 @@ try {
     </div>
     <div class="container">
         <div class="form-box">
+            <?php if (!empty($msg)): ?>
+    <div class="alert <?php echo $tipoMsg === 'success' ? 'alert-success' : 'alert-error'; ?>">
+        <?php echo $msg; ?>
+    </div>
+<?php endif; ?>
+
             <h2>Recuperar Senha</h2>
             <p>Digite seu e-mail para receber um link de redefinição de senha.</p>
             <form action="" method="POST">

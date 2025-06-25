@@ -129,7 +129,7 @@ $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($f['id_funcionario'] ?? '') ?></td>
                             <td>
                                 <?php
-                                $cpf_valor = $f['CPF'] ?? ''; // Pega o valor do CPF, ou string vazia se NULL
+                                $cpf_valor = $f['cpf'] ?? ''; // Pega o valor do CPF, ou string vazia se NULL
 
                                 if (!empty($cpf_valor)) { // Só tenta processar se não for vazio/nulo
                                     // Remove qualquer caractere não numérico e pega os primeiros 11 dígitos

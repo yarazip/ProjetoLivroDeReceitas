@@ -551,3 +551,16 @@ button:hover {
     position: absolute;
     right: 10px;
 }
+.mensagem-erro {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+    padding: 12px;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-left: 150px;
+}

@@ -117,7 +117,9 @@ if (isset($_POST['adicionar'])) {
     <title>Adicionar Nova Receita | Cozinheiro</title>
     <link rel="stylesheet" href="../styles/adicionarReceitas.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon" />
 
 </head>
@@ -294,6 +296,27 @@ if (isset($_POST['adicionar'])) {
                 }
             });
         });
+        document.addEventListener('DOMContentLoaded', function () {
+    // Inicializa o Select2 para todos os selects de ingredientes
+    function aplicarSelect2() {
+        document.querySelectorAll('select[name^="ingredientes"]').forEach(function(select) {
+            $(select).select2({
+                width: 'resolve',
+                placeholder: "Busque um ingrediente",
+                language: "pt-BR"
+            });
+        });
+    }
+
+    aplicarSelect2(); // aplica nos existentes
+
+    // Reaplica ao adicionar novo ingrediente
+    document.querySelector('.ingredientes-container').addEventListener('click', function(event) {
+        if (event.target.classList.contains('adicionar-ingrediente')) {
+            setTimeout(aplicarSelect2, 50); // espera DOM adicionar novo item
+        }
+    });
+});
     </script>
 </body>
 

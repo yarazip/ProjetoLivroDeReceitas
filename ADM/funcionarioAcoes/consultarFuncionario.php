@@ -117,7 +117,7 @@ try {
                     <strong>CPF:</strong>
                     <span>
                         <?php
-                        $cpf_valor = $funcionario_detalhes['CPF'] ?? '';
+                        $cpf_valor = $funcionario_detalhes['cpf'] ?? '';
                         if (!empty($cpf_valor)) {
                             $cpf_limpo_e_limitado = substr(preg_replace('/\D/', '', $cpf_valor), 0, 11);
                             if (strlen($cpf_limpo_e_limitado) === 11) {

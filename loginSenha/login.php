@@ -57,7 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             exit();
         } else {
-            echo "<script>alert('Email ou senha inválidos!'); window.history.back();</script>";
+            $_SESSION['erro_login'] = "Email ou senha inválidos!";
+            header("Location: login.php");
             exit();
         }
     } catch (PDOException $e) {
@@ -86,6 +87,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <h2 class="login">LOGIN</h2>
     <div class="container">
+        <?php if (isset($_SESSION['erro_login'])): ?>
+    <div class="mensagem-erro">
+        <?= htmlspecialchars($_SESSION['erro_login']) ?>
+    </div>
+    <?php unset($_SESSION['erro_login']); ?>
+<?php endif; ?>
         <!-- Seção de Login -->
         <div class="login-section">
             <div class="login-container">

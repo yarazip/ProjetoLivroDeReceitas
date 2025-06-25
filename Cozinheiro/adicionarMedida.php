@@ -96,7 +96,7 @@ if (isset($_POST['adicionar'])) {
                 <label for="descricao">Descrição da Medida:</label>
                 <input type="text" id="descricao" name="descricao" placeholder="Ex: Quilogramas, Xícaras" required>
                 <label for="medida">Símbolo da Medida:</label>
-                <input type="text" id="medida" name="medida" placeholder="Ex: kg, xíc." required maxlength="20">
+                <input type="text" id="medida" name="medida" placeholder="Ex: kg, xíc.">
                 <button type="submit" name="adicionar">Adicionar Medida</button>
                 <a href="medidasChef.php"><button type="button">Cancelar</button></a>
             </form>

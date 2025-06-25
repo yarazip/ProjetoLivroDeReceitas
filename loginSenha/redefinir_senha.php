@@ -41,7 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmtDelete->bindParam(":token", $token);
         $stmtDelete->execute();
 
-        echo "<script>alert('Senha atualizada com sucesso!'); window.location.href='login.php';</script>";
+        $msg = "Senha atualizada com sucesso!";
+        $tipoMsg = "success";
     }
 }
 ?>
@@ -49,34 +50,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta charset="UTF-8">
     <title>Redefinir Senha</title>
-    <link rel="stylesheet" href="../styles/redefinir.css">
+    <link rel="stylesheet" href="../styles/redefinir_senha.css">
+    <script src="./scripts/script.js"></script>
+
     <script>
     function validarSenha() {
-        const senha = document.querySelector('[name="nova_senha"]').value;
-        const erros = [];
+    const senha = document.querySelector('[name="nova_senha"]').value;
+    const erros = [];
 
-        if (senha.length < 8) erros.push("mínimo de 8 caracteres");
-        if (!/[A-Z]/.test(senha)) erros.push("1 letra maiúscula");
-        if (!/[a-z]/.test(senha)) erros.push("1 letra minúscula");
-        if (!/[0-9]/.test(senha)) erros.push("1 número");
-        if (!/[!@#$%^&*]/.test(senha)) erros.push("1 caractere especial");
+    if (senha.length < 8) erros.push("mínimo de 8 caracteres");
+    if (!/[A-Z]/.test(senha)) erros.push("1 letra maiúscula");
+    if (!/[a-z]/.test(senha)) erros.push("1 letra minúscula");
+    if (!/[0-9]/.test(senha)) erros.push("1 número");
+    if (!/[!@#$%^&*]/.test(senha)) erros.push("1 caractere especial");
 
-        if (erros.length > 0) {
-            alert("A senha precisa conter: " + erros.join(", "));
-            return false;
-        }
+    const divErro = document.getElementById('erro-senha');
+
+    if (erros.length > 0) {
+        divErro.textContent = "A senha precisa conter: " + erros.join(", ");
+        divErro.style.display = "block";
+        return false;
+    } else {
+        divErro.style.display = "none";
         return true;
     }
+}
     </script>
 </head>
 <body>
     <h2>Redefinir Senha</h2>
+    <?php if (!empty($msg)): ?>
+    <div class="alert <?php echo $tipoMsg === 'success' ? 'alert-success' : 'alert-error'; ?>">
+        <?php echo $msg; ?>
+    </div>
+    <?php endif; ?>
+    <div class="password-field">
     <form method="POST" onsubmit="return validarSenha();">
-        <input type="password" name="nova_senha" placeholder="Nova senha" required>
-        <input type="password" name="confirmar" placeholder="Confirme a nova senha" required>
+        <div class="input-wrapper">
+    <input type="password" name="nova_senha" placeholder="Nova senha" required>
+    <i class="fa-solid fa-eye-slash" id="toggleSenha1"></i>
+</div>
+
+<div class="input-wrapper">
+    <input type="password" name="confirmar" placeholder="Confirme a nova senha" required>
+    <i class="fa-solid fa-eye-slash" id="toggleSenha2"></i>
+</div>
         <button type="submit">Redefinir</button>
     </form>
+    </div>
+    <div id="erro-senha" class="alert alert-error" style="display:none;"></div>
 </body>
 </html>

@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+
+:root {
+    --logo-font: 'Rock Salt', cursive;
+    --main-font: 'Source Sans 3', sans-serif;
+    --highlights: #ffffff;
+    --background: #eeeeee;
+    --light-grey: #d9d9d9;
+    --medium-grey: #959595;
+    --dark-grey: #333333;
+    --black: #000000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* centraliza o conteúdo */
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--background);
+    font-family: var(--main-font);
+}
+
+h2 {
+    color: var(--medium-grey);
+    font-weight: 400;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+form {
+    background: var(--highlights);
+    padding: 50px;
+    border-radius: 15px;
+    text-align: center;
+    width: 350px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    animation: slide-in 0.8s ease-out;
+}
+
+input {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 15px;
+    border: 1px solid var(--medium-grey);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--highlights);
+    font-family: var(--main-font);
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--dark-grey);
+    box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: var(--dark-grey);
+    color: var(--highlights);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 15px 0 0 0;
+    font-family: var(--main-font);
+}
+
+button:hover {
+    background: var(--black);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    
+}
+
+.alert {
+    padding: 15px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* espaço para o olho */
+    box-sizing: border-box;
+}
+
+.input-wrapper i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #555;
+}
