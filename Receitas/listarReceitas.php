@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "yara123", "teste_trabalho_1", 3307);
+$conn = new mysqli("localhost", "root", "senha", "teste_trabalho_1", 3307);
 
 if ($conn->connect_error) {
     die("Erro ao conectar ao banco de dados: " . $conn->connect_error);

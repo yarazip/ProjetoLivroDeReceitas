@@ -1,6 +1,6 @@
 <?php
 // Conexão
-$conexao = new mysqli("localhost", "root", "yara123", "teste_trabalho_1", 3307);
+$conexao = new mysqli("localhost", "root", "senha", "teste_trabalho_1", 3307);
 
 if ($conexao->connect_error) {
     die("Erro na conexão: " . $conexao->connect_error);
