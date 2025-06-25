@@ -21,6 +21,16 @@ Este projeto tem como objetivo criar um **Sistema de Publicação de Livros de R
 
 ---
 
+## 🧪 Testes Automatizados com PHPUnit
+
+Este projeto inclui testes automatizados utilizando o framework **PHPUnit** para validar funcionalidades essenciais, como autenticação e controle de acesso.
+
+Para executar os testes, rode o comando:
+
+```bash
+php vendor/bin/phpunit tests/
+```
+
 ## 🛠️ Tecnologias Utilizadas
 
 - **HTML5** – Estruturação semântica
