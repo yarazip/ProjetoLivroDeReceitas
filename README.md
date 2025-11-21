@@ -1,27 +1,27 @@
-# 📖 Sistema de Publicação de Livros de Receitas (Projeto da Faculdade)
+# Sistema de Publicação de Livros de Receitas (Projeto Acadêmico)
 
-🚀 **Projeto Concluído**  
+ **Projeto Concluído**  
 
 Este projeto tem como objetivo criar um **Sistema de Publicação de Livros de Receitas**, onde **chefs e funcionários** podem cadastrar, visualizar, editar e excluir receitas organizadas em categorias como **Receitas de Animes**, **Massas**, **Sobremesas**, entre outras.
 
 ---
 
-## ✅ Funcionalidades Concluídas
+## Funcionalidades Concluídas
 
-- 🔐 **Autenticação com PHP e MySQL** (login por email/senha)
-- 👥 **Controle de Acesso por Cargo** (Administrador, Editor, Cozinheiro, Degustador)
-- 📚 **Cadastro de Livros com Múltiplas Receitas**
-- 🧾 **Edição e Exclusão de Livros e Receitas**
-- 📄 **Geração de PDFs com DomPDF**
-- 🧭 **Redirecionamento com base no tipo de usuário**
-- 🎨 **Front-end responsivo com HTML, CSS e JavaScript**
-- 👁️‍🗨️ **Campo de senha com botão "mostrar/ocultar"**
-- 🛡️ **Proteção de rotas com sessões (`$_SESSION`)**
-- 🗂️ **Banco de Dados Relacional com MySQL**
+-  **Autenticação com PHP e MySQL** (login por email/senha)
+-  **Controle de Acesso por Cargo** (Administrador, Editor, Cozinheiro, Degustador)
+-  **Cadastro de Livros com Múltiplas Receitas**
+-  **Edição e Exclusão de Livros e Receitas**
+-  **Geração de PDFs com DomPDF**
+-  **Redirecionamento com base no tipo de usuário**
+-  **Front-end responsivo com HTML, CSS e JavaScript**
+-  **Campo de senha com botão "mostrar/ocultar"**
+-  **Proteção de rotas com sessões (`$_SESSION`)**
+-  **Banco de Dados Relacional com MySQL**
 
 ---
 
-## 🧪 Testes Automatizados com PHPUnit
+##  Testes Automatizados com PHPUnit
 
 Este projeto inclui testes automatizados utilizando o framework **PHPUnit** para validar funcionalidades essenciais, como autenticação e controle de acesso.
 
@@ -31,7 +31,7 @@ Para executar os testes, rode o comando:
 php vendor/bin/phpunit tests/
 ```
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **HTML5** – Estruturação semântica
 - **CSS3** – Estilo responsivo e moderno
@@ -43,13 +43,13 @@ php vendor/bin/phpunit tests/
 
 ---
 
-## 🧩 Diagrama de Caso de Uso
+## Diagrama de Caso de Uso
 
 ![Diagrama de Caso de Uso](https://github.com/yarazip/ProjetoLivroDeReceitas/raw/main/CasoDeUso/CasoDeUso.png)
 
 ---
 
-## 🗂️ Estrutura de Diretórios
+## Estrutura de Diretórios
 
 - `/LoginSenha/` – Login e recuperação de senha
 - `/Editor/` – Gestão de livros e receitas
@@ -63,7 +63,7 @@ php vendor/bin/phpunit tests/
 
 ---
 
-## 🚀 Como Executar o Projeto
+## Como Executar o Projeto
 
 1. Clone o repositório:
    ```bash
